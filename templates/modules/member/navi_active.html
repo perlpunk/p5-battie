@@ -1,0 +1,9 @@
+<ul>
+[%if .can.member.view_box %]<li><a href="[%= .self %]/member/view_box">[%translate id=member_inbox %]</a></li>[%/if %]
+[%if .can.member.box_list %]<li><a href="[%= .self %]/member/box_list">[%translate id=member_list_of_my_postboxes %]</a></li>[%/if %]
+[%if .can.member.list %]<li><a href="[%= .self %]/member/list">[%translate id=member_members %]</a></li>[%/if %]
+[%if .can.member.abook %]<li><a href="[%= .self %]/member/abook">[%translate id=member_addressbook %]</a></li>[%/if %]
+[%if .can.member.settings %]<li><a href="[%= .self %]/member/settings">[%translate id=global_settings %]</a></li>[%/if %]
+[%if .can.member.stats %]<li><a href="[%= .self %]/member/stats">Statistics</a></li>[%/if %]
+[%if .can.member.geo %]<li><a href="[%= .self %]/member/geo">Worldmap</a></li>[%/if %]
+</ul>

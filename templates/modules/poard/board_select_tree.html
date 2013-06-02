@@ -1,0 +1,6 @@
+<option value="">Please select</option>
+[%loop board_tree %]
+[%if is_leaf %]<option value="[%= id %]">[%= name %]</option>
+[%else is_leaf %]<optgroup label="[%= name %]">[%/if is_leaf %]
+[%loop level_down %]</optgroup>[%/loop level_down %]
+[%/loop board_tree %]

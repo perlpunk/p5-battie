@@ -1,0 +1,9 @@
+<form action="[%= .self %]/cms/edit_motd/[%= .data.content.motd.id %]" method="post">
+Weight: <input type="text" name="weight" value="[%= .data.content.motd.weight %]"><br>
+Text: <input type="text" name="content" value="[%= .data.content.motd.content %]" size="90"><br>
+Start: <input type="text" name="start" value="[%= .data.content.motd.start ESCAPE=TIME_YMD_HMS %]"> YYYY-MM-DD HH::MM::SS<br>
+End: <input type="text" name="end" value="[%= .data.content.motd.end escape=TIME_YMD_HMS %]"> YYYY-MM-DD HH::MM::SS<br>
+[%= .user.token.hidden escape=0 %]
+<input type="submit" name="submit.save" value="Save" class="button submit">
+</form>
+

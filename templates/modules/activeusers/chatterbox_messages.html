@@ -1,0 +1,48 @@
+[%if .can.activeusers.show_chat_details %]
+
+[%if .data.chat.msgs# %]
+
+[%if .data.chat.big %]
+<table class="chatterbox" style="width: 100%">
+[%loop .data.chat.msgs %]
+<tr [%if __odd__ %]class="odd"[%/if %]>
+<td style="width: 10%">[%= ctime_epoch escape=TIME_ONLY %]</td>
+[%if action %]
+<td colspan="2"><i>[%= rendered escape=0 %]</i></td>
+[%else %]
+<td style="width: 10%">
+[%if get_self %]<i>[%= user.nick %]:</i>
+[%else %][%= user.nick %]:
+[%/if get_self %]
+</td>
+<td>[%= rendered escape=0 %]</td>
+[%/if action %]
+
+</tr>
+[%/loop .data.chat.msgs %]
+</table>
+
+[%else %]
+<div class="chatterbox">
+[%loop .data.chat.msgs %]
+[%if action %]
+<span class="chat_action">[%= rendered escape=0 %]</span><br>
+[%else %]
+<span [%if __odd__ %]class="odd"[%/if %]>
+    [%if get_self %]<i>[%= user.nick %]:</i>
+    [%else %][%= user.nick %]:
+    [%/if get_self %]
+[%= rendered escape=0 %]
+[%/if action %]
+</span><br>
+
+[%/loop .data.chat.msgs %]
+</div>
+[%/if .data.chat.big %]
+
+[%/if .data.chat.msgs# %]
+
+
+[%else .can.activeusers.show_chat_details %]
+[%= .data.chat.user_count %] user(s) chatting
+[%/if .can.activeusers.show_chat_details %]

@@ -1,0 +1,376 @@
+<h2 align="center">[%translate id="userprefs_preferences" %]</h2>
+
+[%switch .action %]
+
+[%case timezone %]
+
+<form action="[%= .self %]/userprefs/settings/timezone" method="post">
+<select name="settings.timezone">
+<option value="">--- Select ---</option>
+[%html_option .data.userprefs.timezones %]
+</select>
+<input type="submit" class="button submit" name="submit.save" value="[%translate id="global_action_save" %]">
+[%= .user.token.hidden escape=0 %]
+</form>
+
+[%case set_lang %]
+Your current language is set to '[%= .data.userprefs.language.name %]'.<br>
+<form action="[%= .self %]/userprefs/set_lang" method="post">
+Select your preferred language:<br>
+<select name="prefs.lang">
+[%html_option .data.userprefs.languages %]
+</select>
+<br>
+<input type="submit" class="button submit" name="submit.save" value="[%translate id="global_action_save" %]">
+[%= .user.token.hidden escape=0 %]
+</form>
+
+[%case personal_nodelet %]
+
+<form action="[%= .self %]/userprefs/personal_nodelet" method="post">
+<textarea name="nodelet.content" rows="8" cols="70">[%= .data.userprefs.mynodelet.content %]</textarea>
+[%= .user.token.hidden escape=0 %]
+<br>
+<input type="submit" class="button" name="submit.preview" value="[%translate id="global_action_preview" %]">
+<input type="submit" class="button submit" name="submit.save" value="[%translate id="global_action_save" %]">
+</form>
+
+<hr>
+<table class="border_table"><tr><td>
+[%= .data.userprefs.mynodelet.rendered escape=0 %]
+</td></td></table>
+
+<a href="[%= .self %]/userprefs/settings/nodelet">Details</a>
+
+[%case profile %]
+
+[%if .data.userprefs.confirm %]
+
+Your profile was updated.
+<br />
+<a href="[%= .self %]/userprefs/profile">Go to profile</a>
+
+[%else %]
+[%if .data.userprefs.error.token %]
+[%include name="token_expired.html" %]
+[%/if %]
+
+<form action="[%= .self %]/userprefs/profile" method="post">
+<table>
+<tr>
+<td>Name:</td><td><input type="text" name="profile.name" value="[%= .data.userprefs.profile.name %]"></td>
+</tr>
+<tr>
+<td>Location:</td><td><input type="text" name="profile.location" value="[%= .data.userprefs.profile.location %]"></td>
+</tr>
+<tr>
+<td>Geo coordinates:</td>
+<td>
+Latitude: <input type="text" name="profile.geo_lat" value="[%= .data.userprefs.profile.geo_lat %]" size="10" maxlength="10">
+Longitude: <input type="text" name="profile.geo_long" value="[%= .data.userprefs.profile.geo_long %]" size="10" maxlength="10">
+(Example: 51.0000, 9.0000)
+Only visible in <a href="[%= .self %]/member/geo">Worldmap</a>
+</td>
+</tr>
+<tr><td></td><td><i>Try http://maps.google.com/maps/geo?q=YOUR+ADDRESS&output=csv</i></td></tr>
+</tr>
+<tr>
+<td>Homepage:</td><td><input type="text" name="profile.homepage" value="[%= .data.userprefs.profile.homepage %]"></td>
+</tr>
+<tr>
+<td>Signature:</td><td><textarea name="profile.signature" rows="4" cols="60">[%= .data.userprefs.profile.signature %]</textarea>
+    <table class="border_table" width="100%"><tr><td>
+    [%= .data.userprefs.profile.get_rendered_sig escape=0 %]
+    </td></tr></table>
+</td>
+</tr>
+<tr>
+<td>Birthday (YMD):</td>
+<td>
+<select name="profile.birth_year">
+<option value="">---</option>
+[%html_option .data.userprefs.years %]
+</select>
+<select name="profile.birth_month">
+<option value="">---</option>
+[%html_option .data.userprefs.months %]
+</select>
+<select name="profile.birth_day">
+<option value="">---</option>
+[%html_option .data.userprefs.days %]
+</select>
+</td>
+
+</tr>
+<tr>
+<td>Sex:</td><td>
+[%html_option_loop .data.userprefs.sexes %]
+<input type="radio" name="profile.sex" value="[%= value %]" [%if selected %]checked="checked"[%/if %]>[%= label %]
+[%/html_option_loop .data.userprefs.sex %]
+</td>
+</tr>
+<tr>
+<td>URL to photo:</td><td><input type="text" name="profile.foto_url" value="[%= .data.userprefs.profile.foto_url %]"></td>
+</tr>
+<tr>
+<td>ICQ:</td><td><input type="text" name="profile.icq" value="[%= .data.userprefs.profile.icq %]"></td>
+</tr>
+<tr>
+<td>MSN:</td><td><input type="text" name="profile.msn" value="[%= .data.userprefs.profile.msn %]"></td>
+</tr>
+<tr>
+<td>AOL:</td><td><input type="text" name="profile.aol" value="[%= .data.userprefs.profile.aol %]"></td>
+</tr>
+<tr>
+<td>Interests:</td><td><textarea name="profile.interests" rows="4" cols="60">[%= .data.userprefs.profile.interests %]</textarea>
+</td>
+</tr>
+
+<tr>
+<td colspan="2">
+<input type="submit" class="button submit" name="submit.save" value="[%translate id="global_action_save" %]">
+</td>
+</tr>
+</table>
+[%= .user.token.hidden escape=0 %]
+</form>
+[%/if .data.userprefs.confirm %]
+
+[%case avatar %]
+
+[%if .data.userprefs.error.avatar_too_big %]
+The file you uploaded was too big. Try again.
+[%/if .data.userprefs.error.avatar_too_big %]
+
+[%if .data.userprefs.confirm_upload %]
+Your avatar was successfully uploaded.
+<br />
+<a href="[%= .self %]/userprefs/avatar">Go to avatar</a>
+[%elsif .data.userprefs.confirm_delete %]
+Your avatar was successfully deleted.
+<br />
+<a href="[%= .self %]/userprefs/avatar">Go to avatar</a>
+
+[%else %]
+
+[%if .data.userprefs.profile.avatar %]
+<img src="[%= .data.userprefs.avatar_url %]/[%= .data.userprefs.profile.user_id %]_[%= .data.userprefs.profile.avatar %]" alt="user image" />
+[%/if .data.userprefs.profile.avatar %]
+
+<form action="[%= .self %]/userprefs/avatar" method="post" enctype="multipart/form-data">
+<input type="file" name="profile.avatar" />
+<br />
+<i>File size: maximum [%= .data.userprefs.avatar_max %] bytes,
+[%= .data.userprefs.avatar_max_x %] x
+[%= .data.userprefs.avatar_max_y %]</i>
+
+<br />
+
+<input type="submit" class="button" name="submit.upload" value="Upload Avatar" />
+[%= .user.token.hidden escape=0 %]
+</form>
+
+<hr>
+[%if .data.userprefs.profile.avatar %]
+<form action="[%= .self %]/userprefs/avatar" method="post" enctype="multipart/form-data">
+<input type="submit" class="button" name="submit.delete" value="Delete Avatar" />
+[%= .user.token.hidden escape=0 %]
+</form>
+[%/if .data.userprefs.profile.avatar %]
+
+[%/if .data.userprefs.confirm %]
+
+[%case set_email %]
+
+[%if .data.userprefs.sent_confirmation %]
+    <span class="hint">An email has been sent.</span>
+[%elsif .data.userprefs.confirmed %]
+    <span class="hint">Your new email is now active.</span>
+[%else %]
+
+[%if .data.userprefs.error.token %]
+[%include name="token_expired.html" %]
+[%elsif .data.userprefs.error.wrong_password %]
+<span class="error">Your password was wrong, please try again.</span>
+[%elsif .data.userprefs.error.invalid_email %]
+<span class="error">Your email isn't valid, please try again.</span>
+[%elsif .data.userprefs.error.same_email %]
+<span class="error">Your new email appears to be the same as the old one.</span>
+[%/if %]
+
+<form action="[%= .self %]/userprefs/set_email" method="post">
+Your current email adress is:<br />
+<b>[%= .data.userprefs.user.profile.email %]</b>
+<p />
+<br>
+Your new email address:<br />
+<input type="text" size="30" id="user.new_email1" name="user.new_email1" value="[%= .data.userprefs.input.email1 %]"><br />
+Retype:<br />
+<input type="text" size="30" id="user.new_email2" name="user.new_email2"><br />
+Your password:
+<input type="password" name="user.password">
+<p />
+You will get an email to your new address with a link to confirm
+the address. Until then your old address will be active.<br />
+
+[%= .user.token.hidden escape=0 %]
+<input type="submit" class="button submit" name="submit.save" value="[%translate id="global_action_save" %]">
+</form>
+
+[%/if %]
+
+[%case set_password %]
+
+[%if .data.userprefs.error.token %]
+[%include name="token_expired.html" %]
+[%elsif .data.userprefs.error.wrong_password %]
+Your old password was wrong, please try again.
+[%elsif .data.userprefs.error.new_password_match %]
+Your passwords didn't match, please try again.
+[%/if %]
+
+[%if .data.userprefs.confirm %]
+
+Your password was successfully changed. Next time you log in you must use
+the new password.
+
+[%else %]
+
+[%if .data.saved %]
+[%else %]
+<script type="text/javascript">
+function compare_passwords() {
+    pass1 = document.getElementById('user.new_password1');
+    pass2 = document.getElementById('user.new_password2');
+    if (pass1.value == pass2.value) {
+        return true;
+    }
+    else {
+        alert("Your passwords don't match, please try again");
+        return false;
+    }
+}
+</script>
+<form action="[%= .self %]/userprefs/set_password" onSubmit="return compare_passwords()" method="post">
+
+    <table>
+        <tr>
+            <td>Your old password:</td>
+            <td><input type="password" name="user.old_password"></td>
+        </tr>
+        <tr>
+            <td>Your new password:</td>
+            <td><input type="password" id="user.new_password1" name="user.new_password1"></td>
+        </tr>
+        <tr>
+            <td>Your new password (retype):</td>
+            <td><input type="password" id="user.new_password2" name="user.new_password2"></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                [%= .user.token.hidden escape=0 %]
+                <input type="submit" class="button submit" name="submit.save" value="[%translate id="global_action_save" %]">
+            </td>
+        </tr>
+    </table>
+</form>
+[%/if .data.saved %]
+[%/if .data.userprefs.confirm %]
+
+
+[%case set_theme %]
+
+[%if .can.userprefs.settings %]
+<h2>Font</h2>
+<br>
+[%unless .cookie %]
+You need to activate cookies.
+[%/unless .cookie %]
+
+<a name="quickset">Most used size:</a><br>
+<form action="[%= .self %]/userprefs/settings/look" method="POST">
+<input type="hidden" name="settings.font_size" value="12">
+<input type="hidden" name="settings.font_entity" value="px">
+[%= .user.token.hidden escape=0 %]
+<input type="submit" class="button submit" name="submit.save" value="Set to 12px">
+</form>
+<br>
+
+Select your preferred size and entity:<br>
+<form action="[%= .self %]/userprefs/settings/look" method="POST">
+<table>
+<tr>
+<td>Font-Size:</td><td><input type="text" name="settings.font_size" value="[%= .data.settings.userprefs.font_size %]" size="5" maxlength="5">
+<select name="settings.font_entity">
+[%html_option .data.settings.userprefs.font_entities %]
+</select>
+</td>
+</tr>
+</table>
+[%= .user.token.hidden escape=0 %]
+<input type="submit" class="button submit" name="submit.save" value="[%translate id="global_action_save" %]">
+<!-- <input type="submit" class="button" name="submit.preview" value="[%translate id="global_action_preview" %]"> -->
+[%if .data.settings.userprefs.font_size %]
+<br><br>
+<input type="submit" class="button submit" name="submit.reset" value="Reset to use site defaults">
+(will use your browsers preferences)
+[%/if %]
+</form>
+
+<hr>
+[%unless .cookie %]
+These settings need cookies.<br>
+[%/unless .cookie %]
+
+<h2>Theme</h2>
+<br>
+<p>
+Select theme:<br>
+<form action="[%= .self %]/userprefs/set_theme" method="POST">
+    <select name="prefs.theme">
+    [%html_option_loop .data.userprefs.themes %]
+        <option value="[%= value%]" [%= selected%] >[%= label %]</option>
+    [%/html_option_loop .data.userprefs.themes %]
+    </select>
+<br>
+    <select name="prefs.color">
+    [%html_option_loop .data.userprefs.colors %]
+        <option value="[%= value%]" [%= selected%] >[%= label %]</option>
+    [%/html_option_loop .data.userprefs.colors %]
+    </select>
+</p>
+    <p>
+    Additionally set your own css URL: <input type="text" name="prefs.css_url" value="[%= .data.userprefs.css %]" size="40">
+    <br>
+[%= .user.token.hidden escape=0 %]
+    <input type="submit" class="button submit" name="submit.save" value="[%translate id="global_action_save" %]">
+</form>
+
+
+
+
+[%/if .can.userprefs.settings %]
+
+[%case settings %]
+[%if .data.userprefs.error.token %]
+[%include name="token_expired.html" %]
+[%/if %]
+[%switch .data.userprefs.setting %]
+[%case nodelet %]
+<form action="[%= .self %]/userprefs/settings/nodelet" method="POST">
+Hide nodelet: <input type="checkbox" name="settings.nodelet.hide" [%if .data.settings.userprefs.nodelet.hidden %]checked="checked"[%/if %]><br>
+<input type="submit" class="button submit" name="submit.save" value="[%translate id="global_action_save" %]">
+[%= .user.token.hidden escape=0 %]
+</form>
+
+[%/switch .data.userprefs.setting %]
+[%case start %]
+
+<ul>
+<li>General</li>
+[%include userprefs/navi_active.html %]
+<li><a href="[%= .self %]/poard/settings">Forum</a></li>
+</ul>
+
+
+[%/switch .action %]

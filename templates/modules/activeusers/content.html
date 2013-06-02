@@ -1,0 +1,20 @@
+[%switch .action %]
+
+[%case hide %]
+
+[%if .data.activeusers.error.token %]
+[%include name="token_expired.html" %]
+[%/if %]
+<form action="[%= .self %]/activeusers/hide" method="POST">
+
+[%if .data.activeusers.user_visible %]
+<input type="submit" name="submit.hide" class="button" value="Hide myself"/>
+[%else %]
+<input type="submit" name="submit.show" class="button" value="Show myself"/>
+[%/if %]
+
+[%= .user.token.hidden escape=0 %]
+</form>
+
+
+[%/switch .action %]

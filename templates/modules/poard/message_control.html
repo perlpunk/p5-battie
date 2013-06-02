@@ -1,0 +1,10 @@
+<td valign="top" colspan="1">
+<a href="#" onclick="hide_message_static([%= id %]); return false">
+<img id="collapse_[%= id %]" src="[%= .data.userprefs.theme %]/remove.png" border="0" alt="close" title="collapse" style="vertical-align: middle;">
+</a>
+[%unless is_leaf %]
+<a href="#" onclick="hide_subtree([%= id %]); return false">
+<img id="collapse_tree_1_[%= id %]" style="vertical-align: middle;"
+ src="[%= .data.userprefs.theme %]/icons/arrow-merge-090.png" border="0" alt="close" title="collapse"></a>
+[%/unless is_leaf %]
+</td>

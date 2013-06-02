@@ -1,0 +1,15 @@
+[%if total_count %]<table class="pager" cellspacing="1"><tr>
+[%if previous %]<td class="pager_active"><a href="[%= previous.link %]"><img src="[%= .data.userprefs.theme escape=0 %]/arrow_left.png" border="0" alt="&lt;&lt;" title="Previous Page"></a></td>
+[%else %]<td class="pager_inactive"><img src="[%= .data.userprefs.theme escape=0 %]/arrow_left_inactive.png" border="0" alt="&lt;&lt;"></td>
+[%/if %]
+
+<td>[%loop pages %][%unless page %]...
+[%elsif active %]<span class="pager pager_inactive">[%if is_first %]|&lt; [%/if %][%= title %][%if is_last %] &gt;|[%/if %]</span>
+[%else %]<a href="[%= link %]">[%if is_first %]|&lt; [%/if %][%= title %][%if is_last %] &gt;|[%/if %]</a>
+[%/unless %][%/loop pages %]</td>
+
+[%if next %]<td class="pager_active"><a href="[%= next.link %]"><img src="[%= .data.userprefs.theme escape=0 %]/arrow_right.png" border="0" alt="&gt;&gt;" title="Next Page"></a></td>
+[%else %]<td class="pager_inactive"><img src="[%= .data.userprefs.theme escape=0 %]/arrow_right_inactive.png" border="0" alt="&gt;&gt;"></td>
+[%/if %]
+<td>[%= total_count escape=0 %] [%translate id="global_entries" count="total_count" %], [%= total_pages escape=0 %] [%translate id="global_pages" count="total_pages" %]</td>
+</tr></table>[%/if total_count %]

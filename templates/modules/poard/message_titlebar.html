@@ -1,0 +1,20 @@
+<div class="author">
+[%if author %]
+[%if .can.member.profile %]<a href="[%= $SELF escape=0 %]/member/profile/[%= author.id escape=0 %]">[%= author.nick %]</a>
+[%else %][%= author.nick %][%/if %]
+[%else %]
+
+[%if is_approved %]<i>[%translate id=global_guest %] [%= author_name %]</i>
+[%elsif .can.poard.approve_message %]<i>[%translate id=global_guest %] [%= author_name %]</i>
+[%elsif is_deleted %]<span class="hint">[%translate id=poard_msg_deleted %]</span>
+[%else %]<span class="hint">[%translate id=poard_msg_not_approved_yet %]</span>
+[%/if %]
+[%/if %]
+</div>
+
+<div class="posting_date"><a name="ms_[%= id escape=0 %]">&nbsp;</a>[%= ctime_epoch escape=TIME_HTML %]</div>
+
+<div class="anchor">
+<a href="[%= $SELF escape=0 %]/poard/thread/[%= thread_id escape=0 %]#ms_[%= id escape=0 %]" title="Permanent link to message #[%= id escape=0 %] in thread"><img src="[%= .data.userprefs.theme %]/theme_icons/anchor.png" alt="#[%= id escape=0 %]" ></a>
+<a href="[%= $SELF escape=0 %]/poard/message/[%= id escape=0 %]" title="Permanent link to message #[%= id escape=0 %]"><img src="[%= .data.userprefs.theme %]/theme_icons/anchor_plus.png" alt="#[%= id escape=0 %]"></a>
+</div>

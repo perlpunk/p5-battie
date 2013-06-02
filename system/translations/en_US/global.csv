@@ -1,0 +1,83 @@
+"lang";"id";"translation"
+en_US;global_action_save;"Save"
+en_US;global_action_add;"Add"
+en_US;global_action_approve;"Approve"
+en_US;global_action_delete;"Delete"
+en_US;global_action_edit;"Edit"
+en_US;global_action_send;"Send"
+en_US;global_action_submit;"Submit"
+en_US;global_action_preview;"Preview"
+en_US;global_action_create;"Create"
+en_US;global_action_cancel;"Cancel"
+en_US;global_action_view;"View"
+en_US;global_action_register;"Register"
+en_US;global_action_login;"Login"
+en_US;global_action_logout;"Logout"
+en_US;global_back;"Back"
+en_US;global_settings;"Settings"
+en_US;global_preferences;"Preferences"
+en_US;global_language;"Language"
+en_US;global_month1;"January"
+en_US;global_month2;"February"
+en_US;global_month3;"March"
+en_US;global_month4;"April"
+en_US;global_month5;"May"
+en_US;global_month6;"June"
+en_US;global_month7;"July"
+en_US;global_month8;"August"
+en_US;global_month9;"September"
+en_US;global_month10;"October"
+en_US;global_month11;"November"
+en_US;global_month12;"December"
+en_US;global_day1;"Monday"
+en_US;global_day2;"Tuesday"
+en_US;global_day3;"Wednesday"
+en_US;global_day4;"Thursday"
+en_US;global_day5;"Friday"
+en_US;global_day6;"Saturday"
+en_US;global_day7;"Sunday"
+en_US;global_day1_short;"Mo"
+en_US;global_day2_short;"Tu"
+en_US;global_day3_short;"We"
+en_US;global_day4_short;"Th"
+en_US;global_day5_short;"Fr"
+en_US;global_day6_short;"Sa"
+en_US;global_day7_short;"Su"
+en_US;global_date_at;"at"
+en_US;global_pages;"page";"pages"
+en_US;global_entries;"entry";"entries"
+en_US;global_title;"Title";
+en_US;global_action_reply;"reply";
+en_US;global_reply;"reply";"replies"
+en_US;global_action_search;"search";
+en_US;global_action_subscribe;"subscribe";
+en_US;global_article;"article";"articles"
+en_US;global_user;"user";"users"
+en_US;global_guest;"guest";"guests"
+en_US;global_username;"Username";
+en_US;global_password;"Password";
+en_US;global_bind_to_ip;"Bind session to current IP-Address (recommended)";
+en_US;global_remember;"Remember me (needs cookies)";
+en_US;global_remember_name;"Remember only username (needs cookies)";
+en_US;global_remember_none;"Don't remember me at all";
+en_US;global_your_password;"Your password";
+en_US;global_your_password_retype;"Retype password";
+en_US;global_register_me;"Register me";
+en_US;global_your_email;"Your email-address";
+en_US;global_your_email_invalid;"Invalid email";
+en_US;global_personal_nodelet;"Personal Nodelet"
+en_US;global_add_entry;"add entry"
+en_US;global_forgot_pass;"Forgot Password?";
+en_US;global_add_current_url;"Add current url"
+en_US;global_error_user_exists;"Username exists already"
+en_US;global_success_register;"You are successfully registered and can now proceed to"
+en_US;global_error_login_failed;"Login failed, please try again."
+en_US;global_font;Font
+en_US;global_terms_conditions;"Terms & Conditions"
+en_US;global_error_user_invalid;"Invalid username (A-Za-z0-9_.-)"
+en_US;"global_login_confirm %1:s";"You should get an email with the subject '%1:s' to complete your registration."
+en_US;global_today;Today
+en_US;global_yesterday;Yesterday
+en_US;global_x_hours_ago;"%1:s hour ago";"%1:s hours ago"
+en_US;global_x_minutes_ago;"%1:s minute ago";"%1:s minutes ago"
+en_US;global_antispam_info_akismet;"Ich erkläre mich damit einverstanden, dass alle eingegebenen Daten und meine IP-Adresse nur zum Zweck der Spamvermeidung durch das Programm Akismet in den USA überprüft und gespeichert werden. <a href=""http://faq.wpde.org/hinweise-zum-datenschutz-beim-einsatz-von-akismet-in-deutschland/"">Weitere Informationen zu Akismet und Widerrufsmöglichkeiten</a>"

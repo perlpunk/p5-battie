@@ -1,0 +1,61 @@
+[%if is_last %]
+<li class="board_tree_last">
+[%else %]
+<li class="board_tree">
+[%/if is_last %]
+[%if is_root %]
+<table class="overview" cellspacing="1" width="100%">
+<tr>
+<th >Board</th>
+<th style="width: 80px;">Threads<br>([%translate id="poard_answer_post" count="0" %])</th>
+<th style="width: 350px;">[%translate id="poard_last_answer" %]</th>
+</tr>
+</table>
+[%else %]
+<table width="100%" class="overview" cellspacing="1">
+<tr>
+[%if is_leaf %]
+<td>
+<a href="[%= .self %]/poard/xml_messages_rss/[%= id %]" title="Board Feed"><img src="[%= .data.userprefs.theme %]/icons/feed.png" alt="[feed]"></a>
+<a href="[%= .self %]/poard/board/[%= id %]"><b>[%= name %]</b></a>
+<br>[%= description %]</td>
+<td style="width: 80px;">[%= thread_count %] ([%= answer_count %])</td>
+
+<td style="width: 350px;">
+[%with latest %]
+[%if is_read %]
+Thread: <a href="[%= .self %]/poard/thread/[%= id %][%if last_read %]?read=[%= last_read %][%/if %]">[%= title %]</a>
+[%else %]
+<b>Thread: <a href="[%= .self %]/poard/thread/[%= id %][%if last_read %]?read=[%= last_read %][%/if %]">[%= title %]</a></b>
+[%/if is_read %]
+by
+[%if last.author %]
+<a href="[%= .self %]/member/profile/[%= last.author.id %]">[%= last.author.nick %]</a>
+[%else %]
+<i>[%= last.author_name %]</i>
+[%/if %]
+<br>
+<small>[%= mtime_epoch escape=TIME_HTML %]</small>
+[%/with latest %]
+</td>
+
+
+[%else %]
+<th><b>[%= name %]</b></th>
+<th style="width: 550px;" >[%= description %]</th>
+[%/if is_leaf %]
+</tr>
+</table>
+[%/if is_root %]
+[%unless is_leaf %]
+[%if is_last %]
+<ul class="board_tree_last">
+[%else %]
+<ul class="board_tree">
+[%/if is_last %]
+[%else is_leaf %]
+</li>
+[%/unless is_leaf %]
+
+[%loop level_down %]</ul>[%/loop level_down %]
+

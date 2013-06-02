@@ -1,0 +1,12 @@
+[%if .data.search_options %]
+<form action="[%= .self %]/content/search" method="get">
+<input type="hidden" name="from" value="[%= .data.login.from %]">
+<input type="text" name="query" value="[%= .data.query %]">
+<input type="image" src="[%= .data.userprefs.theme %]/search.png" class="image" style="vertical-align: top;"
+ title="[%translate id="global_action_search" %]" alt="[%translate id=global_action_search %]" name="search" >
+<select name="query.where" size="1">
+[%html_option .data.search_options %]
+</select>
+
+</form>
+[%/if .data.search_options %]

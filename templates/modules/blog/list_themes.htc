@@ -1,0 +1,15 @@
+[%loop _ %]
+<tr>
+
+    <td valign="top" width="30%" [%unless active %]bgcolor="#888888"[%/unless %]><a name="day_[%= cday %]"> </a><a href="[%= .self %]/blog/theme/[%= get_id %]">
+[%if get_image %]<img src="[%= .data.blog.image_url %]/[%= get_image %]" alt="[%= get_title %]" border="0"></a>[%/if %]</td>
+<td valign="top" [%unless active %]bgcolor="#888888"[%/unless %]>    <b><a href="[%= .self %]/blog/list_blog/[%= blog_id %]/[%= blog.url_title %]">[%= blog.title %]:</b></a> <a href="[%= .self %]/blog/theme/[%= get_id %]">[%= get_title %]</a>
+<br>
+<small>[%translate id="blog_posted_by" %] <a href="[%= .self %]/member/profile/[%= posted_by_user.id %]">[%= posted_by_user.nick %]</a> [%translate id="global_date_at" %] [%= ctime escape=TIME_HTML_SHORT %]</small>
+[%= get_abstract_html escape=0 %]
+<a href="[%= .self %]/blog/theme/[%= get_id %]">[more]</a>
+</td>
+
+</tr>
+<tr><td colspan="2"><hr></td></tr>
+[%/loop _ %]

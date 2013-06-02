@@ -1,0 +1,6 @@
+<img style="vertical-align: bottom;" src="[%= .data.userprefs.theme %]/blog.png" alt=""> <a href="[%= .self %]/blog/start">Blog</a>
+[%if .data.latest_news %]
+| Latest News: [%with .data.latest_news %]
+<a href="[%= .self %]/blog/theme/[%= id %]">[%= title %] [more]</a>
+[%/with .data.latest_news %]
+[%/if .data.latest_news %]

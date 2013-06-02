@@ -1,0 +1,31 @@
+<tr>
+    <th align="left" colspan="4">
+    <br />
+    <form action="[%= .self %]/poard/toggle_board_view/[%= id %]" method="POST"
+    [%if is_expanded %]
+ onSubmit="return toggle_board_view([%= id %], 'toggle_hide', 'board_div_[%= id %]', [%= sub_boards# %]);"
+    [%else %]
+ onSubmit="return toggle_board_view([%= id %], 'toggle_show', 'board_div_[%= id %]', 0);"
+    [%/if %]
+    >
+    [%if is_expanded %]
+    <input id="submit_button_[%= id %]" class="button" type="submit" name="submit.toggle_hide" value="Hide" />
+    [%else %]
+    <input id="submit_button_[%= id %]" class="button" type="submit" name="submit.toggle_show" value="Show" />
+    [%/if %]
+    <a href="[%= .self %]/poard/start/[%= id %]">[%= name %]</a>
+    </form>
+    </th>
+</tr>
+    <tr>
+    <td colspan="4">
+    <div id="board_div_[%= id %]">
+    </div>
+    </td>
+    </tr>
+    [%unless is_expanded %]
+    [%else %]
+[%loop sub_boards %]
+[%include name="poard/single_overview.html" %]
+[%/loop sub_boards %]
+[%/if is_expanded %]

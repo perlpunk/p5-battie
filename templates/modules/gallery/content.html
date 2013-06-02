@@ -1,0 +1,432 @@
+[%if .data.gallery.error.token %]
+[%include name="token_expired.html" %]
+[%/if %]
+
+[%switch .action %]
+
+[%case start %]
+<a href="[%= .self %]/gallery/create">Create a new Gallery</a><br>
+<a href="[%= .self %]/gallery/list">List all Galleries</a><br>
+
+
+[%case list %]
+
+<p>
+Galleries:
+</p>
+
+<table class="border_table">
+    [%loop .data.gallery.list %]
+    <tr>
+        <td valign="top" align="left"><a href="[%= .self %]/gallery/view/[%= info.id %]">[%= info.title %]</a><br>
+        created by
+        <a href="[%= .self %]/member/profile/[%= created_by.id %]">[%= created_by.nick %]</a>
+        <br>
+        [%= info.image_count %] Images
+        <br>
+        [%= info.ctime %]
+        </td>
+        <td align="right">
+            <a href="[%= .self %]/gallery/view/[%= info.id %]"><img src="[%= .data.gallery.image_url %]/[%= info.id %]/thumbs/[%= first.id %].[%= first.suffix %]" border="0" alt="[%= info.title %]"></a>
+        </td>
+    </tr>
+    [%unless __last__ %]
+    <tr><td colspan="2"><hr></td>
+    [%/unless __last__ %]
+    [%/loop .data.gallery.list %]
+</table>
+
+[%case view %]
+<div class="breadcrumb" id="breadcrumb">
+<ul>
+[%loop .data.gallery.paths %]
+/ <li><a href="[%= .self %]/gallery/cat/[%= id %]">[%= title %]</a></li>
+[%/loop .data.gallery.paths %]
+</ul>
+</div>
+
+<h2 align="center">Gallery <b>[%= .data.gallery.info.title %] ([%= .data.gallery.image_count %] Images)</b></h2><br>
+[%if .can.gallery.edit %]
+<a href="[%= .self %]/gallery/edit/[%= .data.gallery.info.id %]">Edit</a> /
+<a href="[%= .self %]/gallery/upload_image/[%= .data.gallery.info.id %]">Upload</a><br>
+[%/if .can.gallery.edit %]
+
+<script type="text/javascript">
+function edit_title(old_title,gid, id, div_id) {
+    var el = document.getElementById('image_title_' + id)
+    var res = document.getElementById('result_' + id)
+    new_title = window.prompt("New title:", old_title);
+    if (new_title && new_title != old_title) {
+        res.innerHTML = 'waiting...';
+        ajaxshow( ['ma__gallery/edit_image_title/'+gid+'/'+id,'is_ajax__1','t__[%= .user.token.id %]','submit.save__1','image.title__'+new_title], ['result_'+div_id ], 'POST' );
+        el.innerHTML = new_title;
+    }
+    return false;
+}
+
+var frame_open = 0;
+
+function show_pic(id, suffix, gid) {
+    var src = '[%= .data.gallery.image_url escape=js %]/' + gid + '/' + id + '.' + suffix;
+    var picture_div = document.getElementById('picture');
+    picture_div.innerHTML = '<img src="' + src + '">';
+    var div = document.getElementById('picture_frame');
+    div.style.display = 'block';
+    ajaxshow( ['ma__gallery/view_image/'+gid+'/'+id,'is_ajax__1'], ['previous_thumb', 'next_thumb', 'preload_image' ], 'GET' );
+    if (frame_open) {
+    }
+    else {
+        frame_open = 1;
+    }
+}
+
+function close_div(id) {
+    var div = document.getElementById(id);
+    div.style.display = 'none';
+    frame_open = 0;
+}
+</script>
+
+<div id="preload_image" tyle="display: none">
+
+</div>
+
+<div id="picture_frame" class="login_field" width="90%" height="90%">
+<table cellspacing="0" cellpadding="0" width="90%" height="90%">
+<tr>
+    <td class="transparent" width="20" height="20"></td>
+    <td class="transparent" height="20" >
+    <td class="transparent" width="20" height="20"></td>
+</tr>
+<tr><td class="transparent" width="20"></td>
+<td class="transparent_content" width="90%" align="center">
+<a href="#" title="Close" onclick="close_div('picture_frame'); return false"><img src="[%= .data.userprefs.theme %]/top.png" border="0" alt="&gt;&lt;"></a>
+
+<table width="100%">
+<tr><td align="left"><div id="previous_thumb">previous</div></td><td align="right"><div id="next_thumb">next</div></td></tr>
+<tr><td colspan="2" align="center">
+<div id="picture">
+</div>
+</td></tr></table>
+
+</td>
+<td class="transparent" width="20"></td>
+</tr>
+<tr>
+    <td class="transparent" width="20" height="20"></td>
+    <td class="transparent" height="20">
+    <td class="transparent" width="20" height="20" ></td>
+</tr>
+</table>
+</div>
+
+<table align="center">
+    <tr>
+        <th align="center" colspan="4">
+[%with .data.gallery.pager %]
+[%include name="pager.html" %]
+[%/with .data.gallery.pager %]
+        </th>
+    </tr>
+    <tr>
+    [%loop .data.gallery.images %]
+        <td width="130" class="gallery" height="130" align="center">
+            <table valign="top"><tr><td height="120" align="center" valign="top">
+                        <a
+            onclick="show_pic([%= id %], '[%= suffix %]', [%= .data.gallery.info.id %]); return false"
+                        href="[%= .data.gallery.image_url %]/[%= .data.gallery.info.id%]/[%= _.id %].[%= _.suffix %]"><img src="[%= .data.gallery.image_url %]/[%= .data.gallery.info.id %]/thumbs/[%= _.id %].[%= _.suffix %]" border="0"></a>
+                        </td></tr>
+                        <tr><td valign="bottom">
+                [%= position %]. <span id="image_title_[%= id %]">[%= _.title %]</span>
+										[%if .can.gallery.edit_image %]
+                <a href="[%= .self_action %]/gallery/edit_image/[%= .data.gallery.info.id %]/[%= id %]"
+                    onClick="edit_title('[%= _.title escape=javascript %]', [%= .data.gallery.info.id %],[%= id %],[%= id %]);return false" class="minimal" title="Edit Image Title">Edit</a>
+                <div id="result_[%= id %]"></div>
+            <a href="[%= .self %]/gallery/edit_image/[%= .data.gallery.info.id %]/[%= id %]">Manage</a>
+										[%/if .can.gallery.edit_image %]
+    </table>
+    </td>
+    [%if newline %]
+    </tr><tr>
+    [%/if newline %]
+    [%/loop .data.gallery.images %]
+    </tr>
+    <tr>
+        <th align="center" colspan="4">
+[%with .data.gallery.pager %]
+[%include name="pager.html" %]
+[%/with .data.gallery.pager %]
+        </th>
+    </tr>
+</table>
+
+[%case edit_image %]
+
+Edit image from gallery <b>[%= .data.gallery.info.title %]</b><br>
+<form action="[%= .self %]/gallery/edit_image/[%= .data.gallery.info.id %]/[%= .data.gallery.image.id %]" method="POST">
+    <input type="submit" name="submit.delete" value="Delete" class="button">
+[%= .user.token.hidden escape=0 %]
+		</form>
+
+<form action="[%= .self %]/gallery/edit_image/[%= .data.gallery.info.id %]/[%= .data.gallery.image.id %]" method="POST">
+    Title: <input type="text" size="40" name="image.title" value="[%= .data.gallery.image.title %]">
+    <br>
+    Position: <input type="text" size="4" name="image.position" value="[%= .data.gallery.image.position %]">
+    <br>
+    <input type="submit" name="submit.save" value="Save" class="button">
+[%= .user.token.hidden escape=0 %]
+</form>
+<br>
+<img src="[%= .data.gallery.image_url %]/[%= .data.gallery.info.id%]/[%= .data.gallery.image.id %].[%= .data.gallery.image.suffix %]"><br>
+
+[%case create %]
+
+[%if .data.gallery.error.no_cat_selected %]
+Please select a category.
+[%/if .data.gallery.error.no_cat_selected %]
+<form action="[%= .self %]/gallery/create" method="POST">
+Title:    <input type="text" name="gallery.title" value="[%= .data.gallery.title %]">
+<br>
+    <input type="submit" class="button" name="submit.create" value="Create">
+<form action="[%= .self %]/gallery/edit/[%= .data.gallery.info.id %]" method="post" method="POST">
+<select name="gallery.cat" size="7">
+<option value="0">Please select</option>
+[%html_option .data.gallery.categories %]
+</select>
+[%= .user.token.hidden escape=0 %]
+</form>
+
+[%case edit %]
+
+<h2>Edit Gallery <a href="[%= .self %]/gallery/view/[%= .data.gallery.info.id %]">[%= .data.gallery.info.title %]</a></h2><br>
+
+
+<a href="[%= .self %]/gallery/upload_image/[%= .data.gallery.info.id %]">Upload Image(s)</a>
+<hr>
+<h3>Set Title</h3>
+
+<form action="[%= .self %]/gallery/edit/[%= .data.gallery.info.id %]" method="post" method="POST">
+Title:    <input type="text" name="gallery.title" value="[%= .data.gallery.info.title %]">
+    <input type="submit" class="button" name="submit.save" value="Change Title">
+[%= .user.token.hidden escape=0 %]
+</form>
+
+<hr>
+<h3>Set Category (current: <a href="[%= .self %]/gallery/cat/[%= .data.gallery.info.cat_id %]">[%= .data.gallery.info.cat.title %]</a>):</h3><br>
+<form action="[%= .self %]/gallery/edit/[%= .data.gallery.info.id %]" method="post" method="POST">
+<select name="gallery.cat" size="7">
+<option value="">Please select</option>
+[%html_option .data.gallery.categories %]
+</select>
+[%= .user.token.hidden escape=0 %]
+    <input type="submit" class="button" name="submit.set_cat" value="Change Category">
+</form>
+
+
+[%case upload_image %]
+
+<form id="uploadform" action="[%= .self %]/gallery/upload_image/[%= .data.gallery.info.id %]?upload.id=[%= .data.gallery.upload_id %]" method="post"
+    onsubmit="return false;" enctype="multipart/form-data">
+
+    Gallery <b>[%= .data.gallery.info.title %]</b><br>
+    <a href="[%= .self %]/gallery/edit/[%= .data.gallery.info.id %]">Edit Gallery</a><br>
+<a href="[%= .self %]/gallery/view/[%= .data.gallery.info.id %]">View Gallery</a>
+<p>
+
+    Here you can upload images. You can upload 1-10 images, and fill in titles; you
+    can also fill the titles in later.
+    <table>
+        <tr><th>Title</th><th>File</th></tr>
+        <tr>
+            <td><input id="title1" type="text" name="gallery.image1.title" onchange="fileChange(1);"></td>
+            <td><input id="image1" type="file" name="gallery.image1.file" onchange="fileChange(1);"></td>
+        </tr>
+        <tr>
+            <td><input id="title2" type="text" name="gallery.image2.title" onchange="fileChange(2);"></td>
+            <td><input id="image2" type="file" name="gallery.image2.file" onchange="fileChange(2);"></td>
+        </tr>
+        <tr>
+            <td><input id="title3" type="text" name="gallery.image3.title" onchange="fileChange(3);"></td>
+            <td><input id="image3" type="file" name="gallery.image3.file" onchange="fileChange(3);"></td>
+        </tr>
+        <tr>
+            <td><input id="title4" type="text" name="gallery.image4.title" onchange="fileChange(4);"></td>
+            <td><input id="image4" type="file" name="gallery.image4.file" onchange="fileChange(4);"></td>
+        </tr>
+        <tr>
+            <td><input id="title5" type="text" name="gallery.image5.title" onchange="fileChange(5);"></td>
+            <td><input id="image5" type="file" name="gallery.image5.file" onchange="fileChange(5);"></td>
+        </tr>
+        <tr>
+            <td><input id="title6" type="text" name="gallery.image6.title" onchange="fileChange(6);"></td>
+            <td><input id="image6" type="file" name="gallery.image6.file" onchange="fileChange(6);"></td>
+        </tr>
+        <tr>
+            <td><input id="title7" type="text" name="gallery.image7.title" onchange="fileChange(7);"></td>
+            <td><input id="image7" type="file" name="gallery.image7.file" onchange="fileChange(7);"></td>
+        </tr>
+        <tr>
+            <td><input id="title8" type="text" name="gallery.image8.title" onchange="fileChange(8);"></td>
+            <td><input id="image8" type="file" name="gallery.image8.file" onchange="fileChange(8);"></td>
+        </tr>
+        <tr>
+            <td><input id="title9" type="text" name="gallery.image9.title" onchange="fileChange(9);"></td>
+            <td><input id="image9" type="file" name="gallery.image9.file" onchange="fileChange(9);"></td>
+        </tr>
+        <tr>
+            <td><input id="title10" type="text" name="gallery.image10.title" onchange="fileChange(10);"></td>
+            <td><input id="image10" type="file" name="gallery.image10.file" onchange="fileChange(10);"></td>
+        </tr>
+    </table>
+
+    <input type="submit" class="button" name="submit.upload" value="Upload" onclick="uploadFile();">
+<div>
+    <div id="fileName"></div>
+    <progress id="progress" style="margin-top:10px"></progress> <span id="prozent"></span>
+</div>
+<script type="text/javascript">
+var files = new Array();
+function fileChange(id)
+{
+    files = [];
+    for (var i=1; i<=10; i++) {
+        var input = document.getElementById("image"+i);
+        var fileList = document.getElementById("image"+i).files;
+        var title = document.getElementById("title"+i).value;
+
+        var file = fileList[0];
+        var fileobject = new Object;
+        fileobject.file = file;
+        fileobject.title = title;
+
+        if (file) {
+            files.push(fileobject);
+        }
+    }
+    display_files();
+}
+function display_files() {
+    var html = document.getElementById("fileName");
+    html.innerHTML = '';
+    for (var i=0; i<files.length; i++) {
+        var fileobject = files[i];
+        var file = fileobject.file;
+        html.innerHTML += 'Name:' + file.name + '<br>';
+        html.innerHTML += 'Size:' + file.size + 'B<br>';
+        html.innerHTML += 'Type:' + file.type + 'B<br>';
+        html.innerHTML += 'Title:' + fileobject.title + '<br><hr>';
+    }
+}
+
+function uploadFile() {
+    var formData = new FormData();
+    var client = new XMLHttpRequest();
+    var prog = document.getElementById("progress");
+    prog.value = 0;
+    prog.max = 0;
+
+    formData.append('submit.upload', 1);
+    formData.append('t', '[%= .user.token.id %]');
+    for (var i=0; i<files.length; i++) {
+        var fileobject = files[i];
+        var file = fileobject.file;
+        prog.max += file.size;
+        formData.append('gallery.image'+(i+1)+'.file', file);
+        if (fileobject.title.length) {
+            formData.append('gallery.image'+(i+1)+'.title', fileobject.title);
+        }
+    }
+
+    client.onerror = function(e) {
+        alert("onError");
+    };
+
+    client.onload = function(e) {
+        document.getElementById("prozent").innerHTML = "100%";
+        prog.value = prog.max;
+        var html = document.getElementById("fileName");
+        html.innerHTML = 'Done';
+        var form = document.getElementById('uploadform');
+        form.reset();
+        document.getElementById("prozent").innerHTML = "";
+        document.getElementById("progress").value = 0;
+    };
+
+    client.upload.onprogress = function(e) {
+        document.getElementById("progress").value = e.loaded;
+        document.getElementById("prozent").innerHTML = Math.round(100 / e.total * e.loaded) + "%";
+    };
+
+    client.open("POST", "[%= .self %]/gallery/upload_image/[%= .data.gallery.info.id %]");
+    client.send(formData);
+}
+</script>
+
+[%= .user.token.hidden escape=0 %]
+</form>
+
+[%case cat %]
+<div class="breadcrumb" id="breadcrumb">
+<ul>
+[%loop .data.gallery.paths %]
+/ <li><a href="[%= .self %]/gallery/cat/[%= id %]">[%= title %]</a><li>
+[%/loop .data.gallery.paths %]
+</ul>
+</div>
+<h3>[%= .data.gallery.category.title %]</h3>
+<br>
+
+<ul class="star">
+[%loop .data.gallery.children %]
+<li>[%= .user.token.hidden escape=0 %]
+<a href="[%= .self %]/gallery/cat/[%= id %]">[%= title %]</a>
+[%if is_node %]
+<form action="[%= .self %]/gallery/cat/[%= id %]" method="post">
+[%= .user.token.hidden escape=0 %]
+[%if .can.gallery.cat_edit %]
+    <input type="submit" class="button" name="submit.delete" value="Delete">
+[%/if .can.gallery.cat_edit %]
+</form>
+[%/if is_node %]
+</li>
+[%/loop .data.gallery.children %]
+</ul>
+
+[%if .can.gallery.cat_edit %]
+<form action="[%= .self %]/gallery/cat/[%= .data.gallery.category.id %]" method="post">
+[%= .user.token.hidden escape=0 %]
+    [%if .data.gallery.category %]
+        <input type="text" name="cat.title">
+        <input type="submit" class="button" name="submit.create" value="Add Category">
+    [%else .data.gallery.category %]
+        <input type="submit" class="button" name="submit.create" value="Create Root Category">
+    [%/if .data.gallery.category %]
+</form>
+[%/if .can.gallery.cat_edit %]
+
+
+<table class="border_table">
+    [%loop .data.gallery.infos %]
+    <tr>
+        <td valign="top" align="left"><a href="[%= .self %]/gallery/view/[%= info.id %]">[%= info.title %]</a><br>
+        created by
+        <a href="[%= .self %]/member/profile/[%= created_by.id %]">[%= created_by.nick %]</a>
+        <br>
+        [%= info.image_count %] Images
+        <br>
+        [%= info.ctime %]
+        </td>
+        <td align="right">
+            <a href="[%= .self %]/gallery/view/[%= info.id %]"><img src="[%= .data.gallery.image_url %]/[%= info.id %]/thumbs/[%= first.id %].[%= first.suffix %]" border="0" alt="[%= info.title %]"></a>
+        </td>
+    </tr>
+    [%unless __last__ %]
+    <tr><td colspan="2"><hr></td>
+    [%/unless __last__ %]
+    [%/loop .data.gallery.infos %]
+</table>
+
+
+
+
+[%/switch .action %]

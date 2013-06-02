@@ -1,0 +1,46 @@
+<form action="[%= $SELF escape=0 %]/poard/mod_delete_message/[%= id escape=0 %]" method="POST" style="display: inline;">
+[%unless .data.poard.nojs %]
+<input type="submit" name="submit.delete" value="[%translate id="global_action_delete" %]"
+class="action_button"
+    onClick="delete_message([%= get_id escape=0 %],'status_[%= id escape=0 %]','del_reason_div_[%= id escape=0 %]');return false;">
+</form>
+
+<div id="del_reason_div_[%= id escape=0 %]" style="visibility:hidden; position:absolute; background-color:#ff0000; border-left:1px solid #000000;">
+Reason for deletion:
+<form action="#">
+<select name="del_reason_[%= id escape=0 %]" id="del_reason_[%= id escape=0 %]">
+<option value="spam">Spam</option>
+<option value="offtopic">Offtopic</option>
+<option value="double_post">Double Post</option>
+<option value="other: ">Other</option>
+</select>
+<br>
+Specify:<br><input type="text" name="other_reason_[%= id escape=0 %]" id="other_reason_[%= id escape=0 %]">
+<br>
+<input type="button" name="submit.reallydelete" value="[%translate id="global_action_delete" %]" class="button"
+onClick="really_delete_message([%= get_id escape=0 %],'status_[%= id escape=0 %]','del_reason_div_[%= id escape=0 %]',[%= id escape=0 %])">
+<input type="button" name="submit.cancel" value="Cancel" class="button"
+onClick="cancel_delete_message([%= get_id escape=0 %],'status_[%= id escape=0 %]','del_reason_div_[%= id escape=0 %]')">
+&nbsp;
+</form>
+</div>
+
+[%else %]
+<div id="del_reason_div_[%= id escape=0 %]" style="position:absolute; background-color:#ff0000; border-left:1px solid #000000">
+Reason for deletion:<br>
+<select name="comment" id="del_reason_[%= id escape=0 %]">
+<option value="spam">Spam</option>
+<option value="offtopic">Offtopic</option>
+<option value="double_post">Double Post</option>
+<option value="other: ">Other</option>
+</select>
+<br>
+Specify:<br><input type="text" name="comment" id="other_reason_[%= id escape=0 %]">
+<br>
+        <input type="submit" name="submit.reallydelete" value="[%translate id="global_action_delete" %]" class="button">
+&nbsp;
+</form>
+</div>
+
+
+[%/if %]

@@ -1,0 +1,28 @@
+[%if .user.logged_in %]
+<a href="[%= .self %]/login/info">[%translate id=global_user %]: [%= .user.name %]</a><br>
+<a href="[%= .self %]/login/logout"><img style="vertical-align: bottom;" src="[%= .data.userprefs.theme %]/icons/door-open-out.png" alt=""> [%translate id="global_action_logout" %]</a>
+[%else %]
+<script type="text/javascript"><!--
+//<![CDATA[
+function show_login(from) {
+    var result = document.getElementById('loginresult');
+    result.innerHTML = '<img src="' + theme + '/wait.gif" width="50" height="10" alt="[wait]">';
+    result.style.display="block";
+    result.style.visibility="visible";
+    var show_login_callback = function() {
+        result.innerHTML = arguments[0];
+    }
+    ajaxshow( ['ma__login/ajaxshow', 'login.from__'+from], [show_login_callback], 'GET');
+}
+function hide_login() {
+    var result = document.getElementById('loginresult');
+    result.style.display="none";
+    result.style.visibility="hidden";
+}
+//]]>
+--></script>
+<a href="[%= .self %]/login/show?login.from=[%= .data.login.from %]"
+name="ajaxlink" onClick="show_login('[%= .data.login.from escape=JS %]');return false">[%translate id="global_action_login" %]</a>
+<small>(<a href="[%= .self %]/login/register">[%translate id="global_action_register" %]</a>)</small>
+<div id="loginresult" style="z-index: 99; position: absolute;"></div>
+[%/if %]

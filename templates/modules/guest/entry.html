@@ -1,0 +1,23 @@
+<tr>
+[%if active %]
+<th align="left">[%= name %][%if location %] [%translate id=from %] [%= location %][%/if %]</th><th align="left">[%= ctime escape=TIME_HTML %]</th>
+</tr>
+<tr>
+<td>Homepage:</td><td>[%if url %]<a href="[%= .redir %]?[%= url escape=url %]" rel="nofollow">[%= url %]</a>[%else %][No homepage][%/if %]</td>
+</tr>
+<tr>
+<td colspan="2">[%= rendered_message escape=0 %]<br><br></td>
+[%else %]
+    [%if .can.guest.approve_entry %]
+<th align="left">[%= name %][%if location %] [%translate id=from %] [%= location %][%/if %]</th><th align="left">[%= ctime escape=TIME_HTML %]</th>
+</tr>
+<tr>
+<td colspan="2">[%= rendered_message escape=0 %]<br><br></td>
+    [%else %]
+    <td colspan="2">
+    Not approved yet
+    </td>
+    [%/if .can.guest.approve_entry %]
+[%/if active %]
+
+</tr>

@@ -1,0 +1,789 @@
+/* global */
+/* The CSS that's required to position the footer */
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+	height: 100%;
+}
+
+body {
+	height: 100%;
+	font-family: verdana, arial, sans-serif;
+	padding: 0px;
+	margin: 0px;
+	font-size: .78em;
+
+	scrollbar-base-color:#000000;
+	scrollbar-3d-light-color:#006699;
+	scrollbar-arrow-color:#FFFFFF;
+	scrollbar-darkshadow-color:#000000;
+	scrollbar-face-color:#006699;
+	scrollbar-highlight-color:#FFFFFF;
+	scrollbar-shadow-color:#000066;
+	scrollbar-track-color:#000000;
+}
+
+p {
+	margin: 0px;
+	padding: 0px 0px 16px 0px;
+	line-height: 1.7em;
+}
+
+h1 {
+	font-size: 108%;
+	letter-spacing: .1em;
+}
+
+h2 {
+	margin: 0px;
+	padding: 0px 0px 4px 0px;
+	font-size: 100%;
+	letter-spacing: .1em;
+}
+
+img{border: 0px;}
+
+a {
+	outline: none;
+	color: #000088;
+	text-decoration: underline;
+}
+
+/* image positioning - left, right and center */
+.left {
+	float: left; 
+	padding: 0px 8px 0px 0px;
+}
+
+.right {
+	float: right; 
+	padding: 0px 0px 0px 8px;
+}
+
+.center {
+	display: block;
+	text-align: center;
+	margin: 0 auto;
+}
+
+/* block quote */
+blockquote {
+	margin: 20px 0px 20px 0px; 
+	padding: 10px 20px 0px 20px;
+	border-left: 8px solid;
+}
+
+/* unordered list */
+ul {
+	margin: 8px 0px 0px 16px;
+	padding: 0px;
+}
+
+ul li {
+	list-style-type: square;
+	margin: 0px 0px 11px 0px; 
+	padding: 0px;
+}
+
+/* ordered list */
+ol {
+	margin: 8px 0px 0px 24px;
+	padding: 0px;
+}
+
+ol li {
+	margin: 0px 0px 11px 0px; 
+	padding: 0px;
+}
+
+/* widths */
+#links_container, #menu, #content {
+	width: 100%; 
+	margin-left: auto; 
+	margin-right: auto;
+}
+
+#main {
+	position: relative;
+	min-height: 100%;
+	width: 100%;
+	margin-left: auto; 
+	margin-right: auto;
+}
+
+/* footer */
+#footer {
+	height: 80px;  
+	padding: 18px 0px 0px 0px;
+	font-size: 88%;
+	text-transform: uppercase;
+	text-align: center; 
+	border-top: 4px solid;
+	width: 100%; 
+	
+	position: relative;
+	margin: -102px auto 0 auto;
+}
+
+/* A CSS hack that only applies to IE -- specifies a different height for the footer */
+* html #footer {
+	margin-top: -7.4em;
+}
+
+/* links / footer */
+#links_container {
+	border-top: 1px solid; 
+	border-bottom: 1px solid;
+}
+
+#links {
+	height: 80px;  
+	padding: 18px 0px 0px 0px;
+	font-size: 88%;
+	text-transform: uppercase;
+}
+
+#links {
+	text-align: right;
+	padding: 10px 10px 0px 0px;
+}
+
+#links a, #footer a, #links a:hover, #footer a:hover{text-decoration: none;}
+
+/* logo */
+#logo {
+	padding-left: 19px;
+	float: left;
+}
+
+#logo h1 {
+	font-family: verdana, arial, sans-serif;
+	margin: 0px;
+	padding: 18px 0px 0px 0px;
+	font-size: 160%;
+	letter-spacing: .2em;
+	text-transform: uppercase;
+}
+
+#logo h2 {
+	font-family: verdana, arial, sans-serif;
+	margin: 0px;
+	padding: 5px 0px 0px 0px;
+	font-size: 108%;
+	letter-spacing: .2em;
+}
+
+/* navigation menu */
+#menu {
+	height: 40px; 
+	border-bottom: 1px solid;
+}
+
+#menu ul{margin: 0px auto;} 
+
+#menu li {
+	float: left; 
+	margin: 0px 0px 0px 0px; 
+	padding: 0px;
+	list-style: none;
+} 
+
+#menu li a {
+	display: block; 
+	float: left; 
+	height: 27px;
+	text-decoration: none; 
+	padding: 11px 19px 2px 19px;
+	text-transform: uppercase;
+	font-size: 88%;
+	border-right: 1px solid;
+} 
+
+/* main content */
+#content {
+	height: auto;
+	padding: 20px 0px 0px 0px;
+	overflow: hidden;
+}
+
+/* column 1 - contains sidebar */
+#column1 {
+	float: left;
+	width: 220px;
+	padding: 4px 15px 95px 19px;
+}
+
+.sidebaritem {
+	text-align: left;
+	float: left;
+	margin: 0px 0px 25px 0px;
+}
+
+.sidebaritem h1 {
+	padding: 0px; 
+	margin: 0px 0px 14px 0px; 
+	font-weight: bold;
+	text-transform: uppercase;
+}
+
+.sidebaritem p {
+	line-height: 16px; 
+	padding: 0px 0px 8px 0px;
+}
+
+.sbilinks{padding: 0px 0px 0px 0px;}
+
+.sbilinks ul{margin: 0px auto;} 
+
+.sbilinks li {
+	margin: 0px; 
+	float: left; 
+	list-style: none; 
+} 
+
+.sbilinks li > a , .sbilinks li > a:hover {
+	float: left;
+	height: 16px;
+	text-decoration: none; 
+	padding: 5px 0px 4px 19px;
+	width: 169px;
+	border: 0px;
+} 
+
+.sidebaritem a, .sidebaritem a:hover {
+	padding: 0px 0px 2px 19px;
+	text-decoration: none;
+}
+
+/* column 2 - page content */
+#column2 {
+	text-align: justify;
+	padding: 0px 20px 15px 0px;
+	margin: 0px 0px 0px 270px;
+}
+
+#column2 h1 {
+	font-family: arial, sans-serif;
+	margin: 0px 0px 12px 0px; 
+	font-size: 150%;
+	text-transform: uppercase;
+	font-weight: normal;
+}
+
+#column2 a, #column2 a:hover {
+	padding: 0px 0px 2px 0px;
+	text-decoration: none;
+}
+
+/* additional colour scheme selections */
+#colour{margin: 0px 0px 20px 0px;}
+
+#colour a, #colour a:hover{border: 0px;}
+
+.blue {
+	background: #FFFFFF url(blue.png) no-repeat left center;
+	color: #109CEF;
+	padding: 0px 40px 0px 20px;
+}
+
+.green {
+	background: #FFFFFF url(green.png) no-repeat left center;
+	color: #94C65A;
+	padding: 0px 40px 0px 20px;
+}
+
+.purple {
+	background: #FFFFFF url(purple.png) no-repeat left center;
+	color: #CE5AEF;
+	padding: 0px 40px 0px 20px;
+}
+
+.orange {
+	background: #FFFFFF url(orange.png) no-repeat left center;
+	color: #FF9C21;
+	padding: 0px 40px 0px 20px;
+}
+
+/******************************** old style *******************************/
+table {
+    font-family: verdana,sans-serif;
+}
+
+td { empty-cells:show }
+
+.minimal {
+    font-size: 70%;
+}
+
+table.outer_table {
+    background: #f6f6f6;
+    height: 100%;
+}
+
+table.navigation {
+    background-color: #e0eeff;
+    border: 1px solid #aaccee;
+    border-spacing: 0em;
+}
+
+table.navigation td.navigation_active {
+    border: 1px solid #000000;
+    background-color: #eeeeee;
+}
+table.navigation a {
+    text-decoration: none;
+    font-weight: bold;
+}
+table.navi_horizontal a {
+    margin: 0.4em; padding: 0.2em 0.5em;
+}
+table.navi_vertical a {
+    margin: 0.0em 0.0em; padding: 0.0em 0.0em;
+}
+table.navigation a:hover {
+    background-color: #eeeeee;
+    color: #000000;
+}
+table.navigation td {
+    border-top: 1px solid #aaccee;
+    padding-bottom: 0.3em;
+    padding-left: 0.2em;
+    padding-right: 0.1em;
+    padding-top: 0.3em;
+}
+table.navi_horizontal td {
+    vertical-align: top;
+    padding: 0em;
+    margin: 0em;
+    padding-left: 0.2em;
+    padding-top: 0.2em;
+}
+table.navi_vertical td {
+    padding-bottom: 0.5em;
+}
+table.navigation input[type='text'] {
+    border: 0px;
+    border-bottom: 1px solid #cccccc;
+    border-right: 1px solid #cccccc;
+    border-left: 1px solid #aaaaaa;
+    border-top: 1px solid #aaaaaa;
+}
+
+table.navigation ul {
+    margin-top: 0em;
+    margin-bottom: 0em;
+    margin-right: 0em;
+    margin-left: 1em;
+    padding-left: 0.2em;
+}
+table.navigation li {
+    margin-left: 0em;
+    padding-left: 0.0em;
+}
+table.navigation ul a {
+    font-size: 85%;
+    font-weight: normal;
+}
+
+table.navigation table.chatterbox {
+    font-size: 85%;
+}
+
+.navi a {
+    text-decoration: none;
+}
+a.unread, a.unread:hover {
+    font-weight: bold;
+}
+a:hover {
+    color: #000088;
+    text-decoration: underline;
+}
+a:visited {
+    color: #446677;
+}
+
+table.debug_inner, td.debug_inner, th.debug_inner {
+    background: #111122;
+    color: #eeeeee;
+    font-family: Courier;
+}
+
+table.active {
+    background: #ff0000;
+}
+table.active a, table.active a:visited {
+//    color: #ffffff;
+}
+.navi_active a, .navi_active a:visited {
+ //   color: #ffffff;
+    text-decoration: none;
+}
+
+input, select {
+    color: #111111;
+    background: #eeeeee;
+    font-size: 85%;
+}
+option {
+    background: #88aaff;
+}
+optgroup {
+    background: #503060;
+}
+
+.navi_active {
+    background: #ffffff;
+    border-top:   1px solid #0000ff;
+    border-left:  1px solid #0000ff;
+    border-right: 1px solid #0000ff;
+    border-bottom:1px solid #0000ff;
+    font-weight: bold;
+    font-size: 85%;
+}
+
+tr.navi:hover, td.navi:hover, .navi:hover {
+    border-bottom:1px solid #ffffff;
+    border-right: 1px solid #ffffff;
+    border-left:  1px solid #5555ff;
+    border-top:   1px solid #5555ff;
+}
+.navi {
+    border-top:   1px solid #ffffff;
+    border-left:  1px solid #ffffff;
+    border-right: 1px solid #5555ff;
+    border-bottom:1px solid #5555ff;
+    background-image:url(verlauf.gif);
+}
+
+.navi_table {
+    border-right:1px solid #99ccff;
+}
+
+hr {
+    border-top:0px solid #77aadd;
+    border-bottom:1px dotted #99ccff;
+}
+
+
+a:link img{
+		border: 0px;
+		border-style:outset;
+		border-width:0px;
+}
+
+.button {
+    background: transparent; background-image: url(button.gif);
+    background-repeat: no-repeat;
+    background-position: center left;
+    border-bottom: solid 1px #666666;
+    border-right:  solid 1px #666666;
+    color: #000000;
+}
+input.submit {
+    font-weight: bold;
+    color: #000000;
+}
+
+.error {
+    color: #ff0000;
+}
+
+.hint {
+    color: #dd6000;
+}
+
+div.cell_error {
+    background-color: #ffbbbb;
+}
+
+span.cell_okay {
+    background-color: #bbffbb;
+    color: #000000;
+}
+
+div.cell_okay {
+    background-color: #bbffbb;
+    color: #000000;
+}
+
+a.action {
+    background-color: #dddddd;
+    border-top: 1px solid #bbbbbb;
+    border-right: 1px solid #bbbbbb;
+    border-bottom: 1px solid #aaaaaa;
+    border-left: 1px solid #aaaaaa;
+    text-decoration: none;
+}
+a.action:hover {
+    background-color: #bbeeff;
+    color: #660033;
+    text-decoration: none;
+}
+span.inactive_action {
+    background-color: #222222;
+    color: #444444;
+}
+
+table.searchresults {
+    background-color: #cccccc;
+}
+table.searchresults th {
+    background-color: #e0e0e0;
+    color: #3333ff;
+    font-size: 110%;
+    vertical-align: top;
+    font-weight: normal;
+    padding-bottom: 0.3em;
+}
+table.searchresults td {
+    background-color: #f6f6f6;
+    padding: 4px;
+}
+table.searchresults td.small {
+    font-size: 92%;
+}
+table.searchresults td.excerpt {
+    font-size: 87%;
+    color: #444444;
+}
+table.searchresults td.thread {
+    width: 30%;
+}
+table.searchresults td.delimiter {
+    background-color: #e0e0e0;
+    padding: 0px;
+    height: 5px;
+}
+table.searchresults a {
+    text-decoration: none;
+}
+table.searchresults td strong {
+    color: #44aa00;
+}
+
+table.overview {
+    background-color: #cccccc;
+    padding: 0px;
+    border-spacing: 1px;
+}
+table.overview td {
+    padding: 4px;
+    margin: 0px;
+    vertical-align: top;
+    background-color: #f6f6f6;
+}
+table.overview td.light {
+    background-color: #f6f6f6;
+}
+table.overview td.dark {
+    background-color: #ebebeb;
+}
+table.overview a {
+    text-decoration: none;
+}
+table.overview th {
+    background-color: #e6e6e6;
+    color: #3333ff;
+    font-size: 110%;
+    vertical-align: top;
+    font-weight: normal;
+    padding-bottom: 0.3em;
+}
+
+
+table.border_table, div.border_div {
+    border-left:   1px solid #aaaaaa;
+    border-right:  1px solid #aaaaaa;
+    border-bottom: 1px solid #aaaaaa;
+    border-top: 1px solid #aaaaaa;
+}
+
+table.chatterbox td{
+    border-left:   none;
+    border-right:  none;
+    border-bottom: none;
+}
+
+table.chatterbox tr.odd, div.chatterbox span{
+    width: 100%;
+    font-size: 90%;
+}
+table.chatterbox tr.odd, div.chatterbox a {
+    font-size: 90%;
+}
+table.chatterbox tr.odd, div.chatterbox span.chat_action{
+    font-weight: bold;
+}
+
+
+table.pager td {
+    border-left:   1px solid #444499;
+    border-right:  1px solid #444499;
+    padding: 0.2em;
+}
+table.pager td.pager_inactive,span.pager_inactive {
+    color: #777777;
+}
+table.pager {
+    background-color: #eeeeee;
+    border-collapse: collapse;
+    border-top:      1px solid #444499;
+    border-bottom:   1px solid #444499;
+    font-size: 115%;
+    font-weight: bold;
+}
+table.pager a {
+    padding: 0.1em;
+    margin: 0.2em;
+    text-decoration: none;
+}
+table.pager a:hover {
+    color: #000000;
+    background: #aaaaff;
+}
+
+div.login_field {
+    z-index: 666;
+    display: none;
+    position: absolute;
+}
+
+td.transparent {
+    background: #0000ff;
+    filter:alpha(opacity=50);
+    opacity:0.5;
+    -moz-opacity:0.5;
+}
+
+td.transparent_content {
+    background: #eeeeee;
+    -moz-opacity: 1;
+    opacity: 1;
+    border-top:   3px solid #000000;
+    border-left:  3px solid #000000;
+    border-right:  2px solid #000000;
+    border-bottom:2px solid #000000;
+}
+
+ul.star {
+    list-style-image:url(star.gif);
+}
+
+#breadcrumb ul {
+    margin: 0;
+    padding: 0;
+}
+
+#breadcrumb li {
+    list-style-image:url(star.gif);
+    display: inline;
+    margin-right: 2;
+    margin-left: 2;
+    margin-top: 0;
+    border-bottom: 1px dotted;
+    font-weight: bold;
+}
+
+td.navi_links_div {
+    border:1px dotted #555599;
+}
+td.navi_links_div a {
+    text-decoration: none;
+}
+
+#navi_links ul {
+    margin: 0;
+    padding: 0;
+}
+
+#navi_links li {
+    list-style-image:url(star.gif);
+    font-weight: bold;
+    float: left;
+    margin-left: 20;
+    margin-top: 0;
+}
+#navi_links ul li a:hover {
+    text-decoration: none;
+    color: #ffffff;
+    background-color: #555599;
+}
+
+table.powered_by {
+    font-size: 85%;
+    color: #dddddd;
+    background-color: #000000;
+    border: 2px solid #99ccff;
+    padding: 0em 0em 0em 0em;
+    margin: 0em 0em 0em 0em;
+}
+table.powered_by img {
+    vertical-align: middle;
+}
+table.powered_by a, table.powered_by a:hover, table.powered_by a:visited {
+    color: #ffffff;
+}
+
+div.functions {
+    background-color: #ffeeee;
+    border: 1px dotted #ff0000;
+    width: 65%;
+    padding: 0.5em;
+    margin-bottom: 0.3em;
+}
+div.functions_small {
+    width: 30%;
+}
+div.functions a.action, div.functions div.action {
+    float: left;
+    margin: 0.2em;
+}
+
+div.page_options {
+    background-color: #eeffee;
+    border: 1px dotted #00ca00;
+    width: 30%;
+    font-size: 70%;
+    padding: 0.5em;
+    float: right;
+}
+
+div.description {
+    background-color: #e8e8e8;
+    border: 1px dotted #b0b0b0;
+    padding: 0.3em;
+	min-width: 200px;
+	max-width: 80%;
+}
+
+div.motd {
+    border: 1px dotted #777777;
+    font-size: 95%;
+    color: #444444;
+}
+div.motd a {
+    text-decoration: none;
+}
+
+div.message_div del {
+    color: red;
+}
+div.message_div ins {
+    color: green;
+    text-decoration: none;
+}
+
+span.javascript, div.javascript, td.javascript {
+    visibility: hidden;
+}
+
+a.icon_link {
+    text-decoration: none;
+}
+a.icon_link > img {
+    padding-right: 0.25em;
+}

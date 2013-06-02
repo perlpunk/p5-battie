@@ -1,0 +1,82 @@
+table.message_table {
+    background-color: #ffffff;
+    border-bottom: 1px solid #888888;
+    border-left:   1px solid #888888;
+}
+
+table.unread_msg, div.unread_msg {
+    border-left: 2px solid #0000ff;
+}
+ul.message_tree {
+    border-left: 1px dotted #88aaff;
+}
+ul.message_tree_last {
+    border-left: 0px solid #ffffff;
+}
+ul.message_tree:hover {
+    border-left: 1px solid #88aaff;
+}
+ul.message_tree_last:hover {
+    border-left: 0px solid #ffffff;
+}
+table.posting_headline {
+    background-color: #f0f0f0;
+}
+div.posting_headline_0, table.posting_headline_0 { background-color: #f0f0f0; }
+div.posting_headline_1, table.posting_headline_1 { background-color: #e0e8f0; }
+div.posting_headline_2, table.posting_headline_2 { background-color: #d0e0f0; }
+div.posting_headline_3, table.posting_headline_3 { background-color: #c0d8f0; }
+div.posting_headline_4, table.posting_headline_4 { background-color: #b0d0f0; }
+div.posting_headline_5, table.posting_headline_5 { background-color: #a0c8f0; }
+div.posting_headline_6, table.posting_headline_6 { background-color: #90c0f0; }
+div.posting_headline_7, table.posting_headline_7 { background-color: #80b8f0; }
+div.posting_headline_8, table.posting_headline_8 { background-color: #70b0f0; }
+div.posting_headline_del, table.posting_headline_del { background-color: #bb9999; }
+
+table.posting_headline a, td.posting_headline a {
+    color: #003366;
+}
+td.posting_headline, th.posting_headline, div.posting_headline {
+    color: #000000;
+	/*
+    background-color: #dddddd;
+	*/
+}
+td.author_info {
+    border-right: 1px dashed #aaaaaa;
+}
+td.posting_status {
+    background-color: #eeeeee;
+}
+td.posting_content div.signature, div.posting div.signature {
+    border-top: 1px dashed #aaaaaa;
+    border-bottom: 1px solid #cccccc;
+    background-color: #eeeeee;
+}
+label.board_label {
+    color: #0000ff;
+}
+label.board_label_selected {
+    color: #ff0000;
+}
+table.board_admin td.board_name {
+    background-color: #eeeeee;
+}
+table.board_admin td.board_label {
+    background-color: #eeeeee;
+}
+table.board_admin td.board_target {
+    background-color: #dddddd;
+}
+ul.board_tree_last {
+	/*
+    border-left: 1px dotted #888888;
+	*/
+}
+ul.board_tree {
+/*
+    border-left: 1px dotted #888888;
+    border-bottom: 1px dotted #888888;
+	*/
+}
+

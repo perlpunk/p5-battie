@@ -1,0 +1,87 @@
+[%if .data.poard.error.attachment %]
+<span class="error">Attachment error:
+[%loop .data.poard.error.attachment join=", " %]
+[%switch _ %]
+[%case max_size %]Attachment too big
+[%case max_totalsize %]Attachment total size too high
+[%case mimetype %]Unsupported mime type
+[%case max %]Maximum number of uploads
+[%case dup_filename %]Duplicate filename
+[%/switch %]
+[%/loop .data.poard.error.attachment %]
+</span>
+[%/if %]
+[%with .data.poard.error.message %]
+<span class="error">
+[%if too_long %]Message too long<br>[%/if %]
+[%if too_long2 %]Message very long, please use <tt>[more]</tt> tags.<br>[%/if %]
+[%if bbcode %]BBCode auto-corrected<br>[%/if %]
+[%if url %]URLs auto-corrected<br>[%/if %]
+</span>
+<hr>
+[%/with .data.poard.error.message %]
+<div class="posting_content">
+[%= .data.poard.message.rendered escape="0" %]
+</div>
+<br>
+<form action="[%= .self %]/poard/edit_message/[%= .data.poard.message.id %]" method="POST" enctype="multipart/form-data">
+<input type="hidden" name="form" value="1">
+<table>
+<tr><td valign="top">
+[%if .data.poard.thread.is_tree %]
+New title for subthread (use only if subthread is long and offtopic):<br>
+<input type="text" tabindex="1" name="message.title" size="50" maxlength="128" value="[%= .data.poard.message.title %]"><br><br>
+[%/if .data.poard.thread.is_tree %]
+[%translate id="global_article" %]:
+<span class="hint"><a href="[%= .self %]/poard/markup_help/"><i>[%translate id=poard_markup_help %]</i></a></span>
+<script type="text/javascript"><!--
+write_markup_help('help_result', 'markup_teaser');
+--></script>
+<br><br>
+<textarea name="message.message"
+cols="[%= .data.settings.poard.edit.textarea.cols %]"
+rows="[%= .data.settings.poard.edit.textarea.rows %]"
+tabindex="2"
+>[%= .data.poard.message.message %]</textarea>
+[%if .can.poard.settings %]<small><a href="[%= .self %]/poard/settings/edit#textarea">[%translate id=global_settings %]</a></small>[%/if %]
+<br>
+Comment about edit: <input tabindex="3" type="text" size="50" maxlength="128" name="edit_comment" value="[%= .data.poard.edit_comment %]">
+<i>(e.g. Typo, added paragraph about ... No bbcode)</i>
+<br>
+Add comment to message automatically: <input type="checkbox" name="add_edit_comment" value="1" [%if .data.poard.add_edit_comment %]checked="checked"[%/if %]>
+<br><br>
+<input type="submit" tabindex="4" name="submit.preview" value="[%translate id="global_action_preview" %]" class="button">
+<input type="submit" tabindex="5" name="submit.save" value="[%translate id="global_action_save" %]" class="button submit">
+<br><br><span title="Try to correct wrong bbcode/forgotten closing tags"><input id="correct_bbcode" type="checkbox" name="correct_bbcode" value="1" [%if .data.poard.correct_bbcode %]checked="checked"[%/if %]> <label for="correct_bbcode"><span title="[%translate id=poard_hint_correct_bbcode_explain %]">[%translate id=poard_hint_correct_bbcode %]</span></label></span>
+<br><span title="Replace internal urls to board with the corresponding bbcode tags"><input id="correct_urls" type="checkbox" name="correct_urls" value="1" [%if .data.poard.correct_urls %]checked="checked"[%/if %]> <label for="correct_urls"><span title="[%translate id=poard_hint_correct_urls_explain %]">[%translate id=poard_hint_correct_urls %]</span></label></span>
+</td>
+<td valign="top"><div id="help_result" style="max-height: 400px;"><div id="markup_teaser"></div></div></td></tr>
+</table>
+[%= .user.token.hidden escape=0 %]
+
+<span class="hint"><a href="[%= .self %]/poard/markup_help/"><i>[%translate id=poard_markup_help %]</i></a></span>
+<script type="text/javascript"><!--
+write_markup_help('help_result_bottom', 'markup_teaser_bottom');
+--></script>
+<div id="help_result_bottom" style="max-height: 400px;"><div id="markup_teaser_bottom"></div></div>
+
+[%if .can.poard.message_attach %]
+<hr>
+<h3><a name="attach">[%translate id=poard_attachment count=0 %]</a></h3><br>
+<table class="overview">
+<tr><th>File</th><th>Type</th><th>Thumb</th><th>Delete</th></tr>
+[%loop .data.poard.message.attachments %]
+<tr>
+<td>[%= filename %][%if deleted %]<i> (deleted)</i>[%/if %]</td>
+<td>[%= type %]</td>
+<td>[%if thumb %]<img src="[%= thumbnail_url %]" alt="[%= filename %]">[%/if %]</td>
+<td><input type="checkbox" name="attach.delete.[%= attach_id %]" value="1"></td>
+</tr>
+[%/loop %]
+</table>
+<input type="submit" name="submit.attach" value="Update" class="button submit">
+<br><br>Add Attachments:<br>
+[%include poard/edit_attach.html %]
+[%/if %]
+
+</form>

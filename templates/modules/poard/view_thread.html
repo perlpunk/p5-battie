@@ -1,0 +1,245 @@
+<div class="thread_tools" id="poard_thread_tools">
+<div class="page_options">
+<tt title="BBCode for this thread">[thread][%= .data.poard.thread.id escape=0 %][/thread]</tt>
+</div>
+<br>
+[%if .can.poard.subscribe_thread %]
+<div style="float: right; margin-top: 5px" id="poard_thread_buttons">
+<script type="text/javascript"><!--
+var label_unsub = 'Unsubscribe';
+var label_sub = '[%translate id=global_action_subscribe %]';
+var title_unsub = 'Unsubscribe';
+var title_sub = 'Subscribe and get notified when new messages are added';
+function subscribe_thread(id) {
+subscribe_thread2(id, title_unsub, label_unsub, title_sub, label_sub);
+}
+--></script>
+<form action="[%= $SELF escape=0 %]/poard/subscribe_thread/[%= .data.poard.thread.id escape=0 %]" method="POST">
+[%if .data.poard.subscribed %]
+<input id="sub" type="submit" name="submit.unsubscribe" value="Unsubscribe" class="button submit"
+onclick="subscribe_thread([%= .data.poard.thread.id escape=0 %]);return false;">
+[%else %]
+<input id="sub" type="submit" name="submit.subscribe"
+value="[%translate id="global_action_subscribe" %]" class="button submit"
+title="Subscribe and get notified when new messages are added"
+onclick="subscribe_thread([%= .data.poard.thread.id escape=0 %]);return false;">
+[%/if .data.poard.subscribed %]
+<div id="result_subscribe"></div>
+[%= .user.token.hidden escape=0 %]
+</form>
+</div>
+[%/if .can.poard.subscribe_thread %]
+<div style="float: right; margin-top: 5px" class="share_buttons">
+<a title="[twitter]" href="http://twitter.com/share?text=[%= .data.subtitle escape=URL %]+-+[%= .title escape=URL %]&amp;url=[%= .server %][%= $SELF escape=0 %]/poard/thread/[%= .data.poard.thread.id escape=0 %]"><img style="vertical-align: bottom;" src="[%= .data.userprefs.theme %]/icons/twitter.gif"></a>
+
+<a href="http://reddit.com/submit?url=[%= .server %][%= $SELF escape=0 %]/poard/thread/[%= .data.poard.thread.id escape=0 %]" title="submit to reddit"> <img src="[%= .data.userprefs.theme %]/icons/reddit.gif" style="vertical-align: bottom;" alt="submit to reddit" border="0" /> </a>
+</div>
+
+</div>
+
+
+<div class="thread_title">
+<span class="title">[%= .data.poard.title %]</span>
+[%if .data.poard.thread.solved %]<img src="[%= .data.userprefs.theme %]/icons/tick.png" alt="[[%translate id=poard_solved %]]" title="[%translate id=poard_solved %]">[%/if %]
+[%if expr="( .data.poard.thread.own ) or (.can.poard.mod_edit_thread)" %]
+<a title="Edit Title" href="[%= $SELF escape=0 %]/poard/edit_thread_title/[%= .data.poard.thread.id escape=0 %]"><img src="[%= .data.userprefs.theme %]/icons/document-edit.png" alt="Edit Title"></a>
+[%/if %]
+</div>
+
+
+<div class="thread_description">
+<p style="margin-bottom: 8px;">
+[%if .data.poard.thread.tags# %]
+<img src="[%= .data.userprefs.theme %]/icons/tags.png" alt=""> Tags: [%loop .data.poard.thread.tags %]
+<span class="tag"><a href="[%= $SELF escape=0 %]/poard/search/tag/[%= name escape=url %]" rel="tag">[%= name %]</a></span>
+[%/loop .data.poard.thread.tags %]
+<a href="[%= $SELF escape=0 %]/poard/search/tag?[%loop .data.poard.thread.tags %]tag=[%= name escape=url %];[%/loop %]">[%translate id=poard_similar_threads %]</a>
+[%/if .data.poard.thread.tags# %]
+[%if expr="( .data.poard.thread.own ) or (.can.poard.mod_edit_thread)" %]
+<a title="Edit Tags" href="[%= $SELF escape=0 %]/poard/edit_thread_tags/[%= .data.poard.thread.id escape=0 %]"><img src="[%= .data.userprefs.theme %]/icons/document-edit.png" alt="Edit Tags" ></a>
+[%/if %]
+</p>
+[%if .data.poard.thread.get_readers %]
+<span title="[%translate id=poard_thread_readers_expl %]">[%translate id=poard_thread_readers count=".data.poard.thread.get_readers" %]: [%= .data.poard.thread.get_readers %]</span>
+[%/if .data.poard.thread.get_readers %]
+
+<br>
+[%if .data.poard.thread_solvable %]
+<form action="[%= $SELF escape=0 %]/poard/solve_thread/[%= .data.poard.thread.id escape=0 %]" method="POST">
+[%if .data.poard.thread.solved %]
+[%translate id=poard_mark_thread_unsolved %]:
+<input type="submit" name="submit.unsolve" value="[%translate id=global_action_save %]" class="button">
+[%else %]
+[%translate id=poard_mark_thread_solved %]:
+<input type="image" src="[%= .data.userprefs.theme %]/icons/tick.png" name="submit.solve" value="[%translate id=global_action_save %]" class="button">
+[%/if %]
+[%= .user.token.hidden escape=0 %]
+</form>
+[%/if .data.poard.thread_solvable %]
+
+<!--
+[%if .can.poard.mod_merge_thread %]
+    <td>
+    <form action="[%= $SELF escape=0 %]/poard/mod_merge_thread/[%= .data.poard.thread.id %]" method="POST">
+    <input type="submit" name="submit.select_board" value="Merge Thread" class="button">
+    </form>
+    </td>
+[%/if .can.poard.mod_merge_thread %]
+-->
+[%if .data.poard.thread.is_deleted %]
+DELETED
+<form action="[%= $SELF escape=0 %]/poard/mod_undelete_thread/[%= .data.poard.thread.id escape=0 %]" method="POST">
+<input type="submit" name="submit.undelete" value="Undelete Thread" class="button">
+[%= .user.token.hidden escape=0 %]
+</form>
+[%else %]
+
+[%if .can.poard.mod_fix_thread %]<a href="#moderation">Moderation</a>[%/if %]
+[%/if %]
+
+<script type="text/javascript"><!--
+// more-tags
+function loadmore(arrow,msid, counter) {
+loadmore2(arrow,msid, counter);
+}
+--></script>
+</div>
+
+
+
+<p>
+[%if .data.poard.thread.is_survey %]
+[%with .data.poard.thread %][%include name="poard/view_surveys.html" %][%/with %]
+[%/if .data.poard.thread.is_survey %]
+</p>
+<br>
+[%if .data.poard.thread.is_tree %]
+Articles: <a href="javascript:void(hide_all(true));">hide</a>
+<a href="javascript:void(hide_all(false));">open</a> all |
+<a href="javascript:void(hide_old_branches(true));">hide</a>
+<a href="javascript:void(hide_old_branches(false));">show</a> old branches
+<a href="[%= $SELF escape=0 %]/poard/settings/articles#threads"> <img src="[%= .data.userprefs.theme %]/icons/information.png" alt="?"></a>
+
+
+[%if .data.poard.thread.subtrees %]
+<div class="description">
+<img src="[%= .data.userprefs.theme %]/icons/node.png"> [%translate id=poard_subtree count=.data.poard.thread.subtrees# %]:<br>
+[%loop .data.poard.thread.subtrees %]
+<span style="padding-left: [%= expr="15 * level" %]px"><a [%unless read %]class="unread"[%/unless %] href="[%= $SELF escape=0 %]/poard/thread/[%= .data.poard.thread.id escape=0 %]/[%= id escape=0 %]">[%= title %]</a> ([%= children escape=0 %] [%translate id="poard_articles" count="children" %]) [%= mtime escape=TIME_HTML %]</span>
+<br>
+[%/loop .data.poard.thread.subtrees %]
+</div>
+[%/if .data.poard.thread.subtrees %]
+
+<ul class="message_tree_root">
+[%include name="poard/message_tree.html" %]
+[%loop .data.poard.last_levels %]</ul></li>[%/loop %]
+</ul>
+
+<script type="text/javascript">
+var messages = new Array();
+var old_branches = new Array();
+[%loop .data.poard.thread.messages %]
+[%unless __first__ %]
+[%unless get_is_new %]hide_message_static([%= id escape=0 %]);[%/unless %]
+[%if get_old_branch %]old_branches.push([%= id escape=0 %]);[%/if %]
+messages.push([%= id %]);
+[%/unless %][%/loop %]
+var anchor = window.location.hash;
+if (anchor.match(/#ms_(\d+)/)) {
+    var id = RegExp.$1;
+    var table = document.getElementById('div_msg_' + id);
+    if (table && table.battie_hidden == true) {
+        hide_message_static(id);
+    }
+}
+[%if .data.settings.poard.articles.hide_old_branches %]
+hide_old_branches(true);
+[%/if %]
+</script>
+
+[%else %]
+
+[%with .data.poard.pager %][%include name="pager.html" %][%/with %]
+[%loop .data.poard.thread.messages %]
+[%include name="poard/single_message.html" %]
+[%/loop .data.poard.thread.messages %]
+[%with .data.poard.pager %][%include name="pager.html" %][%/with %]
+<br>
+
+[%/if .data.poard.thread.is_tree %]
+
+[%unless .data.poard.thread.closed %]
+
+[%if .can.poard.post_answer_authorized %]
+[%if .data.poard.thread.is_approved %]
+[%unless .data.poard.thread.is_tree %]
+<form action="[%= $SELF escape=0 %]/poard/post_answer/[%= .data.poard.thread.id %]" method="POST"
+onSubmit="javascript:window.setTimeout(function(){document.getElementById('submitbutton').disabled=true;}, 10);return true">
+[%= .user.token.hidden escape=0 %]
+Quick Reply:
+<br>
+[%unless .user.logged_in %]Your name: <input type="text" name="message.author_name"><br>[%/unless %]
+<textarea name="message.message" cols="75" rows="5"></textarea>
+<br>
+<input type="submit" name="submit.preview" value="[%translate id="global_action_preview" %]" class="button">
+<input type="submit" name="submit.post" accesskey="s" value="[%translate id="global_action_submit" %]" class="button" id="submitbutton" >
+</form>
+[%/unless .data.poard.thread.is_tree %]
+[%/if .data.poard.thread.is_approved %]
+[%/if .can.poard.post_answer_authorized %]
+
+[%/unless .data.poard.thread.closed %]
+
+
+<br>
+<div id="poard_thread_functions">
+[%if .can.poard.mod_fix_thread %]
+<br>
+<a name="moderation">Moderation:</a>
+<div class="functions">
+[%if .can.poard.mod_fix_thread %]
+<div class="action">
+    <form action="[%= $SELF escape=0 %]/poard/mod_fix_thread/[%= .data.poard.thread.id escape=0 %]" method="POST">
+    [%if .data.poard.thread.fixed %]
+    <input type="submit" name="submit.unfix" value="[%translate id="poard_unfix_thread" %]" class="button submit">
+    [%else %]
+    <input type="submit" name="submit.fix" value="[%translate id="poard_fix_thread" %]" class="button submit">
+    [%/if %]
+    </form>
+</div>
+[%/if .can.poard.mod_fix_thread %]
+
+[%if .can.poard.mod_close_thread %]
+<div class="action">
+    <form action="[%= $SELF escape=0 %]/poard/mod_close_thread/[%= .data.poard.thread.id escape=0 %]" method="POST">
+    [%if .data.poard.thread.closed %]
+    <input type="submit" name="submit.open" value="[%translate id="poard_open_thread" %]" class="button submit">
+    [%else %]
+    <input type="submit" name="submit.close" value="[%translate id="poard_close_thread" %]" class="button submit">
+    [%/if %]
+    </form>
+</div>
+[%/if .can.poard.mod_close_thread %]
+[%if .can.poard.mod_delete_thread %]
+<div class="action">
+    <form action="[%= $SELF escape=0 %]/poard/mod_delete_thread/[%= .data.poard.thread.id escape=0 %]" method="POST">
+    <input type="submit" name="submit.preview" value="Delete Thread" class="button">
+    </form>
+</div>
+[%/if .can.poard.mod_delete_thread %]
+[%if .can.poard.mod_move_thread %]
+<a class="action" href="[%= $SELF escape=0 %]/poard/mod_move_thread/[%= .data.poard.thread.id escape=0 %]">Move Thread</a>
+[%/if .can.poard.mod_move_thread %]
+</div>
+[%/if .can.poard.mod_fix_thread %]
+[%if .can.poard.mod_view_thread_log %]
+<a class="action" href="[%= $SELF escape=0 %]/poard/mod_view_thread_log/[%= .data.poard.thread.id escape=0 %]">View Log</a>
+[%/if .can.poard.mod_view_thread_log %]
+
+</div>
+
+<br>
+View <a href="[%= $SELF escape=0 %]/poard/statistic/day/[%= .data.poard.thread.ctime_epoch escape=TIME_YMD %]">all threads created [%= .data.poard.thread.ctime_epoch escape=TIME_HTML %]</a>.
+
+

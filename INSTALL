@@ -1,0 +1,155 @@
+* INSTALL MODULES
+
+Check for missing dependencies and create buildfile:
+perl Build.PL
+(add prefix if necessary: --prefix /your/lib)
+
+You'll need DBD::Pg and DateTime::Format::Pg if you use PostgreSQL
+
+* CONFIG
+
+Copy conf/battie.ini.sample (to conf/battie.ini for example) and edit.
+Every config variable should have an example value and a line which
+explains it. If not, write a bug report =)
+
+* DATABASE
+
+Create database you configured at battie.ini DBH section
+
+If your database is not yet utf8, do a
+    ALTER DATABASE your_db_name CHARACTER SET utf8
+because battie runs on utf8.
+
+GRANT ALL PRIVILEGES ON your_db_name.* TO 'battie_username'@'localhost' IDENTIFIED BY 'some_pass';
+FLUSH PRIVILEGES;
+
+Pick your DBS, e.g. for MySQL do:
+
+  perl -pi.bak -e's/TABLE_PREFIX/your_prefix/g' sql/battie_schema_current_MySQL.sql
+
+Replace 'your_prefix' with the DEFAULT_TABLE_PREFIX value from your ini.
+
+Feed sql/battie_schema_current_MySQL.sql to your database.
+
+* CREATE INITIAL CONTENT
+
+Call
+ perl bin/init_db.pl path/to/battie.ini
+
+* CREATE TRANSLATIONS
+
+for en_US, de_DE:
+    perl bin/translation.pl path/to/battie.ini system/translations/en_US/*.csv
+    perl bin/translation.pl path/to/battie.ini system/translations/de_DE/*.csv
+Do the same for other languages
+
+* CHOOSE THE DEFAULT CSS
+
+choose a css from static/theme:
+cd static/theme
+ln -s your_favourite_theme default
+
+* CGI
+
+Edit bin/battie.cgi to add your library path to battie ('use lib') and change
+the path for $inifile to the correct one.
+
+* FastCGI
+
+Alternatively you may use FastCGI.  Just use the following paragraph for your
+Apache configuration.  (No script editing is necessary for this method ;)
+
+Alias /battie/js  /path/to/battie/static/js
+Alias /battie/css /path/to/battie/static/css
+Alias /battie.pl  /path/to/battie/bin/battie.fcgi
+<Directory /path/to/battie/bin>
+    <Files *.fcgi>
+        # If you use mod_fcgi rather than mod_fcgid, this will probably be
+        # fcgi-script
+        SetHandler fcgid-script
+
+        Options -Indexes ExecCGI
+    </Files>
+</Directory>
+
+* ModPerl
+
+To preload all modules you can put the following in your httpd.conf:
+    <Perl>
+        my $inifile = '/path/to/battie.ini';
+        my $ini = WWW::Battie::Config::Ini->create($inifile);
+        $ini->load_all_classes;
+    </Perl>
+
+You can also do this in a startup.pl.
+The default startup script is in bin/mod_perl_startup.pl.
+
+** Apache 1.*
+
+PerlModule WWW::Battie::Handler
+<Location /perl/battie>
+    PerlSetVar inifile /path/to/battie.ini
+    SetHandler perl-script
+    PerlHandler WWW::Battie::Handler
+    PerlSendHeader On
+</Location>
+
+** Apache 2.*
+
+PerlModule WWW::Battie::Handler2
+<Location /perl/battie>
+    PerlSetVar inifile /path/to/battie.ini
+    SetHandler perl-script
+    PerlHandler WWW::Battie::Handler2
+    PerlSendHeader On
+</Location>
+
+* Cronjobs
+
+Depending on where you installed the battie modules you have to
+add the path, e.g. if the modules are in /battie/lib, add
+-I/battie/lib to the cronjob call, or do
+PERL5LIB=/battie/lib perl cronjob...
+
+** File cache
+
+To delete file cache, run the cronjob
+
+perl cron/cache/clean_expired.pl conf/your_battie.ini
+
+Depending on how many disc space you have, run it more or less often.
+Once an hour is probably a good time, but once a time might also
+be okay.
+
+** Database sessions
+
+perl cron/login/clean_expired_sessions.pl conf/your_battie.ini
+
+To keep session table small, the more often you run it, the better.
+Like once an hour. If you haven't many users, just run it once a day
+or so.
+
+** Poard Notifications
+
+Sends emails to users who have subscribed to one or more threads.
+
+perl cron/poard/notify.pl conf/your_battie.ini
+
+** Notifications of private messages
+
+Send an email if a user got a private message.
+Call this every 30 minutes, for example.
+
+perl cron/member/notify.pl conf/your_battie.ini
+
+# --------- old ------------
+#
+#Call
+# perl bin/create_schema.pl path/to/battie.ini
+#
+#This will create sql files in your current directoy called schema_*
+#
+#Feed the files to mysql.
+# --------- /old ------------
+
+

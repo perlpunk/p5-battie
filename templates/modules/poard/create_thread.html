@@ -1,0 +1,218 @@
+[%with .data.poard.error %]
+[%if token %][%include name="token_expired.html" %]
+[%elsif no_name %]You are guest and have to add a name to your posting.
+[%elsif no_title %]You have to add a title to your posting.
+[%elsif no_text %]Your posting has no content.
+[%elsif long_text %]Your posting is too long.
+[%elsif max_unapproved_threads %]
+There are to many unapproved threads in this board at the moment, please try later.
+[%elsif spam %]
+<span class="error">Posting not accepted, possible spam</span>
+[%elsif attachment %]
+<span class="error">Attachment error:
+[%loop attachment join=", " %]
+[%switch _ %]
+[%case max_size %]Attachment too big
+[%case max_totalsize %]Attachment total size too high
+[%case mimetype %]Unsupported mime type
+[%case max %]Maximum number of uploads
+[%case dup_filename %]Duplicate filename
+[%/switch %]
+[%/loop attachment %]
+</span>
+[%/if %]
+[%/with .data.poard.error %]
+[%with .data.poard.error.message %]
+<span class="error">
+[%if too_long %]Message too long<br>[%/if %]
+[%if too_long2 %]Message very long, please use <tt>[more]</tt> tags.<br>[%/if %]
+[%if bbcode %]BBCode auto-corrected<br>[%/if %]
+[%if url %]URLs auto-corrected<br>[%/if %]
+</span>
+<hr>
+[%/with .data.poard.error.message %]
+
+
+[%if .data.poard.confirmation %]
+Your thread has been created, but it might not be visible immediately. You
+have to wait until a janitor or moderator approves it.<br>
+This happens if you are a guest poster or if this is one of your first posts.<br>
+<a href="[%= .self %]/poard/thread/[%= .data.poard.thread_id %]">Your thread</a>
+
+[%else %]
+
+<table width="100%"><tr><td class="posting_content">
+[%= .data.poard.message.rendered escape=0%]
+</td></tr></table>
+
+[%if .data.poard.post_hint %]
+<span class="hint"><b>[%translate id=poard_post_hint %]</b></span>
+[%/if %]
+
+[%if .data.poard.create_survey %]
+
+
+
+<form action="[%= .self %]/poard/create_survey/[%= .data.poard.board.id %]" method="POST" enctype="multipart/form-data">
+[%if .can.poard.post_answer_authorized %]
+<input type="hidden" name="antispam_ok" value="1">
+[%else %]
+[%switch .data.poard.antispam %]
+[%case AKISMET %]
+<input type="checkbox" name="antispam_ok" value="1">
+[%translate id=global_antispam_info_akismet %]
+[%/switch .data.poard.antispam %]
+[%/if .can.poard.post_answer_authorized %]
+<input type="hidden" name="form" value="1">
+Question (short question, add explanation below if necessary):<br>
+[%if .data.poard.error.no_question %]
+<span class="error">You have to add a question to your survey.</span>
+[%/if %]
+<input type="text" size="30" name="survey.question" value="[%= .data.poard.survey.question %]" /><p />
+Answers:<br>
+[%loop .data.poard.survey.answers %]
+<input type="text" size="30" name="survey_option.[%= id %].text" value="[%= value %]" /><br>
+[%/loop .data.poard.survey.answers %]
+<br>
+<input type="submit" name="submit.add_answers" value="Add Answers" class="button">
+<br>
+Check if one should be able to select more than one answer:<br>
+<input type="checkbox" name="survey.is_multiple" [%if .data.poard.survey.is_multiple %]checked="checked"[%/if %] value="1" />
+and how many:
+<input type="text" size="3" name="survey.multiple_count" value="[%= .data.poard.survey.multiple_count %]" />
+(default is all f you leave the field blank)
+<p />
+
+Thread title (will be set to survey question by default):<br>
+<input type="text" size="30" name="survey.title" value="[%= .data.poard.survey.title %]" />
+<input type="hidden" name="answer_count" value="[%= .data.poard.survey.answer_count %]" />
+<br>
+
+
+
+[%else %]
+
+<form action="[%= .self %]/poard/create_thread/[%= .data.poard.board.id %]" method="POST" enctype="multipart/form-data">
+[%if .can.poard.post_answer_authorized %]
+<input type="hidden" name="antispam_ok" value="1">
+[%else %]
+[%switch .data.poard.antispam %]
+[%case AKISMET %]
+<input type="checkbox" name="antispam_ok" value="1">
+[%translate id=global_antispam_info_akismet %]
+[%/switch .data.poard.antispam %]
+[%/if .can.poard.post_answer_authorized %]
+<input type="hidden" name="form" value="1">
+<table>
+<tr><td valign="top">
+[%unless .user.logged_in %]
+Your name: <input type="text" tabindex="1" name="message.author_name" value="[%= .data.poard.thread.author_name %]">
+<br>
+[%/if .user.logged_in %]
+[%translate id="global_title" %]: <input tabindex="1" type="text" name="thread.title" value="[%= .data.poard.thread.title %]" size="50" maxlength="128"><br>
+
+
+
+
+[%/if .data.poard.create_survey %]
+<br>
+[%translate id="global_article" %]:
+<span class="hint"><a href="[%= .self %]/poard/markup_help/"><i>[%translate id=poard_markup_help %]</i></a></span>
+<script type="text/javascript"><!--
+write_markup_help('help_result', 'markup_teaser');
+--></script>
+<br><br>
+
+<textarea name="message.message"
+cols="[%= .data.settings.poard.edit.textarea.cols %]"
+rows="[%= .data.settings.poard.edit.textarea.rows %]"
+ tabindex="3">[%= .data.poard.message.message %]</textarea>
+[%if .can.poard.settings %]<small><a href="[%= .self %]/poard/settings/edit#textarea">[%translate id=global_settings %]</a></small>[%/if %]
+<br>
+
+[%if .user.logged_in %]
+<br>
+[%translate id="global_action_subscribe" %]: <input type="checkbox" name="subscribe" tabindex="4" value="1" [%if .data.poard.subscribe %]checked="checked"[%/if %]>
+[%if .can.poard.settings %]<small><a href="[%= .self %]/poard/settings/edit#subscribe">[%translate id=global_settings %]</a></small>[%/if %]
+<br>
+<br>
+[%/if .user.logged_in %]
+<br><br><span title="Try to correct wrong bbcode/forgotten closing tags"><input id="correct_bbcode" type="checkbox" name="correct_bbcode" value="1" [%if .data.poard.correct_bbcode %]checked="checked"[%/if %]> <label for="correct_bbcode"><span title="[%translate id=poard_hint_correct_bbcode_explain %]">[%translate id=poard_hint_correct_bbcode %]</span></label></span>
+<br><span title="Replace internal urls to board with the corresponding bbcode tags"><input id="correct_urls" type="checkbox" name="correct_urls" value="1" [%if .data.poard.correct_urls %]checked="checked"[%/if %]> <label for="correct_urls"><span title="[%translate id=poard_hint_correct_urls_explain %]">[%translate id=poard_hint_correct_urls %]</span></label></span>
+
+</td>
+<td valign="top"><div id="help_result" style="max-height: 400px;"><div id="markup_teaser"></div></div></td></tr>
+</table>
+<span class="hint"><a href="[%= .self %]/poard/markup_help/"><i>[%translate id=poard_markup_help %]</i></a></span>
+<script type="text/javascript"><!--
+write_markup_help('help_result_bottom', 'markup_teaser_bottom');
+--></script>
+<div id="help_result_bottom" style="max-height: 400px;"><div id="markup_teaser_bottom"></div></div>
+<p>
+<hr>
+<h3>Tags</h3>
+<i>(type in or select from the right; up to 10 tags)</i><br>
+<table width="100%">
+<tr>
+<td width="10%" valign="yop">
+<div id="tag_container">
+[%loop .data.poard.use_tags %]
+<input type="text" size="15" class="tag" maxlength="120" name="tag" value="[%= _.get_name %]" onkeyup="suggestions(this,event);" onblur="close_suggestions(1)">
+[%if _.get_name %]
+[%unless _.id %]<span class="hint">new</span>[%/unless %]
+[%/if %]<br>
+[%/loop .data.poard.use_tags %]
+</div>
+</td>
+<td width="25%" valign="top">
+<div id="result_tag_suggest"
+></div>
+<div id="result_tag_suggest_debug"></div>
+</td>
+
+<td valign="top">
+<h3>Typical tags:</h3><br>
+<div id="tags_example">
+[%loop .data.poard.tags_example %]
+<span id="tag_item_example_[%= __index__ %]" class="tag">
+<input type="checkbox" name="tag_new" id="tag_new_example_[%= __index__ %]" value="[%= get_name %]"
+onchange="select_tag(this, 'example');">
+<label for="tag_new_example_[%= __index__ %]">[%= get_name %]</label>
+</span>
+[%/loop .data.poard.tags_example %]
+</div>
+[%if .data.poard.tags_user# %]
+<br>
+<h3>Your last used tags:</h3><br>
+<div id="tags_user" class="taglist">
+[%loop .data.poard.tags_user %]
+<span id="tag_item_user_[%= __index__ %]" class="tag">
+<input type="checkbox" name="tag_new" id="tag_new_user_[%= __index__ %]" value="[%= get_name %]"
+onchange="select_tag(this, 'user');">
+<label for="tag_new_user_[%= __index__ %]">[%= get_name %]</label>
+</span>
+[%/loop .data.poard.tags_user %]
+</div>
+</p>
+[%/if .data.poard.tags_user# %]
+</td>
+</tr>
+</table>
+</p>
+
+<p>
+<hr>
+<h3><a name="attach">[%translate id=poard_attachment count=0 %]</a></h3><br>
+[%if .can.poard.message_attach %][%include poard/edit_attach.html %]
+[%else %]No Attachments allowed[%/if %]
+
+<hr>
+<input type="submit" name="submit.preview" tabindex="5" value="[%translate id="global_action_preview" %]" class="button">
+<input type="submit" name="submit.save" tabindex="6" value="[%translate id="global_action_create" %]" class="button submit">
+<br>
+</p>
+<input type="hidden" name="tags" value="1" />
+[%= .user.token.hidden escape=0 %]
+</form>
+
+[%/if .data.poard.confirmation %]

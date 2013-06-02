@@ -1,0 +1,32 @@
+<i>[%with .data.poard.attachment_conf %]
+Up to [%= max %] attachments; max [%= expr=".number_format.format_bytes(max_size)" %] per file; max total [%= expr=".number_format.format_bytes(max_totalsize)" %];<br>
+file types [%each types sort=alpha  %][%unless __last__%], [%/unless %][%= __key__ %][%/each %]
+[%/with %]</i>
+<table class="overview">
+<tr><th></th><th>File</th><th>Create Thumbnail<br>(only possible for gif, png, jpeg)
+</th></tr>
+
+[%loop .data.poard.attachments %]
+<tr>
+<td>
+[%if new %]
+<b>[%= __counter__ %].</b>
+[%else %]
+[%= __counter__ %].
+[%/if %]
+<input type="checkbox" name="attach.tmp.select.[%= __index__ %]" value="[%= id %]" checked="checked"></td>
+<input type="hidden" name="attach.tmp.id.[%= __index__ %]" value="[%= id %]"></td>
+<td><input type="text" name="attach.tmp.filename.[%= __index__ %]" value="[%= filename %]" maxlength="32"></td>
+<td><input type="checkbox" name="attach.tmp.thumb.[%= __index__ %]" value="1" [%if thumb %]checked="checked"[%/if %]>
+</td>
+<td>Size: [%= size %]</td>
+</tr>
+[%/loop .data.poard.attachments %]
+<tr>
+<td>new</td>
+<td><input type="file" name="attach.new"></td>
+<td><input type="checkbox" name="attach.create_thumb" value="1"></td>
+<td><input type="submit" name="submit.attach" value="Upload/Update" class="button"></td>
+</tr>
+</table>
+

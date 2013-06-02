@@ -1,0 +1,218 @@
+table.message_table {
+    width: 100%;
+    padding: 0em;
+    margin-top: 2px;
+    border-spacing: 0px;
+    background-color: #000000;
+    border-bottom: 1px solid #666666;
+    border-left:   1px solid #666666;
+}
+
+table.message_table th {
+    background-color: #111144;
+    text-align: left;
+    padding: 0em;
+    margin: 0em;
+}
+table.message_table td {
+    padding: 0px;
+    margin: 0px;
+}
+div.message_table {
+    padding: 0em;
+    margin: 0em;
+}
+table.message_title_buttons, table.message_title_buttons td {
+    margin: 0em;
+    padding: 0em;
+}
+table.unread_msg {
+    border-left: 2px solid #0000ff;
+}
+
+.code th {
+    background-color: #eeeeee;
+    font-style: italic;
+    color: #7777aa;
+    padding: 0;
+    padding-left: 10px;
+    font-size: smaller;
+    font-weight: normal;
+    text-align: left;
+}
+
+div.code {
+    max-width: 50em;
+    min-width: 30em;
+    overflow:auto;
+}
+
+div.signature .code th {
+    display: none;
+}
+
+ul.message_tree {
+    border-left: 1px dotted #5588ee;
+    padding-left: 0.9em;
+    list-style:none;
+    padding-right: 0em;
+    padding-top: 0.3em;
+    margin-bottom: 0.4em;
+}
+ul.message_tree_last {
+    border-left: 0px solid #ffffff;
+    padding-left: 0.9em;
+    margin-bottom: 0.2em;
+}
+ul.message_tree:hover {
+    border-left: 1px solid #5588ee;
+}
+ul.message_tree_last:hover {
+    border-left: 0px solid #ffffff;
+}
+ul.message_tree_root {
+    margin: 0.5em 0.5em 0.5em 0.5em;
+    padding-left: 0em;
+}
+
+li.message_tree {
+    margin-left: 0em;
+    list-style:none;
+    padding-right: 0em;
+}
+li.message_tree_hidden {
+    display: none;
+    visibility: hidden;
+}
+li.tree_info_hidden {
+    display: none;
+    visibility: hidden;
+}
+li.tree_info_show {
+    visibility: visible;
+    display: block;
+}
+
+table.posting_headline {
+    background-color: #f0f0f0;
+}
+table.posting_headline a, td.posting_headline a {
+    color: #bbeeff;
+    text-decoration: none;
+}
+td.posting_headline, th.posting_headline, div.posting_headline {
+    color: #ffffff;
+    background-color: #220022;
+    margin: 0em;
+    padding-top: 0.1em;
+    padding-bottom: 1px;
+}
+
+div.posting_headline_0, table.posting_headline_0 { background-color: #000000; }
+div.posting_headline_1, table.posting_headline_1 { background-color: #220010; }
+div.posting_headline_2, table.posting_headline_2 { background-color: #440020; }
+div.posting_headline_3, table.posting_headline_3 { background-color: #660040; }
+div.posting_headline_4, table.posting_headline_4 { background-color: #880050; }
+div.posting_headline_5, table.posting_headline_5 { background-color: #aa0060; }
+div.posting_headline_6, table.posting_headline_6 { background-color: #bb0070; }
+div.posting_headline_7, table.posting_headline_7 { background-color: #cc0080; }
+div.posting_headline_8, table.posting_headline_8 { background-color: #dd0090; }
+div.posting_headline_del, table.posting_headline_del { background-color: #888888; }
+
+td.author_info {
+    border-right: 1px dashed #aaaaaa;
+    width: 100px;
+}
+td.posting_content {
+    height: 100%;
+    padding-bottom: 1ex;
+    padding-right: 5px;
+}
+td.posting_status {
+    background-color: #222222;
+}
+td.posting_content div.signature {
+    font-size: smaller;
+    margin-top:   1ex;
+    margin-right: 20px;
+    padding-left: 2em;
+    border-top: 1px dashed #204080;
+    background-color: #222222;
+}
+
+label.board_label {
+    font-weight: normal;
+    color: #ffffff;
+}
+label.board_label_selected {
+    font-weight: bold;
+    color: #ff0000;
+}
+
+table.board_admin td.board_name {
+    margin-right: 0em;
+    background-color: #222222;
+}
+table.board_admin {
+    padding-right: 0em;
+    width: 100%;
+}
+table.board_admin td.board_label {
+    background-color: #222222;
+    width: 20px;
+}
+table.board_admin td.board_target {
+    background-color: #222222;
+    width: 380px;
+}
+ul.board_root {
+    padding-right: 0em;
+    margin-right: 0em;
+    margin-left: 0em;
+    padding-left: 0em;
+    list-style-type: none;
+}
+ul.board_tree_last {
+    margin-right: 0em;
+    padding-left: 2em;
+    border-left: 1px dotted #888888;
+    list-style-type: none;
+}
+ul.board_tree {
+    padding-right: 0em;
+    margin-right: 0em;
+    padding-left: 2em;
+    margin-bottom: 0.5em;
+    padding-bottom: 0.5em;
+    border-left: 1px dotted #888888;
+    border-bottom: 1px dotted #888888;
+    list-style-type: none;
+}
+
+li.board_tree_last {
+    padding-right: 0em;
+    margin-right: 0em;
+}
+li.board_tree {
+    padding-right: 0em;
+    margin-right: 0em;
+}
+
+li.board_tree th, li.board_tree_last th {
+    margin-top: 1em;
+    padding-top: 0.5em;
+    text-align: left;
+}
+
+table.board_tree {
+    border-bottom: 1px solid #333333;
+}
+table.board_tree td{
+    border-right: 1px solid #333333;
+    vertical-align: top;
+}
+table.board_tree th{
+    background-color: #000000;
+    text-align: left;
+}
+

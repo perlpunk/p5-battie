@@ -1,0 +1,8 @@
+[%loop .data.poard.parents %]
+[%if __first__ %]
+<a href="[%= .self %]/poard/start">[%= name %]</a> /
+[%else %]
+<a href="[%= .self %]/poard/start/[%= id %]">[%= name %]</a> /
+[%/if __first__ %]
+[%/loop .data.poard.parents %]
+<a href="[%= .self %]/poard/board/[%= .data.poard.thread.board.id %]">[%= .data.poard.thread.board.name %]</a>

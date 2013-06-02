@@ -1,0 +1,293 @@
+[%switch .action %]
+
+[%case theme %]
+
+[%if .can.blog.edit_theme %]
+<a href="[%= .self %]/blog/edit_theme/[%= .data.blog.theme.get_id %]">Edit/Upload Image</a>
+[%/if .can.blog.edit_theme %]
+<br>
+
+[%if .data.blog.theme.get_image %]<img src="[%= .data.blog.image_url %]/[%= .data.blog.theme.get_image %]" alt="[%= .data.blog.theme.get_title %]">[%/if %]
+<h3><a href="[%= .self %]/blog/list_blog/[%= .data.blog.blog.get_id %]/[%= .data.blog.blog.url_title %]">[%= .data.blog.blog.get_title %]</a>
+/
+[%= .data.blog.theme.get_title %]</h3>
+
+[%= .data.blog.abstract escape=0 %]
+[%= .data.blog.html escape=0 %]
+
+<hr>
+[%translate id="blog_posted_by" %]
+<a href="[%= .self %]/member/profile/[%= .data.blog.theme.posted_by_user.id %]">[%= .data.blog.theme.posted_by_user.nick %]</a>
+[%translate id="global_date_at" %] [%= .data.blog.theme.ctime escape=TIME_HTML_SHORT %]
+
+<br>
+Last updated: [%= .data.blog.theme.mtime escape=TIME_HTML_SHORT %]
+[%case create_theme %]
+<form action="[%= .self_action %]/blog/create_theme/[%= .data.blog.blog.get_id %]" method="POST">
+    <input type="hidden" name="blog.id" value="[%= .data.blog.blog.get_id %]">
+    <input type="hidden" name="theme.title" value="[%= .data.blog.theme.get_title %]">
+    Create new blog theme for <b>[%= .data.blog.blog.get_title %]</b>
+    <br>
+    Title: [%= .data.blog.theme.get_title %]
+    <br>
+    Abstract:
+    <br>
+    <textarea cols="75" rows="5" name="theme.abstract">[%= .data.blog.theme.get_abstract %]</textarea>
+    <br>
+    <textarea cols="75" rows="15" name="theme.message"></textarea>
+    <br>
+    <input type="submit" class="button" name="submit.create">
+</form>
+
+[%case edit_theme %]
+<a href="[%= .self %]/blog/theme/[%= .data.blog.theme.get_id %]">View</a>
+<form action="[%= .self_action %]/blog/edit_theme/[%= .data.blog.theme.get_id %]" method="POST">
+    [%= .user.token.hidden escape=0 %]
+    <input type="hidden" name="theme.id" value="[%= .data.blog.theme.get_id %]">
+    <input type="hidden" name="theme.title" value="[%= .data.blog.theme.get_title %]">
+    Edit blog theme for <b>[%= .data.blog.blog.get_title %]</b>
+<table border>
+        <tr>
+            <td width="20%">Title:</td>
+            <td>[%= .data.blog.theme.get_title %]</td>
+        </tr>
+    <tr>
+        <td>Blog Category:</td>
+        <td>
+            <select name="theme.blog_id">
+            [%html_option .data.blog.blog_options %]
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+        For formatting, see <a href="http://www.textism.com/tools/textile">Textile</a>
+        <br>
+        Abstract:
+        <br>
+        <textarea cols="75" rows="5" name="theme.abstract">[%= .data.blog.theme.get_abstract %]</textarea>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">Text:<br>
+        <textarea cols="75" rows="15" name="theme.message">[%= .data.blog.theme.get_message %]</textarea>
+        </td>
+    </tr>
+    <tr>
+        <td>Visible:</td>
+        <td><input type="checkbox" name="theme.active" value="1" [%if .data.blog.theme.get_active %]checked="checked"[%/if %]></td>
+    </tr>
+    <tr>
+        <td>Should appear in latest news:</td>
+        <td>
+            <input type="checkbox" name="theme.is_news" value="1" [%if .data.blog.theme.get_is_news %]checked="checked"[%/if %]>
+        </td>
+    </tr>
+    <tr>
+        <td>Answers allowed:</td>
+        <td>
+            <input type="checkbox" name="theme.can_comment" value="1" [%if .data.blog.theme.get_can_comment %]checked="checked"[%/if %]>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <input type="submit" class="button" name="submit.save" value="Save">
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            [%if .data.blog.theme.get_active %]
+            <input type="submit" class="button" name="submit.delete" value="Delete" disabled> Make entry invisible first and then delete.
+            [%else %]
+            <input type="submit" class="button" name="submit.delete" value="Delete">
+            [%/if .data.blog.theme.get_active %]
+
+        </td>
+    </tr>
+</table>
+</form>
+
+<hr>
+Upload a new picture:<br>
+<form action="[%= .self_action %]/blog/edit_theme/[%= .data.blog.theme.get_id %]" method="POST"
+enctype="multipart/form-data">
+    [%= .user.token.hidden escape=0 %]
+
+<input type="file" name="theme.image">
+<input type="submit" class="button" name="submit.upload" value="Upload">
+</form>
+<img src="[%= .data.blog.image_url %]/[%= .data.blog.theme.get_image %]" alt="[%= .data.blog.theme.get_title %]">
+
+[%case list_blog %]
+<h3>[%= .data.blog.blog.get_title %]</h3>
+
+    [%if .can.blog.create_theme %]
+<form action="[%= .self_action %]/blog/create_theme/[%= .data.blog.blog.get_id %]" method="POST">
+    Create new blog theme for <b>[%= .data.blog.blog.get_title %]</b>
+    <br>
+    Title: <input type="text" name="theme.title">
+    <br>
+    <input type="submit" class="button" name="submit.create" value="Create">
+</form>
+    [%/if .can.blog.create_theme %]
+<table width="100%">
+[%with .data.blog.themes %]
+[%include name="blog/list_themes.htc" %]
+[%/with .data.blog.themes %]
+</table>
+
+[%case edit_blog %]
+
+<h3>Blog <a href="[%= .self %]/blog/list_blog/[%= .data.blog.blog.id %]">[%= .data.blog.blog.title %]</a></h3>
+<br>
+<hr>
+<h3>[%translate id="global_action_edit" %]</h3>
+<br>
+<form action="[%= .self_action %]/blog/edit_blog/[%= .data.blog.blog.id %]" method="POST">
+    [%= .user.token.hidden escape=0 %]
+    <table>
+    <tr>
+    <td>Title:</td>
+    <td><input type="text" name="blog.title" value="[%= .data.blog.blog.title %]"</td>
+    </tr>
+    <tr>
+    <td colspan="2">
+        <input type="submit" name="submit.save" value="[%translate id="global_action_save" %]" class="button">
+    </td>
+    </tr>
+    <tr>
+    <td colspan="2">
+        <input type="submit" name="submit.delete" value="[%translate id="global_action_delete" %]" class="button">
+    </td>
+    </tr>
+    </table>
+
+</form>
+
+[%case start %]
+
+[%if .data.blog.year_calendar %]
+<table class="border_table">
+<tr>
+    [%with .data.blog.calendar %]
+    <td align="center">
+        [%if_defined previous.month %]
+        <a href="[%= .self %]/blog/start/[%= previous.year %]/[%= previous.month %]"><img src="[%= .data.userprefs.theme %]/arrow_left.png" border="0" alt="&gt;&lt;"></a>
+        [%else %]
+        <img src="[%= .data.userprefs.theme %]/arrow_left.png" border="0" alt="&gt;&lt;">
+        [%/if previous.month %]
+        [%= month_name %]
+        [%if_defined next.month %]
+        <a href="[%= .self %]/blog/start/[%= next.year %]/[%= next.month %]"><img src="[%= .data.userprefs.theme %]/arrow_right.png" border="0" alt="&gt;&gt;"></a>
+        [%else %]
+        <img src="[%= .data.userprefs.theme %]/arrow_right.png" border="0" alt="&gt;&gt;">
+        [%/if next.month %]
+    </td>
+    <td align="center">
+    [%if prev_year %]
+        <a href="[%= .self %]/blog/start/[%= prev_year %]/[%= month %]">[%= prev_year %]</a>
+    [%/if prev_year %]
+        <b>[%= year %]</b>
+        [%if next_year %]
+        <a href="[%= .self %]/blog/start/[%= next_year %]/[%= month %]">[%= next_year %]</a>
+        [%/if next_year %]
+    </td>
+    [%/with .data.blog.calendar %]
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+[%with .data.blog.calendar %]
+[%set_var mycal value=_ %]
+<table class="border_table">
+    <tr>
+        [%loop headline %]
+        <td>[%= day_name %]</td>
+        [%/loop headline %]
+    </tr>
+[%loop days %]
+    <tr>
+    [%loop _ %]
+    <td align="right">[%if _ %]
+        [%if themes %]
+            <a href="[%= .self %]/blog/start/[%= $mycal.year %]/[%= $mycal.month %]#day_[%= day %]" title="[%= themes %] Entries">[%= day %]</a>
+        [%else themes %]
+            [%= day %]
+        [%/if themes %]
+    [%/if _ %]</td>
+    [%/loop _ %]
+    </tr>
+[%/loop days %]
+</table>
+[%/with .data.blog.calendar %]
+
+</td>
+<td valign="top">
+
+[%with .data.blog.year_calendar %]
+<table class="border_table">
+<tr>
+[%loop months break="3" %]
+    <td align="center" width="80">[%if current %]*[%/if %]
+    [%if themes %]
+        <a href="[%= .self %]/blog/start/[%= $mycal.year %]/[%= month %]">[%= month_name %]</a>
+    [%else themes %]
+    [%= month_name %]
+    [%/if themes %]
+    </td>
+    [%if __break__ %]
+    [%unless __last__ %]</tr><tr>[%/unless __last__ %]
+    [%/if __break__ %]
+[%/loop months %]
+</tr>
+</table>
+[%/with .data.blog.year_calendar %]
+
+</td>
+</tr>
+</table>
+[%else .data.blog.year_calendar %]
+<table class="border_table">
+<tr><td><a href="[%= .self %]/blog/start/[%= .data.blog.year %]/[%= .data.blog.month %]">Show Calendar</a>
+</td>
+</tr>
+</table>
+[%/if .data.blog.year_calendar %]
+
+<table width="100%">
+[%with .data.blog.themes %]
+[%include name="blog/list_themes.htc" %]
+[%/with .data.blog.themes %]
+</table>
+
+<ul>
+    [%loop .data.blog.list %]
+    <li><a href="[%= .self %]/blog/list_blog/[%= get_id %]/[%= url_title %]">[%= get_title %]</a>
+    [%if .can.blog.edit_blog %]
+    <a href="[%= .self %]/blog/edit_blog/[%= id %]">Edit</a>
+    [%/if .can.blog.edit_blog %]
+    </li>
+    [%/loop .data.blog.list %]
+</ul>
+
+[%case create_blog %]
+<p>
+Create a new blog category:
+
+<form action="[%= .self_action %]/blog/create_blog" method="POST">
+
+    <table>
+        <tr>
+            <td>Title:</td>
+            <td><input type="text" name="blog.title"></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" class="button" name="submit.create">
+            </td>
+        </tr>
+    </table>
+</form>
+
+[%/switch .action %]

@@ -1,0 +1,11 @@
+Hi [%= .data.poard.user.nick %],
+
+the following threads you subscribed to have new messages:
+[%loop .data.poard.threads %]
+[%= thread.title %]
+[%= .server %][%= .self %]/poard/thread/[%= thread.id %]
+
+[%loop msgs %]    [%= author_name %]: [%= .server %][%= .self %]/poard/thread/[%= thread_id %]#ms_[%= id %]
+
+[%/loop msgs %]
+[%/loop .data.poard.threads %]

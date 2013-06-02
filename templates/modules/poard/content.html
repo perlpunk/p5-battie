@@ -1,0 +1,556 @@
+[%set_var SELF value=".self" %]
+[%switch .action %]
+
+[%case view_thread,thread %]
+[%include name="poard/view_thread.html" %]
+
+[%case view_latest,latest %]
+<div id="result_list">
+[%include poard/show_unapproved_count.html %]
+<table class="overview">
+<tr>
+<th>
+<div class="javascript" id="javascript">
+<img style="cursor: pointer" onclick="refresh_list('[%= .data.poard.latest_time escape=js %]')"
+src="[%= .data.userprefs.theme %]/icons/arrow-circle-double.png" alt="[refresh]" title="Refresh list">
+</div>
+</th>
+[%include poard/thread_list_header.html %]
+</tr>
+[%loop .data.poard.threads %]
+<tr class="[%if solved %]thread_solved[%else %]thread_unsolved[%/if %]">
+<td class="dark">
+[%if is_read %]<img src="[%= .data.userprefs.theme %]/thread.png" alt="read" title="read">
+[%else %]<img src="[%= .data.userprefs.theme %]/thread_unread.png" alt="new" title="new">
+[%/if %]
+</td>
+<td valign="top" class="light">
+<a href="[%= .self %]/poard/board/[%= board.id %]">[%= board.name %]</a>
+</td>
+[%include name="poard/thread_list.html" %]
+</tr>
+[%/loop .data.poard.threads %]
+</table>
+[%if .can.poard.settings %]<small><a href="[%= .self %]/poard/settings/overview#latest">[%translate id=global_settings %]</a></small>[%/if %]
+[%if .data.poard.hidden_threads %]
+<br><br>
+Hidden:<br>
+[%loop .data.poard.hidden_threads %]
+[%= count %] [%translate id=poard_thread count=count %] in <a href="[%= .self %]/poard/board/[%= id %]">[%= name %]</a><br>
+[%/loop .data.poard.hidden_threads %]
+[%/if .data.poard.hidden_threads %]
+</div>
+
+[%case start %]
+[%include poard/show_unapproved_count.html %]
+[%translate id=poard_hint_overview %] <a href="[%= .self %]/poard/latest/24h">[%translate id=poard_last_24_hours %]</a><br>
+<ul class="board_root">
+[%loop .data.poard.tree %][%include poard/board_tree.html %][%/loop %]
+</ul>
+
+
+
+[%case markup_help %]
+<style type="text/css">
+div.markup_help div.codebox {
+    min-width: 20em;
+    width: 30em;
+    max-width: 30em;
+    overflow-x:scroll;
+}
+</style>
+<div class="markup_help">
+<table class="overview">
+<tr><th width="10%">BBCode</th><th width="45%">Example</th><th>Result</th></tr>
+[%loop .data.poard.markup.tags %]
+<tr>
+<td><tt>[%= name %]</tt></td>
+<td><pre>[%= source %]</pre></td>
+<td>[%= result escape=0 %]<br>[%= description %]</td>
+</tr>
+[%/loop .data.poard.markup.tags %]
+</table>
+</div>
+
+[%case search %]
+[%include poard/search.html %]
+
+[%case msgs_by_nick %]
+
+Forum messages by <a href="[%= $SELF escape=0 %]/poard/msgs_by_nick/[%= .data.poard.author.id %]">[%=.data.poard.author.nick %]</a><br>
+
+[%with .data.poard.pager %][%include name="pager.html" %][%/with %]
+<table class="overview" cellspacing="1">
+<tr><th>Board</th><th>Thread</th><th>Time</th></tr>
+[%loop .data.poard.msgs %]
+[%set_var mymsg value=_ %]
+<tr>
+[%with msg %]
+[%if $mymsg.is_new %]
+<td><a href="[%= .self %]/poard/board/[%= thread.board.id %]">[%= thread.board.name %]</a></td>
+<td class="dark"><a href="[%= .self %]/poard/thread/[%= thread.id %]">[%= thread.title %]</a></td>
+[%else %]
+<td colspan="2"></td>
+[%/if ..is_new %]
+<td><a href="[%= .self %]/poard/message/[%= id %]">[%= ctime escape=TIME_HTML %]</a>
+[%unless position %]<b title="Thread starter">*</b>[%/unless %]
+</td>
+[%/with msg %]
+</tr>
+[%/loop .data.poard.msgs %]
+</table>
+
+[%case view_subscriptions,subscriptions %]
+<table class="overview" cellspacing="1">
+<tr>
+<th>New</th>
+[%include poard/thread_list_header.html %]
+</tr>
+[%loop .data.poard.subscriptions %]
+<tr>
+<td class="dark">
+[%with thread %]
+[%if is_read %]<img src="[%= .data.userprefs.theme %]/thread.png" alt="read" title="read">
+[%else %]<img src="[%= .data.userprefs.theme %]/thread_unread.png" alt="new" title="new">
+[%/if %]
+</td>
+<td valign="top" class="light"><a href="[%= .self %]/poard/board/[%= board.id %]">[%= board.name %]</a></td>
+[%include name="poard/thread_list.html" %]
+[%/with thread %]
+</tr>
+[%/loop .data.poard.subscriptions %]
+</table>
+
+[%case mod_view_message_diff %]
+
+<form action="[%= .self %]/poard/mod_view_message_diff/[%= .data.poard.msg.id %]" method="POST">
+<select name="d1">
+[%html_option_loop .data.poard.versions_options1 %]
+<option value="[%= value%]" [%= selected%] >[%= label escape=TIME_HTML_FULL %]</option>
+[%/html_option_loop .data.poard.versions_options1 %]
+</select>
+<select name="d2">
+[%html_option_loop .data.poard.versions_options2 %]
+<option value="[%= value%]" [%= selected%] >[%= label escape=TIME_HTML_FULL %]</option>
+[%/html_option_loop .data.poard.versions_options2 %]
+</select>
+<br>
+<input type="submit" name="submit.diff" value="Diff" class="button">
+</form>
+
+<div class="message_div">
+<table class="overview">
+<tr><th>Old</th><th>New</th></tr><tr><td valign="top">
+<tt>[%= .data.poard.diff[0] escape=0 %]</tt>
+</td><td valign="top">
+<tt>[%= .data.poard.diff[1] escape=0 %]</tt>
+</td></tr></table>
+</div>
+<br>
+<table class="overview">
+[%loop .data.poard.versions %]
+<tr><td>
+[%if __first__ %]
+[%= ctime escape=TIME_HTML_FULL %]
+[%else %]
+<a href="[%= .self %]/poard/mod_view_message_diff/[%= .data.poard.msg.id %]?d1=[%= id %]">[%= ctime escape=TIME_HTML_FULL %]</a>
+[%/if %]
+</td></tr>
+[%/loop .data.poard.versions %]
+</table>
+<br>
+
+[%case mod_view_thread_log %]
+Log:
+<table class="overview" cellspacing="1">
+<tr><th>User</th><th>Time</th><th>Action</th><th>IP</th><th>Country</th><th>Comment</th></tr>
+[%loop .data.thread.logs %]
+<tr>
+<td>
+[%if user %]
+<a href="[%= .self %]/member/profile/[%= user_id %]">[%= user.nick %]</a>
+[%else %]
+guest
+[%/if %]
+</td>
+<td>[%= ctime escape=TIME_HTML %]:</td><td>[%= action %]</td><td>[%= ip %]</td><td>[%= country %]</td>
+<td>[%= comment %]</td>
+</tr>
+[%/loop .data.thread.logs %]
+</table>
+
+
+[%case view_message_log %]
+<table class="overview">
+<tr><th>Time</th><th>User</th><th>action</th><th>Comment</th></tr>
+[%loop .data.poard.message_log %]
+<tr>
+<td>[%= ctime escape=TIME_HTML %]</td>
+<td>[%= user.nick %]</td>
+<td>[%= action %]</td>
+<td>[%= comment %]</td>
+</tr>
+[%/loop .data.poard.message_log %]
+</table>
+
+[%case mod_view_message_log %]
+Log:
+<table class="overview" cellspacing="1">
+<tr><th>User</th><th>Time</th><th>Action</th><th>IP</th><th>Country</th></tr>
+[%loop .data.msg.logs %]
+<tr>
+<td>
+[%if user %]
+<a href="[%= .self %]/member/profile/[%= user_id %]">[%= user.nick %]</a>
+[%else %]
+guest
+[%/if %]
+</td>
+<td>[%= ctime escape=TIME_HTML %]:</td><td>[%= action %]</td><td>[%= ip %]</td><td>[%= country %]</td>
+</tr>
+[%/loop .data.msg.logs %]
+</table>
+
+<a href="[%= .self %]/poard/mod_view_message_diff/[%= .data.msg.id %]">Diff</a>
+
+[%case mod_delete_thread %]
+    <form action="[%= .self %]/poard/mod_delete_thread/[%= .data.poard.thread.id %]" method="POST">
+        <input type="submit" name="submit.delete" value="[%translate id="global_action_delete" %]" class="button">
+<br>
+Reason for deletion:<br>
+<select name="comment" id="del_reason_[%= .data.poard.thread.id %]">
+<option value="spam">Spam</option>
+<option value="offtopic">Offtopic</option>
+<option value="double_post">Double Post</option>
+<option value="other:">Other</option>
+</select>
+<br>
+Specify:<br><input type="text" name="other" id="other_reason_[%= .data.poard.thread.id %]">
+<br>
+[%= .user.token.hidden escape=0 %]
+</form>
+
+[%case mod_delete_message %]
+[%with .data.poard.message %][%include name="poard/delete_form.html" %][%/with %]
+
+[%case statistic %]
+[%include poard/statistics.html %]
+
+[%case show_unapproved_messages %]
+
+<table class="overview">
+[%loop .data.poard.onhold_messages %]
+<tr>
+<td>
+<a href="[%= .self %]/poard/message/[%= id %]">[%= id %] ([%= ctime_epoch escape=TIME_HTML %])</a>
+</td>
+<td>
+[%if author %]
+[%= author.nick %]
+[%else %]
+guest [%= author_name %]
+[%/if %]
+</td>
+</tr>
+[%/loop .data.poard.onhold_messages %]
+</table>
+
+[%case survey_vote %]
+
+Your votes:
+<table class="overview" cellspacing="1" >
+[%loop .data.poard.voted %]
+<tr>
+<td>[%= position %].</td><td>[%= answer %]</td><td>[%if myvote %]+[%else %]-[%/if %]</td>
+</tr>
+[%/loop .data.poard.voted %]
+</table>
+
+[%case post_answer %]
+[%include poard/post_answer.html %]
+
+[%case view_board,board %]
+<div class="page_options">
+<tt title="BBCode for this board">[board][%= .data.poard.board.id escape=0 %][/board]</tt>
+</div>
+<div class="description">[%= .data.poard.board.description %]
+[%if .data.poard.top_tags.tags# %]
+<hr><span tyle="float: left; position: relative;">Top Tags:</span>
+[%loop .data.poard.top_tags.tags %]
+<span class="tag" tyle="list-style-type: none;float: left"><a href="[%= $SELF escape=0 %]/poard/search/tag/[%= tag.name escape=url %]" rel="tag" title="[%= count %] Threads">[%= tag.name %]</a></span>
+[%/loop .data.poard.top_tags.tags %]
+[%/if .data.poard.top_tags.tags# %]
+</div>
+<br>
+[%if .data.poard.board.is_leaf %]
+<table><tr>
+[%if .can.poard.create_thread %]
+<td>
+<form action="[%= $SELF escape=0 %]/poard/create_thread/[%= .data.poard.board.id escape=0 %]" method="POST">
+<input type="submit" name="submit.preview" value="[%translate id=poard_create_new_thread %]" class="button">
+</form>
+</td>
+[%/if .can.poard.create_thread %]
+
+[%if .can.poard.create_survey %]
+<td>
+<form action="[%= $SELF escape=0 %]/poard/create_survey/[%= .data.poard.board.id escape=0 %]" method="POST">
+<input type="submit" name="submit.preview" value="[%translate id=poard_create_new_survey %]" class="button">
+</form>
+</td>
+[%/if .can.poard.create_survey %]
+</tr></table>
+[%/if .data.poard.board.is_leaf %]
+<br>
+
+[%with .data.poard.pager %][%include name="pager.html" %][%/with %]
+
+<table class="overview" cellspacing="1" width="100%">
+<tr>
+<th>New</th><th>Title</th><th>[%translate id=poard_threadlist_author_when %]</th><th>[%translate id=poard_threadlist_lastaction %]</th><th>[%translate id=poard_threadlist_last_post %]</th><th>[%translate id="poard_answer_post" count="0" %]<br>
+(<span title="[%translate id=poard_thread_readers_expl %]">[%translate id=poard_thread_readers count="0" %]</span>)</th>
+</tr>
+[%loop .data.poard.threads %]
+<tr>
+<td>
+[%if is_read %]<img src="[%= .data.userprefs.theme %]/thread.png" alt="read" title="read">
+[%else %]<img src="[%= .data.userprefs.theme %]/thread_unread.png" alt="new" title="new">[%/if %]
+</td>
+[%include name="poard/thread_list.html" %]
+</tr>
+[%/loop .data.poard.threads %]
+</table>
+[%with .data.poard.pager %][%include name="pager.html" %][%/with %]
+
+[%case admin_list_boards %]
+
+<form action="[%= .self %]/poard/admin_edit_board" method="post">
+<ul class="board_root">
+[%loop .data.poard.tree %]
+[%include poard/board_admin_tree.html %]
+[%/loop .data.poard.tree %]
+</ul>
+
+[%= .user.token.hidden escape=0 %]
+</form>
+
+<form action="[%= .self %]/poard/admin_edit_board" method="POST">
+<input type="hidden" name="board.parent_id" value="[%= .data.poard.tree[0].id %]">
+<input type="hidden" name="edit" value="1">
+<input type="submit" name="submit.create" value="Create new Toplevel-Board" class="button">
+</form>
+
+[%case admin_edit_board %]
+[%include poard/admin_edit_board.html %]
+
+[%case mod_move_thread %]
+Move <a href="[%= .self %]/poard/thread/[%= .data.poard.thread.id %]">[%= .data.poard.thread.title %]</a><br>
+
+<form action="[%= .self %]/poard/mod_move_thread/[%= .data.poard.thread.id %]" method="POST">
+<input type=hidden name="movefrom" value="[%= .data.poard.thread.board_id %]">
+<table border="0"> <tr>
+<td>Source board:</td>
+<td>[%= .data.poard.thread.get_board.name %]</td>
+</tr>
+<tr>
+<td>Target board:</td>
+<td><select name="moveto" size="1">
+[%with .data.poard %][%include poard/board_select_tree.html %][%/with %]
+</select></td>
+</tr></table>
+<br>
+Info message (MOVE_TO will be replaced with the selected board id):<br>
+<textarea name="info" cols="65" rows="6">[%translate id=poard_move_from_to args=".data.poard.thread.board_id" %]
+</textarea>
+<br>
+Check the following box if you don't want to add an information message and update thread timestamp (can be useful for moving old threads).<br>
+No info: <input type="checkbox" name="no_info" value="1">
+<br>
+<br>
+<input type="submit" name="submit.move" value="Move" class="button">
+</form>
+
+
+[%case mod_split_thread %]
+
+[%if .data.poard.thread.is_tree %]
+
+<form action="[%= .self %]/poard/mod_split_thread/[%= .data.poard.thread.id %]/[%= .data.poard.message.id %]" method="POST">
+<table>
+<tr>
+<td>New Title:</td><td><input type="text" size="40" name="thread.title" value="[%= .data.poard.new_title %]"></td>
+</tr>
+<tr>
+<td>Target Board:
+<br><i>(leave empty, if the thread should stay in the same board)</i></td>
+<td>
+<select name="target" size="1">
+[%with .data.poard %][%include poard/board_select_tree.html %][%/with %]
+</select>
+</td>
+</tr>
+<tr>
+<td>Add information message to source thread:</td>
+<td><input type="checkbox" name="add_info_message" value="1"></td>
+</tr>
+</table>
+[%= .user.token.hidden escape=0 %]
+<input type="submit" name="submit.really_split" value="Split" class="button">
+</form>
+[%else %]
+only implemented for trees
+[%/if .data.poard.thread.is_tree %]
+<!--
+Split <a href="[%= .self %]/poard/thread/[%= .data.poard.thread.id %]">[%= .data.poard.thread.title %]</a><br>
+
+<form action="[%= .self %]/poard/mod_split_thread/[%= .data.poard.thread.id %]/[%= .data.poard.message.id %]" method="POST">
+[%= .user.token.hidden escape=0 %]
+New title: <input type="text" name="new_thread.title" size="40" value="split [%= .data.poard.thread.title %]"><br>
+Info message (SPLIT_TO will be replaced with the new thread id):<br>
+<textarea name="new_thread.text" cols="55" rows="3">Split from [thread][%= .data.poard.thread.id %][/thread] to [thread]SPLIT_TO[/thread]</textarea>
+<br>
+<input type="submit" name="submit.split" value="Split" class="button">
+</form>
+-->
+
+[%case mod_merge_thread %]
+
+[%if .data.poard.board_options %]
+
+<form action="[%= .self %]/poard/mod_merge_thread/[%= .data.poard.thread.id %]" method="POST">
+<select name="board_id" size="5">
+[%loop .data.poard.board_options %]
+<optgroup label="[%= name %]">
+[%html_option_loop opts %]
+<option value="[%= value%]" [%= selected%] >[%= label %]</option>
+[%/html_option_loop opts %]
+</optgroup>
+[%/loop .data.poard.board_options %]
+</select>
+<br>
+<input type="submit" name="submit.select_thread" value="Select Thread" class="button">
+</form>
+
+[%elsif .data.poard.threads %]
+
+[%with .data.poard.pager %][%include name="pager.html" %][%/with %]
+
+<table class="overview" cellspacing="1">
+<tr>
+<th>Select</th><th>Board</th><th>Title</th><th>From / When</th><th>Last action</th><th>Last post</th><th>Answers</th>
+</tr>
+[%loop .data.poard.threads %]
+<tr>
+<td valign="top">
+<form action="[%= .self %]/poard/mod_merge_thread/[%= .data.poard.thread.id %]" method="POST">
+<input type="hidden" name="thread_id" value="[%= id %]" />
+<input type="submit" name="submit.merge" value="Merge" class="button" />
+</form>
+
+</td>
+
+<td valign="top">
+<a href="[%= .self %]/poard/board/[%= board.id %]">[%= board.name %]</a>
+</td>
+[%include name="poard/thread_list.html" %]
+</tr>
+[%/loop .data.poard.threads %]
+</table>
+[%/if %]
+
+[%case mod_reparent %]
+<h2>Reparent message (tree) in <a href="[%= .self %]/poard/thread/[%= .data.poard.thread.id %]">[%= .data.poard.thread.title %]</a></h2>
+<br>Not working yet<br>
+<form action="[%= .self %]/poard/mod_reparent/[%= .data.poard.thread.id %]/[%= .data.poard.msg.id %]">
+<ul class="message_tree_root">
+[%loop .data.poard.msgs %]
+[%include name="poard/small_message_tree.html" %]
+[%/loop .data.poard.msgs %]
+</ul>
+<!--
+<input type="submit" name="submit.move" value="Reparent" class="button submit">
+-->
+</form>
+
+[%case edit_thread_tags %]
+
+<form action="[%= .self %]/poard/edit_thread_tags/[%= .data.poard.thread.id %]" method="POST">
+<h3>Tags for Thread <a href="[%= .self %]/poard/thread/[%= .data.poard.thread.id %]">[%= .data.poard.thread.title %]</a></h3>
+<i>(type in or select from the right; up to 10 tags)</i><br>
+<table width="100%">
+<tr>
+<td width="10%">
+<div id="tag_container">
+[%loop .data.poard.use_tags %]
+<input type="text" size="15" class="tag" maxlength="120" name="tag" value="[%= _.get_name %]" onkeyup="suggestions(this,event);" onblur="close_suggestions(1)">
+[%if _.get_name %]
+[%unless _.id %]<span class="hint">new</span>[%/unless %]
+[%/if %]<br>
+[%/loop .data.poard.use_tags %]
+</div>
+</td>
+<td width="25%" valign="top">
+<div id="result_tag_suggest"></div>
+<div id="result_tag_suggest_debug"></div>
+</td>
+
+<td valign="top">
+<h3>Typical tags:</h3><br>
+<div id="tags_example">
+[%loop .data.poard.tags_example %]
+<span id="tag_item_example_[%= __index__ %]" class="tag">
+<input type="checkbox" name="tag_new" id="tag_new_example_[%= __index__ %]" value="[%= get_name %]"
+onchange="select_tag(this, 'example');">
+<label for="tag_new_example_[%= __index__ %]">[%= get_name %]</label>
+</span>
+[%/loop .data.poard.tags_example %]
+</div>
+[%if .data.poard.tags_user# %]
+<br>
+<h3>Your last used tags:</h3><br>
+<div id="tags_user" class="taglist">
+[%loop .data.poard.tags_user %]
+<span id="tag_item_user_[%= __index__ %]" class="tag">
+<input type="checkbox" name="tag_new" id="tag_new_user_[%= __index__ %]" value="[%= get_name %]"
+onchange="select_tag(this, 'user');">
+<label for="tag_new_user_[%= __index__ %]">[%= get_name %]</label>
+</span>
+[%/loop .data.poard.tags_user %]
+</div>
+</p>
+[%/if .data.poard.tags_user# %]
+</td>
+</tr>
+</table>
+<input type="hidden" name="tags" value="1" />
+<input type="submit" name="submit.preview" value="[%translate id="global_action_preview" %]" class="button">
+<input type="submit" name="submit.save" value="[%translate id="global_action_save" %]" class="button submit">
+[%= .user.token.hidden escape=0 %]
+</form>
+
+[%case edit_thread_title %]
+[%if .data.poard.error.no_title %]
+<span class="error">No title</span>
+[%/if %]
+
+<form action="[%= .self %]/poard/edit_thread_title/[%= .data.poard.thread.id %]" method="POST">
+[%= .user.token.hidden escape=0 %]
+[%translate id="global_title" %]: <input type="text" name="thread.title" value="[%= .data.poard.thread.title %]" size="50" maxlength="128">
+<input type="submit" name="submit.save" value="[%translate id="global_action_save" %]" class="submit button">
+</form>
+
+[%case settings %]
+[%include poard/settings.html %]
+[%case view_trash %]
+[%include poard/trash.html %]
+[%case edit_message %]
+[%include poard/edit_message.html %]
+[%case edit_survey %]
+[%include poard/edit_survey.html %]
+[%case create_thread,create_survey %]
+[%include name="poard/create_thread.html" %]
+[%case view_message,message %]
+[%with .data.poard.message %][%include name="poard/message.html" %][%/with %]
+
+
+[%/switch .action %]

@@ -1,0 +1,40 @@
+<form action="[%= .self %]/poard/admin_edit_board" method="POST">
+<input type="hidden" name="board.id" value="[%= .data.poard.board.id %]">
+<input type="hidden" name="board.parent_id" value="[%= .data.poard.parent_id %]">
+Name: <input type="text" name="board.name" value="[%= .data.poard.board.name %]"><br>
+Description: <textarea cols="35" rows="3" name="board.description">[%= .data.poard.board.description %]</textarea>
+<br>
+Board should be only visible to group:<br>
+<select name="board.groupRequired">
+<option value="">all</option>
+[%html_option .data.poard.roles %]
+</select>
+<br>
+Search Engine options:<br>
+Index: <input type="checkbox" name="board.bit.index" value="1" [%if .data.poard.board.get_bit_index %]checked="checked"[%/if %]><br>
+Archive: <input type="checkbox" name="board.bit.archive" value="1" [%if .data.poard.board.get_bit_archive %]checked="checked"[%/if %]><br>
+
+<br>
+Default Tags: <i>(which tags should be added as default suggestions)</i><br>
+[%loop .data.poard.default_tags %]
+<input type="text" size="25" maxlength="120" name="tag_default" value="[%= _.name %]">
+[%if _.name %]
+[%unless _.id %]<span class="hint">new</span>[%/unless %]
+[%/if %]<br>
+[%/loop .data.poard.default_tags %]
+
+Example Tags: <i>(typical suggestions for this board)</i><br>
+[%loop .data.poard.example_tags %]
+<input type="text" size="25" maxlength="120" name="tag_example" value="[%= _.name %]">
+[%if _.name %]
+[%unless _.id %]<span class="hint">new</span>[%/unless %]
+[%/if %]<br>
+[%/loop .data.poard.example_tags %]
+
+<p>
+<input type="submit" name="submit.preview" value="[%if .data.poard.board.id %]Preview[%else %]Preview[%/if %] Tags" class="button">
+<input type="submit" name="submit.save" value="[%if .data.poard.board.id %]Save[%else %]Create[%/if %]" class="button submit">
+[%= .user.token.hidden escape=0 %]
+</form>
+
+

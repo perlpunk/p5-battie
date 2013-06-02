@@ -1,0 +1,90 @@
+[%if .data.poard.stat %]
+<p>
+[%with .data.poard.stat.count %]
+<table class="overview" cellspacing="1">
+<tr><td>Threads:</td><td>[%= threads %]</td></tr>
+<tr><td>Answers:</td><td>[%= answers %]</td></tr>
+<tr><th>Total Messages:</th><th>[%= messages %]</th></tr>
+</table>
+[%/with %]
+</p>
+<p>
+<table style="width: 100%;">
+<tr><td valign="top">
+<h3>By messagecount:</h3>
+Threads with<br>
+<table class="overview" cellspacing="1">
+[%loop .data.poard.detailed %]
+<tr><td>
+[%switch expr="group[1] - group[0]" %]
+[%case 1 %][%= group[1] %]
+[%case default %][%= expr="group[0] + 1" %] - [%= group[1] %]
+[%/switch %]
+answers:</td>
+<td><a href="[%= .self %]/poard/statistic/[%= group[1] %]">[%= threads %]</a></td></tr>
+[%/loop .data.poard.detailed %]
+<tr><td>more answers:</td><td><a href="[%= .self %]/poard/statistic/most">[%= .data.poard.more %]</a></td></tr>
+</table>
+</td>
+
+<td valign="top">
+
+<h3>By Year:</h3>
+<table class="overview" cellspacing="1"><tr><th>Year</th><th>Threads</th><th>Articles</th></tr>
+[%each .data.poard.by_year %]
+<tr><td><a href="[%= .self %]/poard/statistic/year/[%= __key__ %]">[%= __key__ %]</a></td>
+[%with __value__ %]
+<td>[%= _.threads %]</td><td>[%= _.msgs %]</td>
+[%/with __value__ %]
+</tr>
+[%/each .data.poard.by_year %]
+</table>
+</td></tr></table></p>
+
+[%elsif .data.poard.by_month %]
+
+<br><h3>[%= .data.poard.year %] by month</h3>
+<table class="overview" cellspacing="1"><tr><th>Month</th><th>Threads</th><th>Articles</th></tr>
+[%each .data.poard.by_month %]
+<tr><td><a href="[%= .self %]/poard/statistic/month/[%= .data.poard.year %]-[%= __key__ %]">[%= __key__ %]</a></td>
+[%with __value__ %]
+<td>[%= _.threads %]</td><td>[%= _.msgs %]</td>
+[%/with __value__ %]
+</tr>
+[%/each .data.poard.by_month %]
+</table>
+
+[%elsif .data.poard.by_day %]
+
+<br><h3>[%= .data.poard.month %] by day</h3>
+<table class="overview" cellspacing="1"><tr><th>Day</th><th>Threads</th><th>Articles</th></tr>
+[%each .data.poard.by_day %]
+<tr><td><a href="[%= .self %]/poard/statistic/day/[%= .data.poard.month %]-[%= __key__ %]">[%= __key__ %]</a></td>
+[%with __value__ %]
+<td>[%= _.threads %]</td>
+<td>[%= _.msgs %]</td>
+[%/with __value__ %]
+</tr>
+[%/each .data.poard.by_day %]
+</table>
+
+
+[%elsif .data.poard.threads %]
+
+[%with .data.poard.pager %]
+[%include name="pager.html" %]
+[%/with .data.poard.pager %]
+
+<table>
+<tr><th>Title</th><th>Time</th><th>Answers</th></tr>
+[%loop .data.poard.threads %]
+<tr>
+<td><a href="[%= .self %]/poard/thread/[%= id %]">[%= title %]</a></td>
+<td>[%= ctime escape=TIME_HTML %]</td>
+<td>[%= messagecount %]</td>
+</tr>
+[%/loop .data.poard.threads %]
+</table>
+[%/if %]
+
+

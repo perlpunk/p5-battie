@@ -1,0 +1,184 @@
+[%switch .action %]
+
+[%case language %]
+
+<form action="[%= .self %]/system/language" method="POST">
+<table class="overview" cellspacing="1">
+<tr>
+<td class="dark">ID:</td>
+<td><input type="text" size="8" maxlength="5" name="id" value="[%= .data.system.id %]"> (de_DE, en_US, ...)</td>
+</tr>
+<tr>
+<td class="dark">[%translate id="global_language" %]:</td>
+<td><input type="text" name="name" value="[%= .data.system.name %]">
+(Deutsch, American English, ...)</td>
+</tr>
+<tr>
+<td class="dark">Fallback Language:</td>
+<td>
+<select name="fallback"><option value="">---</option>
+[%html_option .data.system.form.languages %]
+</select>
+</td>
+</tr>
+</table>
+<input type="submit" class="button" name="submit.add" value="[%translate id="global_action_add" %]">
+[%= .user.token.hidden escape=0 %]
+</form>
+
+<form action="[%= .self %]/system/language" method="POST">
+<table class="overview" cellspacing="1">
+<tr><th>ID</th><th>Name</th><th>Active</th><th>Fallback</th></tr>
+[%loop .data.system.languages %]
+<tr>
+<td class="dark">[%= id %]</td>
+<td>[%= name %]</td>
+<td>
+[%if active %]
+<input type="checkbox" name="active.[%= id %]" value="1" checked="checked">
+[%else %]
+<input type="checkbox" name="active.[%= id %]" value="1" >
+[%/if %]</td>
+<td>
+[%= fallback %]
+</td>
+</tr>
+[%/loop .data.system.languages %]
+</table>
+<input type="submit" class="button" name="submit.save" value="[%translate id="global_action_save" %]">
+[%= .user.token.hidden escape=0 %]
+</form>
+
+[%case translation %]
+
+<form action="[%= .self %]/system/translation" method="POST">
+<table class="overview" cellspacing="1">
+<tr><th>ID</th><th>Name</th><th></th></tr>
+[%loop .data.system.translations %]
+<tr>
+<td>[%= id %]</td>
+<td>[%= lang %]</td>
+<td>[%= translation %]</td>
+</tr>
+[%/loop .data.system.translations %]
+</table>
+<input type="submit" class="button" name="submit.save" value="[%translate id="global_action_save" %]">
+[%= .user.token.hidden escape=0 %]
+</form>
+
+
+
+<form action="[%= .self %]/system/translation" method="POST">
+<table class="overview" cellspacing="1">
+<tr>
+<td class="dark">ID:</td>
+<td><input type="text" maxlength="128" name="id" value="[%= .data.system.id %]">
+(global_action_save, ...)</td>
+</tr>
+<tr>
+<td class="dark">[%translate id="global_language" %]:</td>
+<td>
+<select name="language"><option value="">---</option>
+[%html_option .data.system.form.languages %]
+</select>
+</tr>
+<tr>
+<td valign="top" class="dark">Translation:</td>
+<td>
+<textarea name="translation" rows="8" cols="50">[%= .data.system.translation %]</textarea>
+</td>
+</tr>
+</table>
+<input type="submit" class="button" name="submit.add" value="[%translate id="global_action_add" %]">
+[%= .user.token.hidden escape=0 %]
+</form>
+
+[%case terms %]
+
+Create new terms:
+<form action="[%= .self %]/system/edit_term" method="POST">
+<input type="submit" class="button" name="submit.add" value="[%translate id=global_action_create %]">
+[%= .user.token.hidden escape=0 %]
+</form>
+
+<hr>
+[%if .data.system.list_revisions %]
+Revisions:
+<table class="overview">
+<tr><th>ID</th><th>Name</th><th>Valid from</th></tr>
+[%loop .data.system.terms %]
+<tr>
+<td>[%= id %]</td>
+<td><a href="[%= .self %]/system/edit_term/[%= id %]/[%= start_date %]">[%= name %]</a></td>
+<td>[%= start_date.ymd %] [%= start_date.hms %]</td>
+</tr>
+[%/loop .data.system.terms %]
+</table>
+[%else %]
+Terms:
+<ul>
+[%loop .data.system.terms %]
+<li>
+<a href="[%= .self %]/system/edit_term/[%= id %]">[%= id %]</a>
+<a href="[%= .self %]/system/terms/[%= id %]">(List Revisions)</a>
+</li>
+[%/loop .data.system.terms %]
+</ul>
+[%/if %]
+
+[%case edit_term %]
+<form action="[%= .self %]/system/edit_term/[%= .data.system.term.id %]" method="POST">
+<table>
+<tr>
+<td>Term ID (e.g. "terms"):</td>
+<td>
+[%if .data.system.term.id %]
+<input type="hidden" name="term.id" value="[%= .data.system.term.id %]">
+[%= .data.system.term.id %]
+[%if .data.system.term.active %]
+<span class="hint">Term is active, will create new revision</span>
+[%/if %]
+[%else %]
+<input type="text" name="term.id" value="[%= .data.system.term.id %]">
+[%/if %]
+</td>
+</tr>
+<tr>
+<td>Name (e.g. "Terms &amp; Conditions"):</td>
+<td><input type="text" name="term.name" value="[%= .data.system.term.name %]"></td>
+</tr>
+<tr>
+<td>Valid from (YYYY-MM-DD [HH:MM:SS]):</td>
+<td><input type="text" name="term.start_date" value="[%= .data.system.term.start_date.ymd %] [%= .data.system.term.start_date.hms %]"> UTC</td>
+</tr>
+<tr>
+<td>Format (bbcode, textile):</td>
+<td><input type="text" name="term.style" value="[%= .data.system.term.style %]"></td>
+</tr>
+<tr>
+<td colspan="2">Content:<br>
+<textarea cols="80" rows="25" name="term.content">[%= .data.system.term.content %]</textarea>
+</table>
+<input type="submit" class="button" name="submit.save"
+value="[%if expr="( (( not .data.system.term ) + 0) or .data.system.term.active)" %][%translate id=global_action_create %][%else %][%translate id=global_action_save %][%/if %]">
+[%= .user.token.hidden escape=0 %]
+</form>
+[%= .data.system.term.rendered escape=0 %]
+
+[%case term %]
+
+[%if .data.system.term %]
+[%with .data.system.term %]
+<h2>[%= name %]</h2>
+<p>[%= rendered escape=0 %]</p>
+[%/with %]
+[%else %]
+<ul>
+[%loop .data.system.active_terms %]
+<li><a href="[%= .self %]/system/term/[%= id %]/[%= start_date %]">[%= name %]</a></li>
+[%/loop .data.system.active_terms %]
+</ul>
+[%/if %]
+
+
+[%/switch .action %]

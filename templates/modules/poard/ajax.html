@@ -1,0 +1,69 @@
+[%set_var SELF value=".self" %]
+[%switch .action %]
+
+[%case tag_suggest %]
+<option class="tag_suggest" onclick="take_tag_suggestion(this.value,event)" value="SUGGESTION_NAME" id="tag_suggest_[%= __counter__ %]">SUGGESTION_NAME (SUGGESTION_COUNT)</option>
+__pjx__
+<div class="tag_suggest"><select id="tag_suggest_box" class="tag_suggest" size="SUGGESTION_SIZE"
+onblur="close_suggestions(2)" onfocus="active_suggestions(2)"
+onkeypress="try_take_suggestion(this.value, event)" >
+__pjx__
+</select></div>
+__pjx__
+{
+"size": "[%= .data.poard.tag_suggestions_size %]",
+"has_more": "[%= .data.poard.tag_suggestions.more %]",
+"list": [
+[%loop .data.poard.tag_suggestions.list %]
+{"name": "[%= name escape=JS %]", "count": "[%= count %]"}[%unless __last__ %],[%/unless %]
+[%/loop .data.poard.tag_suggestions.list %]
+]
+}
+
+[%case markup_help %]
+<style type="text/css">
+div.markup_help div.codebox {
+    min-width: 10em;
+    width: 20em;
+    max-width: 20em;
+    overflow-x:scroll;
+}
+</style>
+<div class="markup_help">
+<table class="overview">
+<tr><th width="10%">BBCode Example</th><th>Result</th></tr>
+[%loop .data.poard.markup.tags %]
+<tr>
+<td><tt><b>[%= name %]</b></tt><br><tt>[%= source escape=0 %]</tt></td>
+<td>[%= result escape=0 %]<br>[%= description %]</td>
+</tr>
+[%/loop .data.poard.markup.tags %]
+</table>
+</div>
+
+
+[%case subscribe_thread %]
+    [%if .data.poard.subscribed %]
+<i>Subscribed</i><br>
+    [%else %]
+<i>Unsubscribed</i><br>
+    [%/if .data.poard.subscribed %]
+
+[%case toggle_board_view %]
+[%if .data.poard.overview %]
+[%= .data.poard.overview %]
+[%include name="poard/single_overview.html" %]
+[%/if %]
+
+[%case approve_message,mod_delete_message %]
+
+[%if .data.poard.message.is_approved %]
+    <span class="cell_okay"><i><small>approved by [%= .data.poard.message.approved_by.nick %]</small></i></span>
+[%elsif .data.poard.message.is_deleted %]
+    <span class="cell_deleted"><i><small>deleted by [%= .data.poard.trash.deleted_by.nick %]
+    ([%= .data.poard.trash.get_comment %])</small></i></span>
+[%/if .data.poard.message.is_deleted %]
+
+
+
+[%/switch .action %]

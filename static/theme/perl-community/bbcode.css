@@ -1,0 +1,190 @@
+input.edit_button {
+    padding: 0.1em 0.5em 0.1em 0.5em;
+    border: 1px solid #888888;
+}
+
+cite {
+    font-variant: small-caps;
+    font-style: normal;
+}
+
+blockquote {
+    border-left: 2px dotted #660033;
+    border-bottom: 2px dotted #660033;
+    border-top: 2px dotted #660033;
+    margin-left: 0px;
+    padding-left: 0px;
+    padding-top: 0px;
+    padding-bottom: 1ex;
+    margin-top: .5ex;
+    margin-bottom: .5ex;
+    margin-right: 0px;
+    padding-right: 0px;
+}
+
+blockquote > .date {
+    float: right;
+    font-size: smaller;
+}
+
+blockquote > cite {
+    display: block;
+    background-color: #ddddff;
+    padding: 1px;
+}
+
+blockquote > div {
+    padding-left: 1em;
+}
+
+.code pre {
+    line-height: 1.3em;
+    border: 1px solid #aaaaaa;
+    font-size: 95%;
+    font-family: "Courier New, Courier", Monospace;
+    background-color: #ffffff;
+    color: #3333aa;
+}
+span.minicode {
+    border: 1px solid #cccccc;
+    font-size: 95%;
+    font-family: "Courier New, Courier", Monospace;
+    background-color: #ffffff;
+    color: #3333aa;
+}
+
+table.code th {
+    background-color: #eeeeee;
+    font-style: italic;
+    color: #7777aa;
+    padding: 0;
+    padding-left: 10px;
+    font-size: smaller;
+    font-weight: normal;
+    text-align: left;
+}
+
+/*
+div.codebox {
+      max-width:     99%;
+      margin-top:-1px;
+      margin-left:2.3em;
+      padding-right:-3px;
+      border: 1px solid #aaaaaa;
+      overflow-x: auto;
+
+
+    max-width: 90%;
+    padding-left: 4px;
+    padding-right: 2px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    border: 1px solid #aaaaaa;
+    float: left;
+    overflow-x: auto;
+}
+div.code_container {
+    overflow-y: auto;
+}
+*/
+
+div.signature .code th {
+    display: none;
+}
+
+/*
+div.codelines {
+    padding-top: 2px;
+    padding-left: 1px;
+    vertical-align: top;
+    text-align: right;
+    margin-right: 2px;
+    float: left;
+    clear: both;
+}
+div.codeheader {
+    float: left;
+    clear: both;
+    background-color: #eeeeee;
+    font-style: italic;
+    color: #7777aa;
+    padding: 0;
+    padding-left: 10px;
+    font-size: smaller;
+    font-weight: normal;
+    text-align: left;
+}
+
+div.codelines pre {
+    color: #7777aa;
+    border-right: none;
+}
+*/
+
+span.magnifier {
+    background-image:   url(search.png);
+    background-repeat:  no-repeat;
+    padding: 9px;
+    background-position: 5px 5px; 
+}
+
+*.posting_content  ul {
+    margin-left: 0.5em;
+    padding-left:  2em;
+}
+
+    div.code_container{
+      padding: 0em;
+      margin:  0em;
+      padding-right:2em;
+      min-width:20em;
+overflow-y: auto;
+    }
+    
+    div.code_container *{
+      margin: 0px;
+      padding: 0px;
+    }
+
+    div.codeheader{
+      clear: both;
+      margin-bottom:2px;
+    }
+
+    div.codeheader > .content {
+      background-color: #eeeeee;
+      font-style: italic;
+      color: #7777aa;
+      font-size: smaller;
+      font-weight: normal;
+      text-align: left;
+      padding-left: 10px;
+    }
+
+    div.codebox {
+    padding-top: 2px;
+    padding-bottom: 2px;
+      max-width:     99%;
+      margin-top:-1px;
+    padding-left: 4px;
+    padding-right: 2px;
+      margin-left:2.3em;
+      padding-right:-3px;
+      border: 1px solid #aaaaaa;
+      overflow-x: auto;
+    }
+
+    div.codelines {
+    padding-top: 2px;
+    padding-left: 1px;
+      clear: both;
+      float: left;
+      width:2em;
+text-align: right;
+    }
+
+    div.codelines pre {
+      color: #7777aa;
+      border: none;
+    }
+

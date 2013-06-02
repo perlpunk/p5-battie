@@ -1,0 +1,105 @@
+[%switch .data.poard.setting %]
+[%case edit %]
+<form action="[%= .self %]/poard/settings/[%= .data.poard.setting %]" method="POST">
+<h3><a name="textarea">Textarea:</a></h3>
+<br>
+<table>
+<tr>
+<td align="right">Width: <input type="text" name="settings.textarea.cols" value="[%= .data.settings.poard.edit.textarea.cols %]" size="3" onchange="change_size(0, 'width')"></td>
+<td class="javascript"><img src="[%= .data.userprefs.theme %]/arrow_left.png" border="0" alt="[bigger]" title="smaller" onclick="change_size(-1, 'width')">
+<img src="[%= .data.userprefs.theme %]/arrow_right.png" border="0" alt="[bigger]" title="bigger" onclick="change_size(1, 'width')"></td>
+</tr><tr>
+<td align="right">Height: <input type="text" name="settings.textarea.rows" value="[%= .data.settings.poard.edit.textarea.rows %]" size="3" onchange="change_size(0, 'height')"></td>
+<td class="javascript"><img src="[%= .data.userprefs.theme %]/arrow_up.png" border="0" alt="[bigger]" title="smaller" onclick="change_size(-1, 'height')">
+<img src="[%= .data.userprefs.theme %]/arrow_down.png" border="0" alt="[bigger]" title="bigger" onclick="change_size(1, 'height')"></td>
+</tr>
+</table>
+<br>
+<input type="submit" name="submit.save" value="[%translate id="global_action_save" %]" class="button submit">
+<br><br>
+<textarea name="texarea.dummy"
+cols="[%= .data.settings.poard.edit.textarea.cols %]"
+rows="[%= .data.settings.poard.edit.textarea.rows %]">Lorem ipsum</textarea>
+<hr>
+<h3><a name="subscribe">[%translate id="global_action_subscribe" %]:</a></h3>
+<br>
+Automatically subscribe to your own threads:
+<input type="checkbox" name="settings.subscribe" value="1" [%if .data.settings.poard.edit.subscribe %]checked="checked"[%/if %]>
+<br>
+<br>
+<input type="submit" name="submit.save" value="[%translate id="global_action_save" %]" class="button submit">
+[%= .user.token.hidden escape=0 %]
+</form>
+
+[%case articles %]
+<form action="[%= .self %]/poard/settings/[%= .data.poard.setting %]" method="POST">
+<h3><a name="view">Articles:</a></h3>
+<br>
+<table>
+<tr>
+<td>Show Avatars:</td>
+<td><input type="checkbox" name="settings.avatar" value="1" [%if .data.settings.poard.articles.avatar %]checked="checked"[%/if %]></td>
+</tr><tr>
+<td>Show signatures:</td>
+<td><input type="checkbox" name="settings.signature" value="1" [%if .data.settings.poard.articles.signature %]checked="checked"[%/if %]></td>
+</tr></table>
+
+<hr>
+Code Box size:<br>
+Maximum Height: <input type="text" maxlength="4" size="4" name="settings.codebox.y" value="[%= .data.settings.poard.articles.codebox_y %]">em<br>
+Maximum Width: <input type="text" maxlength="4" size="4" name="settings.codebox.x" value="[%= .data.settings.poard.articles.codebox_x %]">em
+<hr>
+
+
+<h3><a name="threads">Threads and branches</a>:</h3><br>
+There can be lengthy threads where only a few messages are new.
+With this option you can collapse subtrees which contain no new articles
+by default:<br>
+Hide old branches: <input type="checkbox" name="settings.hide_old_branches" value="1" [%if .data.settings.poard.articles.hide_old_branches %]checked="checked"[%/if %]>
+<hr>
+
+<input type="submit" name="submit.save" value="[%translate id="global_action_save" %]" class="button submit">
+[%= .user.token.hidden escape=0 %]
+</form>
+
+[%case overview %]
+<form action="[%= .self %]/poard/settings/[%= .data.poard.setting %]" method="POST">
+<h3><a name="latest">Latest threads:</a></h3>
+<br>
+Hide boards in list of recent threads
+<table>
+<tr><th>Hidden</th><th></th><th>Shown</th></tr><tr><td>
+<select name="settings.show" size="5" multiple="1">
+[%html_option .data.poard.options1 %]
+</select></td>
+<td>
+<input type="submit" name="submit.hide" value="&lt;&lt; Hide" class="button submit"><br>
+<input type="submit" name="submit.show" value="&gt;&gt; Show" class="button submit">
+</td>
+<td>
+<select name="settings.hide" size="5" multiple="1">
+[%html_option .data.poard.options2 %]
+</select>
+</td></tr></table>
+[%= .user.token.hidden escape=0 %]
+</form>
+
+<hr>
+<form action="[%= .self %]/poard/settings/[%= .data.poard.setting %]" method="POST">
+Show which threads you subscribed to:
+<input type="checkbox" name="settings.subs" value="1" [%if .data.settings.poard.overview.show_subs %]checked="checked"[%/if %]>
+[%= .user.token.hidden escape=0 %]
+<input type="submit" name="submit.save_subs" value="[%translate id="global_action_save" %]" class="button submit">
+</form>
+
+
+
+[%case default %]
+<ul>
+<li><a href="[%= .self %]/poard/settings/edit">Post articles</a></li>
+<li><a href="[%= .self %]/poard/settings/articles">Article view</a></li>
+<li><a href="[%= .self %]/poard/settings/overview">Latest threads</a></li>
+</ul>
+[%/switch .data.poard.setting %]
+
+<br><br>

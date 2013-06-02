@@ -1,0 +1,19 @@
+[%switch .action %]
+
+[%case add %]
+
+<table class="overview" cellspacing="1">
+[%with .data.guest.entry %]
+[%include "guest/entry.html" %]
+[%/with .data.guest.entry %]
+</table>
+
+[%case approve_entry %]
+[%if .data.guest.entry.approver %]
+approved by [%= .data.guest.entry.approver.nick %]
+[%/if .data.guest.entry.approver %]
+
+[%case delete_entry %]
+Deleted
+
+[%/switch .action %]

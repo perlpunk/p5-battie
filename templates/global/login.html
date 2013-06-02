@@ -1,0 +1,45 @@
+<form action="[%= .self %]/login/auth" method="POST">
+<input type="hidden" name="login.from" value="[%= .data.login.from %]">
+<table>
+<tr>
+    <td>[%translate id="global_username" %]:</td>
+    <td><input type="text" class="input" name="auth.user" value="[%= .username %]"></td>
+</tr>
+<tr>
+    <td>[%translate id="global_password" %]:</td>
+    <td><input type="password" class="input" name="auth.pass" value="[%= .data.auth.pass %]"></td>
+</tr>
+<tr>
+    <td>[%translate id="global_bind_to_ip" %]:</td>
+    <td><input type="checkbox" class="input" name="auth.bind_to_ip"
+    value="1" [%if .data.login.bind_to_ip %]checked="checked"[%/if %]></td>
+</tr>
+<tr>
+    <td>[%translate id="global_remember" %]:</td>
+    <td><input type="radio" class="input" name="auth.remember" value="auth"></td>
+</tr>
+<tr>
+    <td>[%translate id="global_remember_name" %]:</td>
+    <td><input type="radio" class="input" name="auth.remember" value="name" [%if_defined .username %]checked="checked"[%/if %]></td>
+</tr>
+<tr>
+    <td>[%translate id="global_remember_none" %]:</td>
+    <td><input type="radio" class="input" name="auth.remember" value="none"></td>
+</tr>
+<tr>
+    <td colspan="2"><input type="submit" class="button" name="submit.auth" value="[%translate id="global_action_login" %]"></td>
+</tr>
+</table>
+</form>
+[%if .data.login.can_openid %]
+<form action="[%= .self %]/login/auth_openid" method="POST">
+    <input type="hidden" name="login.from" value="[%= .data.login.from %]">
+Your OpenID Identity (currently only livejournal.com or myopenid.com):
+<br>
+<b>http://<b><input type="text" class="input" name="auth.openid.livejournal" value=""><b>.livejournal.com/</b>
+<br>
+<b>http://<b><input type="text" class="input" name="auth.openid.myopenid" value=""><b>.myopenid.com/</b>
+<br>
+<input type="submit" class="button" name="submit.auth" value="[%translate id="global_action_login" %]">
+</form>
+[%/if .data.login.can_openid %]

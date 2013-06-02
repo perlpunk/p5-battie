@@ -1,0 +1,103 @@
+[%switch .action %]
+
+[%case start %]
+<script src="[%= .docurl %]/js/guest.js" type="text/javascript" ></script>
+[%with .data.guest.pager %][%include name="pager.html" %][%/with %]
+<table class="overview" cellspacing="1" width="100%">
+[%loop .data.guest.entries %]
+[%include "guest/entry.html" %]
+
+[%if .can.guest.approve_entry %]
+<tr>
+<td colspan="2">
+[%if active %]
+[%if approver %]
+[%translate id="approved_by" %] <a href="[%= .self %]/member/profile/[%= approver.id %]">[%= approver.nick %]</a>
+[%/if approver %]
+[%else %]
+<form action="[%= .self %]/guest/approve_entry/[%= id %]" method="POST"
+    onSubmit="javascript:approve_entry(this, [%= id %],['status_[%= id %]']);return false">
+<input id="button_[%= id %]" type="submit" name="submit.approve" value="[%translate id=global_action_approve %]" class="button"
+title="This is a guest entry and needs to be approved to show up for all users">
+[%= .user.token.hidden escape=0 %]
+</form>
+[%/if active %]
+<div id="status_[%= id %]">
+</div>
+</td>
+</tr>
+[%/if .can.guest.approve_entry %]
+
+[%if .can.guest.delete_entry %]
+<tr>
+<td colspan="2">
+    <form action="[%= .self %]/guest/delete_entry/[%= id %]" method="POST"
+        onSubmit="javascript:delete_entry(this, [%= id %],['status_del_[%= id %]']);return false">
+    <input id="delete_button_[%= id %]" type="submit" name="submit.delete" value="[%translate id=global_action_delete %]" class="button"
+    onclick="return confirm('Really delete?');"
+    title="Delete entry if necessary">
+    [%= .user.token.hidden escape=0 %]
+    </form>
+<div id="status_del_[%= id %]">
+</div>
+</td>
+</tr>
+[%/if .can.guest.delete_entry %]
+
+[%/loop .data.guest.entries %]
+</table>
+[%with .data.guest.pager %][%include name="pager.html" %][%/with %]
+
+[%case add %]
+<script src="[%= .docurl %]/js/guest.js" type="text/javascript" ></script>
+<form action="[%= .self %]/guest/add" method="POST">
+<table>
+<tr>
+<td width="20%">Name:
+<span id="error_name">[%if .data.guest.error.no_name %]<div class="error">Please provide a name</div>[%/if %]</span></td>
+<td><input type="text" name="name" value="[%= .data.guest.form.name %]"></td>
+</tr>
+<tr>
+<td>Email:</td>
+<td><input type="text" name="email" value="[%= .data.guest.form.email %]"></td>
+</tr>
+<tr>
+<td>Location:</td>
+<td><input type="text" name="location" value="[%= .data.guest.form.location %]"></td>
+</tr>
+<tr>
+<td>Homepage:</td>
+<td><input type="text" name="url" value="[%= .data.guest.form.url %]"></td>
+</tr>
+<tr>
+<td>Message:
+<span id="error_message">
+[%if .data.guest.error.no_message %]<div class="error">Please provide a message.</div>
+[%elsif .data.guest.error.message_too_long %]<div class="error">Your message was too long.</div>
+[%/if %]</span>
+</td>
+<td></td>
+</tr>
+<tr>
+<td colspan="2"><textarea name="message" cols="60" rows="6">[%= .data.guest.form.message %]</textarea></td>
+</tr>
+<tr>
+<td colspan="2">
+<input type="submit" name="submit.preview" value="[%translate id=global_action_preview %]" class="button" 
+onClick="javascript:preview_entry(this.form);return false" >
+<input type="submit" name="submit.send" value="[%translate id=global_action_send %]" class="button" >
+</td>
+</tr>
+</table>
+[%= .user.token.hidden escape=0 %]
+</form>
+
+[%translate id=global_action_preview %]:
+<table class="overview" cellspacing="1">
+[%with .data.guest.entry %]
+[%include "guest/entry.html" %]
+[%/with .data.guest.entry %]
+</table>
+<div id="preview"></div>
+
+[%/switch .action %]

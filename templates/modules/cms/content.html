@@ -1,0 +1,295 @@
+<br>
+[%switch .action %]
+
+[%case start %]
+
+[%case rename_file %]
+
+<form action="[%= .self %]/cms/rename_file/[%= .data.cms.fullpath %]" method="POST">
+New filename:
+<input type="text" name="new_filename" value="[%= .data.cms.filename %]">
+<br>
+<input class="button" type="submit" name="submit.rename" value="Rename">
+<br>
+[%if .data.cms.linking_pages# %]
+There are [%= .data.cms.linking_pages# %] page(s) that link to that file.
+Uncheck the pages you don't want to be replaced with the new filename.
+<table>
+[%loop .data.cms.linking_pages %]
+<tr>
+<td><input type="checkbox" name="replace_page" value="[%= id %]" checked="checked"></td>
+<td><a href="[%= .self %]/content/view/[%= url %]">[%= title %]</a></td>
+</tr>
+[%/loop .data.cms.linking_pages %]
+</table>
+[%/if %]
+[%= .user.token.hidden escape=0 %]
+</form>
+
+[%case show_content %]
+
+<table border=2 class="border_table" width="100%">
+<tr>
+<th colspan="2">
+<a href="[%= .self %]/cms/show_content/">root /</a>
+[%loop .data.cms.paths join="/" %]
+<a href="[%= .self %]/cms/show_content/[%= fullname %]">[%= basename %]</a>
+[%/loop .data.cms.paths %]
+</td>
+</tr>
+
+
+<tr>
+<td valign="top">
+<form action="[%= .self %]/cms/create_dir/[%= .data.cms.path %]" method="post">
+Create new directory:
+<br />
+<input type="text" name="newdir" />
+<br />
+<input type="submit" name="submit.create" value="[%translate id=global_action_create %]" class="button submit" />
+[%= .user.token.hidden escape=0 %]
+</form>
+
+[%if .data.cms.paths %]
+[%if .data.cms.paths[-2] %]
+<a href="[%= .self %]/cms/show_content/[%= .data.cms.paths[-2].fullname %]"><img src="[%= .data.userprefs.theme %]/arrow_up.png" alt="[..]">.. ([%= .data.cms.paths[-2].basename %])</a>
+[%else %]
+<a href="[%= .self %]/cms/show_content/"><img src="[%= .data.userprefs.theme %]/arrow_up.png" alt="[..]">.. (root)</a>
+[%/if%]
+<br />
+[%/if%]
+[%loop .data.cms.dirs %]
+<a href="[%= .self %]/cms/show_content/[%if .data.cms.path %][%= .data.cms.path %]/[%/if %][%= _ %]"><img src="[%= .data.userprefs.theme %]/folder.png" alt="[folder]"> [%= _ %]</a>
+<br />
+[%/loop .data.cms.dirs %]
+
+</td>
+<td valign="top">
+<form action="[%= .self %]/cms/upload_content/[%= .data.cms.path %]" method="post" enctype="multipart/form-data">
+Upload file:
+<br />
+<input type="file" name="file" />
+<br />
+<input type="submit" name="submit.upload" value="Upload" class="button" />
+[%= .user.token.hidden escape=0 %]
+</form>
+</p>
+
+<script type="text/javascript">
+function savename(id, original) {
+    var new_title = window.prompt("New filename:", original);
+if (new_title && new_title != original) {
+    var res = document.getElementById('file_' + id)
+    res.innerHTML = '<img src="[%= .data.userprefs.theme %]/wait.gif" width="150" height="10" alt="[wait]">';
+    ajaxshow( ['ma__cms/rename_file/[%= .data.cms.path %]','t__[%= .user.token.id %]','submit.rename__1','is_ajax__1','new__'+new_title,'original__'+original,'counter__'+id], ["file_"+id ], 'POST' );
+}
+return false;
+}
+</script>
+<form action="[%= .self %]/cms/delete_content/[%= .data.cms.path %]" method="post" enctype="multipart/form-data">
+<table>
+<tr><th>filename</th><th>link to it in textile</th><th></th></tr>
+[%loop .data.cms.files %]
+<tr>
+<td>
+<div id="file_[%= __counter__ %]"><a title="Rename the file by clicking on it" href="[%= .self %]/cms/rename_file/[%if .data.cms.path %][%= .data.cms.path %]/[%/if %][%= _ %]"
+_onClick="savename([%= __counter__ %], '[%= _ %]')"
+>[%= _ %]</a></div>
+</td>
+<td><tt>content:/[%if .data.cms.path %][%= .data.cms.path %]/[%/if %][%= _ %]</tt></td>
+<td><a href="[%= .data.content.url %]/[%if .data.cms.path %][%= .data.cms.path %]/[%/if %][%= _ %]">View</a>
+<td><input type="checkbox" name="cms.file" value="[%= _ %]" /></td>
+</tr>
+[%/loop .data.cms.dirs %]
+</table>
+<input type="submit" name="submit.delete" value="Delete selected files" class="button" />
+[%= .user.token.hidden escape=0 %]
+</form>
+
+If you want to embed images in your site, write <tt>!content:/path/to/image.gif!</tt><br />
+If you want to add a link to a file, write <tt>"Link title":content:/path/to/data.pdf</tt><br />
+
+</td>
+</tr>
+</table>
+
+[%case create_dir %]
+<form action="[%= .self %]/cms/upload_content/[%= .data.cms.path %]" method="post" enctype="multipart/form-data">
+Upload file:
+<br />
+<input type="file" name="file" value="[%= .data.cms.newdir %]" />
+<input type="submit" name="submit.upload" value="Upload" class="button" />
+[%= .user.token.hidden escape=0 %]
+</form>
+
+
+
+[%case list_dates %]
+
+
+<table>
+		<tr>
+				<th width="60">Mon</th>
+				<th width="60">Tue</th>
+				<th width="60">Wed</th>
+				<th width="60">Thu</th>
+				<th width="60">Fri</th>
+				<th width="60">Sat</th>
+				<th width="60">Sun</th>
+		</tr>
+		[%loop .data.cms.month_table %]
+		<tr height="35">
+				[%loop days %]
+				<td valign="top" align="left" class="calendar">
+						[%if day %]
+						[%= day %]
+						<a href="[%= .self %]/cms/edit_date">Create</a>
+						[%/if day %]
+				</td>
+				[%/loop days %]
+		</tr>
+		[%/loop .data.cms.month_table %]
+</table>
+
+[%case list_news %]
+
+<table>
+		[%loop .data.cms.news_list %]
+		<tr>
+				<td><a href="[%= .self %]/news/view/[%= get_id %]">[%= get_headline %]</a></td>
+				<td><a href="[%= .self %]/cms/edit_news/[%= get_id %]">Edit</a></td>
+				<tr>
+				<td>Created: [%= get_ctime %]</td>
+				<td>Modified: [%= get_mtime %]</td>
+				</tr>
+		</tr>
+		<tr>
+				<td colspan="2">
+						[%= get_message %]
+				</td>
+		</tr>
+		[%/loop .data.news_list %]
+</table>
+
+[%case edit_news %]
+
+[%if .data.cms.news %]
+<form action="[%= .self %]/cms/edit_news/[%= .data.cms.news.get_id %]" method="post">
+		[%else %]
+<form action="[%= .self %]/cms/edit_news/" method="post">
+[%/if .data.cms.news %]
+    Headline: <input type="text" size="60" name="cms.headline" value="[%= .data.cms.news.get_headline %]"><br>
+    <textarea name="cms.message" cols="80" rows="16">[%= .data.cms.news.get_message %]</textarea><br>
+    <input type="submit" name="submit.save" value="[%translate id=global_action_save %]" class="button submit">
+</form>
+
+[%if .data.cms.news %]
+<a href="[%= .self %]/cms/delete_news/[%= .data.cms.news.get_id %]">Delete (not yet working)</a>
+[%/if .data.cms.news %]
+
+[%case set_markup %]
+
+
+<form action="[%= .self %]/cms/set_markup/[%= .data.cms.page.get_id %]" method="post">
+    <select name="page.markup">
+        [%html_option .data.cms.markup_options %]
+    </select>
+<br>
+    <input type="submit" name="submit.set" value="[%translate id=global_action_save %]" class="button submit">
+</form>
+
+[%case edit_page_textile %]
+
+For formatting, see <a href="http://www.textism.com/tools/textile">Textile</a><br>
+
+[%if .data.cms.preview %]
+
+Link: <tt>[%= .data.cms.url %]</tt>
+<br>Title: <b>[%= .data.cms.title %]</b><br>
+<form action="[%= .self %]/cms/edit_page_textile[%if .data.cms.page %]/[%= .data.cms.page.get_id %][%/if %]" method="post">
+<table border="1">
+    <tr>
+        <td>[%= .data.cms.html escape="0" %]</td>
+    </tr>
+</table>
+    <input type="submit" name="submit.save" value="[%translate id=global_action_save %]" class="button submit">
+    <input type="hidden" name="cms.url" value="[%= .data.cms.url %]"><br>
+    <input type="hidden" name="cms.title" value="[%= .data.cms.title %]"><br>
+    <input type="hidden" name="cms.text" value="[%= .data.cms.text %]"><br>
+    <input type="hidden" name="cms.parent_id" value="[%= .data.cms.parent %]">
+[%= .user.token.hidden escape=0 %]
+</form>
+<hr>
+<form action="[%= .self %]/cms/edit_page_textile[%if .data.cms.page %]/[%= .data.cms.page.get_id %][%/if %]" method="post">
+    Link: <input type="text" name="cms.url" value="[%= .data.cms.url %]"><br>
+    Title: <input type="text" name="cms.title" value="[%= .data.cms.title %]"><br>
+    <textarea name="cms.text" cols="80" rows="16">[%= .data.cms.text %]</textarea><br>
+    <input type="submit" name="submit.preview" value="[%translate id=global_action_preview %]" class="button">
+    <input type="hidden" name="cms.parent_id" value="[%= .data.cms.parent %]">
+[%= .user.token.hidden escape=0 %]
+</form>
+
+
+[%else %]
+
+<form action="[%= .self %]/cms/edit_page_textile[%if .data.cms.page %]/[%= .data.cms.page.get_id %][%/if %]" method="post">
+    <input type="hidden" name="cms.parent_id" value="[%= .data.cms.parent %]">
+    Link: <input type="text" name="cms.url" value="[%= .data.cms.page.get_url %]"><br>
+    Title: <input type="text" name="cms.title" value="[%= .data.cms.page.get_title %]"><br>
+    <textarea name="cms.text" cols="80" rows="16">[%= .data.cms.page.get_text %]</textarea><br>
+    <input type="submit" name="submit.preview" value="[%translate id=global_action_preview %]" class="button">
+[%= .user.token.hidden escape=0 %]
+</form>
+
+[%/if %]
+
+[%case set_page %]
+
+Position page <b>[%= .data.page.title %]</b> ([%= .data.page.url %])<p>
+Place page<br>
+<form action="[%= .self %]/cms/set_page/[%= .data.page.get_id %]" method="post">
+    <input type="hidden" name="page.parent" value="[%= .data.pid %]"><br>
+    <input type="radio" name="page.position" value="0"> on top
+    <br>
+or after:<br>
+[%loop .data.pages %]
+    <input type="radio" name="page.position" value="[%= position %]">
+<a href="[%= .self %]/cms/set_page/[%= .data.page.get_id %]?page.parent=[%= id %]"><img src="[%= .data.userprefs.theme %]/folder.png" alt="[folder]"> [%= title %]</a><br>
+[%/loop .data.pages %]
+
+    <input type="submit" name="submit.save" value="Set" class="button">
+[%= .user.token.hidden escape=0 %]
+</form>
+
+[%case list_motd %]
+
+<table class="overview" cellspacing="1">
+<tr>
+<th>MOTD</th><th>Start</th><th>End</th><th>Weight</th>
+</tr>
+[%loop .data.motds %]
+<tr>
+<td class="dark">[%= rendered escape=0 %]</td>
+<td>[%= start escape=TIME_HTML_FULL %]</td>
+<td class="dark">[%= end escape=TIME_HTML_FULL %]</td>
+<td>[%= weight %]</td>
+<td class="dark"><a href="[%= .self %]/cms/edit_motd/[%= id %]">Edit</a></td>
+<td>
+<form action="[%= .self %]/cms/edit_motd/[%= id %]" method="post">
+<input type="submit" name="submit.delete" value="Delete" class="button submit">
+[%= .user.token.hidden escape=0 %]
+</form>
+</td>
+</tr>
+[%/loop .data.motd %]
+</table>
+
+<hr>
+New MOTD:
+[%include cms/edit_motd_form.html %]
+
+[%case edit_motd %]
+[%include cms/edit_motd_form.html %]
+
+
+[%/switch .action %]

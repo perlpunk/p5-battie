@@ -1,0 +1,5 @@
+[%if .data.cms.new_filename %]
+<div id="file_[%= .data.cms.counter %]"><a title="Rename the file by clicking on it" href="#"
+onClick="savename([%= .data.cms.counter %], '[%= .data.cms.new_filename %]')"
+>[%= .data.cms.new_filename %]</a></div>
+[%/if %]

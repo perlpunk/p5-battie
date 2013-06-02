@@ -1,0 +1,105 @@
+[%set_var mythread value=_ %]
+[%loop surveys %]
+[%set_var mysurvey value=_ %]
+<table class="overview" cellspacing="1">
+[%set_var show_result expr="(has_voted) or (closed)" %]
+<tr><td colspan="[%if $show_result %]3[%else %]2[%/if %]">Question: <b>[%= question %]</b>[%if closed %] <i>(closed)</i>[%/if %]</td></tr>
+[%if is_multiple %]<tr><td colspan="[%if $show_result %]3[%else %]2[%/if %]">Check up to [%= is_multiple %] answers</td></tr>[%/if %]
+
+[%if $show_result %]
+[%loop options %]
+<tr>
+    <td class="dark"><span id="survey_vote_[%= $mysurvey.id %]_[%= position %]">[%= position %]. [%= answer %]</span></td>
+    <td width="300"><img src="[%= .data.userprefs.theme_color %]/button.gif" width="[%= percent %]%" height="10" alt="[%= percent %]" /></td>
+<td class="dark">[%if votecount %][%= votecount %] vote(s) ([%= percent %]%)[%/if %]</td>
+</tr>
+[%/loop options %]
+<tr>
+<td colspan="2">Total:<td>[%= total_votecount %]</td>
+</tr>
+[%else %]
+<form action="[%= .self %]/poard/survey_vote/[%= id %]" method="POST">
+[%loop options %]
+<tr>
+    <td>
+    [%if .can.poard.survey_vote %]
+    <input class="button" type="[%if $mysurvey.is_multiple %]checkbox[%else %]radio[%/if%]" name="option.position" value="[%= _.position %]" />
+    [%/if .can.poard.survey_vote %]
+    </td>
+    <td>[%= answer %]</td>
+</tr>
+[%/loop options %]
+<tr>
+    <td colspan="2">
+[%if $mythread.closed %]
+Thread is closed
+[%else %]
+    [%if .can.poard.survey_vote %]
+	<input type="checkbox" name="do_not_log" value="1" id="do_not_log"><label for="do_not_log" title="Don't save into database what you voted for"> Don't log my vote</label><br><br>
+    <input type="submit" name="submit.vote" value="[%translate id="poard_vote" %]" class="button">
+    <input type="submit" name="submit.abstain" value="[%translate id="poard_vote_abstain" %]" class="button">
+    [%else %]
+        [%if .user.logged_in %]You can't vote.
+        [%else %]You have to log in to vote.
+        [%/if %]
+    [%/if %]
+[%/if %]
+    </td>
+</tr>
+[%= .user.token.hidden escape=0 %]
+</form>
+[%/if %]
+<tr>
+    <td colspan="[%if $show_result %]3[%else %]2[%/if %]">[%= votecount %] voter(s) so far</td>
+</tr>
+</table>
+[%unless closed %]
+[%if expr="( .data.poard.thread.own ) or (.can.poard.mod_close_survey)" %]
+<form action="[%= .self %]/poard/close_survey/[%= id %]" method="POST">
+[%= .user.token.hidden escape=0 %]
+Close Survey: <input type="submit" name="submit.close" value="X" onclick="return confirm('Really close?');" class="button">
+</form>
+[%/if %]
+[%if expr="( .data.poard.thread.own ) or (.can.poard.edit_survey_change)" %]
+<a href="[%= .self %]/poard/edit_survey/[%= id %]">Add answers</a>
+[%/if %]
+[%/unless closed %]
+[%if has_voted %]
+<br>
+<div id="show_my_vote_result_[%= id %]">
+<form action="[%= .self %]/poard/survey_vote/[%= id %]" method="POST">
+[%= .user.token.hidden escape=0 %]
+<input type="submit" name="submit.show_my_vote" value="Show my vote" class="button"
+onclick="show_my_vote([%= id %]);return false">
+</form>
+
+<script type="text/javascript"><!--
+var survey_id = '';
+my_call = function(){
+var object = JSON.parse(arguments[0]);
+var res = document.getElementById('show_my_vote_result_' + survey_id);
+res.innerHTML = 'Your votes: (';
+for (var i=0; i < object.length; i++) {
+	var opt_res = document.getElementById("survey_vote_" + survey_id + '_' + object[i]);
+	opt_res.style.fontWeight = "bold";
+	opt_res.style.textDecoration = "underline";
+	if (!i==0)
+		res.innerHTML += " ,";
+	res.innerHTML += object[i];
+}
+	res.innerHTML += ")";
+}
+
+function show_my_vote(id) {
+	var res = document.getElementById('show_my_vote_result_' + id);
+    res.innerHTML = 'Your votes: ...<blink>_</blink>';
+    survey_id = id;
+    ajaxshow( ['ma__poard/survey_vote/'+id,'t__[%= .user.token.id %]','submit.show_my_vote__1','is_ajax__1'],
+        [my_call], 'POST' );
+}
+
+--></script>
+</div>
+[%/if %]
+
+[%/loop surveys %]

@@ -1,0 +1,570 @@
+
+[%switch action %]
+
+[%case settings %]
+
+<form action="[%= .self %]/member/settings" method="POST">
+Notify me by email when I get a personal message:
+<input type="checkbox" name="notify" value="1" [%if .data.member.settings.send_notify %]checked="checked"[%/if %] /><br />
+<input type="submit" name="submit.save" value="Save" class="button" />
+[%= .user.token.hidden escape=0 %]
+</form>
+
+[%case abook %]
+
+[%if .data.member.contact %]
+
+Addressbook entry:<br />
+User:
+<a href="[%= .self %]/member/profile/[%= .data.member.contact.contact.id %]">[%= .data.member.contact.contact.nick %]</a>
+<br />
+Added: [%= .data.member.contact.ctime escape=TIME_HTML %]
+<br />
+User may contact you:
+[%if .data.member.contact.blacklist %]No[%else %]Yes[%/if %]
+<br />
+<form action="[%= .self %]/member/abook/[%= .data.member.contact.contactid %]" method="POST">
+Note: <input type="text" name="note" value="[%= .data.member.contact.note %]" /><br />
+<input type="submit" name="submit.save_note" value="Save note" class="button" />
+[%= .user.token.hidden escape=0 %]
+</form>
+
+
+[%elsif .data.member.contacts %]
+[%with .data.member.pager %][%include name="pager.html" %][%/with %]
+<script type="text/javascript">
+var div_id = '';
+my_call = function(){
+    document.getElementById(div_id).innerHTML = arguments[0];
+}
+
+function show_textinput(id) {
+    var el = document.getElementById("textinput_"+id);
+    el.style.visibility = 'visible';
+    el.style.display = 'block';
+}
+function save_note(id, text) {
+    var note = document.getElementById("note_display_"+id);
+    var el = document.getElementById("textinput_"+id);
+    var res = document.getElementById("result_"+id);
+    res.innerHTML = '...';
+    res.innerHTML = '<img src="[%= .data.userprefs.theme %]/wait.gif" width="150" height="10" alt="[wait]">';
+    div_id = "result_"+id;
+    ajaxshow( ['ma__member/abook/'+id,'t__[%= .user.token.id %]','submit.save_note__1','is_ajax__1','note__'+text],
+        [my_call], 'POST' );
+    note.innerHTML = text;
+    el.style.visibility = 'hidden';
+    el.style.display = 'none';
+}
+</script>
+
+<table class="overview" cellspacing="1">
+<tr>
+<th valign="top">Nick</th>
+<th valign="top" align="center">Added</th>
+<th valign="top">Blacklist</th>
+<th valign="top"colspan="2">Note</th>
+</tr>
+
+<tr>
+<th align="center">
+[%with .data.member.sorter.sort_fields.nick %]
+[%include sorter.html %]
+[%/with .data.member.sorter.sort_fields.nick %]
+</th>
+<th align="center">
+[%with .data.member.sorter.sort_fields.ctime %]
+[%include sorter.html %]
+[%/with .data.member.sorter.sort_fields.ctime %]
+</th>
+<th align="center">
+[%with .data.member.sorter.sort_fields.bl %]
+[%include sorter.html %]
+[%/with .data.member.sorter.sort_fields.bl %]
+</th>
+<th colspan="2"></th>
+[%loop .data.member.contacts %]
+<tr>
+<td><a href="[%= .self %]/member/profile/[%= contact.id %]">[%= contact.nick %]</a></td>
+<td>[%= ctime escape=TIME_HTML %]</td>
+<td>[%= blacklist %]</td>
+<td>
+<form onSubmit="save_note([%= contactid %], this.note_[%= contactid %].value);return false">
+<a href="[%= .self %]/member/abook/[%= contactid %]"
+onClick="show_textinput([%= contactid %]);return false"
+><small>[Edit]</small>
+</a>
+<span id="note_display_[%= contactid %]">[%= note %]</span>
+<div id="textinput_[%= contactid %]" style="visibility: hidden; display: none">
+<input type="text" name="note" id="note_[%= contactid %]" value="[%= note %]"/>
+<input type="button" value="Save"
+onClick="save_note([%= contactid %], this.form.note_[%= contactid %].value)" />
+</div>
+<div id="result_[%= contactid %]"></div>
+</form>
+</td>
+<td>
+<form action="[%= .self %]/member/abook/[%= contactid %]" method="POST">
+<input type="submit" name="submit.delete" value="Delete" class="button" />
+[%= .user.token.hidden escape=0 %]
+</form>
+</td>
+</tr>
+[%/loop .data.member.contacts %]
+</table>
+
+[%/if .data.member.contact %]
+
+[%case geo %]
+
+[%if .google_api_key %]
+<noscript><span class="error">Javascript necessary for this function</span></noscript>
+  <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=[%= .google_api_key %]"
+    type="text/javascript">
+  </script>
+    <script type="text/javascript">
+    //<![CDATA[
+    var latitude;
+    var longitude;
+    var locations = new Array();
+
+    function load() {
+        if (GBrowserIsCompatible()) {
+            var map = new GMap2(document.getElementById("map"));
+            map.setCenter(new GLatLng(latitude, longitude), 3);
+            map.addControl(new GLargeMapControl());
+            map.addControl(new GMapTypeControl());
+            map.setMapType(G_HYBRID_MAP);
+
+            for (var i=0; i < locations.length; i++) {
+                map.addOverlay(locations[i], i);
+            }
+            map.enableScrollWheelZoom();
+var myself;
+var home = '[%= .server %][%= .data.userprefs.theme %]/homepage.gif';
+GEvent.addListener(map, "click", function(overlay, point){
+if (myself)
+	map.removeOverlay(myself);
+	if (point) {
+        myself = new GMarker(point);
+        myself.getIcon().image = home;
+        myself.getIcon().iconSize = new GSize(16,16);
+        myself.getIcon().iconAnchor = new GPoint(8,16);
+		map.addOverlay(myself);
+		document.getElementById("click_lat").value = point.lat();
+		document.getElementById("click_long").value = point.lng();
+	}
+});
+        }
+    }
+    function zoom(lat, lon) {
+        latitude = lat;
+        longitude = lon;
+    }
+
+    zoom(51.0000, 9.0000);
+
+    //]]>
+</script>
+
+<div id="map" style="width: 100%; height: 400px"></div>
+[%= .data.member.geo_count %] [%translate id=global_entries count=".data.member.geo_count" %]
+
+[%if .can.userprefs.profile %]
+Click on the map to get geo coordinates:<br>
+<form action="[%= .self %]/userprefs/profile" method="GET">
+Latitude: <input type="text" name="profile.geo_lat" id="click_lat"><br>
+Longitude: <input type="text" name="profile.geo_long" id="click_long"><br>
+<input type="submit" value="Put coordinates in your profile" class="button">
+</form>
+[%/if .can.userprefs.profile %]
+<script type="text/javascript">//<![CDATA[
+        var map = new GMap2(document.getElementById("map"));
+
+function mk_point(lat,lon) {
+    var latlng = new GLatLng(lat, lon);
+    var icon = new GIcon(G_DEFAULT_ICON);
+    var options = { icon: icon, draggable: true };
+    var point = new GLatLng(lat, lon, options);
+    var marker = new GMarker(point);
+    map.addOverlay(marker);
+    return marker;
+}
+[%each .data.member.geo %]
+locations[ [%= __index__ %] ] = mk_point([%= __key__ %]);
+[%/each .data.member.geo %]
+//]]>
+</script>
+[%else %]
+<script type="text/javascript">//<![CDATA[
+function load() {}
+function GUnload() {}
+//]]>
+</script>
+[%/if .google_api_key %]
+
+[%case list %]
+
+[%if .data.member.users_by_group %]
+
+<table class="overview" cellspacing="1">
+<tr>
+<th>Group</th><th>Count</th>
+</tr>
+[%loop .data.member.users_by_group %]
+<tr>
+<td>[%= group_name %]</td><td><a href="[%= .self %]/member/list?group_id=[%= group_id %]">[%= count %]</a></td>
+</tr>
+[%/loop .data.member.users_by_group %]
+</table>
+
+[%else %]
+
+[%loop .data.member.starters %]
+<a style="padding: 0.6em; text-decoration: none;" href="[%= .self %]/member/list?;so=;start=[%= _ escape=url %];group_id=[%= .data.member.group_id %]">[%= _ %]</a>
+[%/loop %]
+<a style="padding: 0.8em; text-decoration: none;" href="[%= .self %]/member/list?;so=%s;start=">all</a>
+[%with .data.member.pager %][%include name="pager.html" %][%/with %]
+
+<br />
+
+<table class="overview" cellspacing="1">
+<tr>
+<th>Nick</th><th>Realname</th><th >Member since</th><th >Last Login</th>
+<th >Location</th><th >Homepage</th><th >Forum Messages</th>
+</tr>
+
+<tr>
+<th>
+[%with .data.member.sorter.sort_fields.nick %]
+[%include sorter.html %]
+[%/with .data.member.sorter.sort_fields.nick %]
+</th>
+<th></th>
+<th align="center">
+[%with .data.member.sorter.sort_fields.ctime %]
+[%include sorter.html %]
+[%/with .data.member.sorter.sort_fields.ctime %]
+</th>
+<th align="center">
+[%with .data.member.sorter.sort_fields.lastlogin %]
+[%include sorter.html %]
+[%/with .data.member.sorter.sort_fields.lastlogin %]
+</th>
+<th align="center">
+[%with .data.member.sorter.sort_fields.location %]
+[%include sorter.html %]
+[%/with .data.member.sorter.sort_fields.location %]
+</th>
+<th></th>
+<th align="center">
+[%with .data.member.sorter.sort_fields.msgs %]
+[%include sorter.html %]
+[%/with .data.member.sorter.sort_fields.msgs %]
+</th>
+</tr>
+[%loop .data.member.list %]
+<tr>
+<td class="dark"><a href="[%= .self %]/member/profile/[%= id %]">[%= nick %]</a></td>
+<td>[%= profile.name %]</td>
+<td class="dark">[%= ctime escape=TIME_HTML %]</td>
+<td>[%= lastlogin escape=TIME_HTML %]</td>
+<td class="dark">[%= profile.location %]</td>
+<td>
+[%if profile.homepage %]
+<a href="[%= .redir %]?[%= profile.homepage escape=URL %]">[%= profile.homepage %]</a>
+[%/if profile.homepage %]
+</td>
+<td class="dark">[%if settings %][%= settings.messagecount %][%/if %]</td>
+</tr>
+[%/loop .data.member.list %]
+</table>
+[%with .data.member.pager %][%include name="pager.html" %][%/with %]
+[%/if .data.member.users_by_group %]
+
+[%case profile %]
+
+[%if .can.useradmin.edit %]
+<a href="[%= .self %]/useradmin/edit/[%= .data.member.user.id %]">Edit User</a><br>
+[%/if .can.useradmin.edit %]
+[%= .data.member.user.nick %]
+[%if .data.member.user.profile.avatar %]
+<img src="[%= .data.userprefs.avatar_url %]/[%= .data.member.user.profile.user_id %]_[%= .data.member.user.profile.avatar %]" alt="user image" />
+[%/if .data.member.profile.avatar %]
+<p />
+<a href="[%= .self %]/member/send_pm?pm.to=[%= .data.member.user.id %]">Send message to [%= .data.member.user.nick %]</a>
+<form action="[%= .self %]/member/edit_abook" method="POST">
+<input type="hidden" name="contact.id" value="[%= .data.member.user.id %]" />
+<input type="submit" name="submit.add" value="Add user to addressbook" class="button" />
+[%= .user.token.hidden escape=0 %]
+</form>
+
+[%if .data.member.user.group_id %]
+<p>Group: [%= .data.member.user.groupname %]
+</p>
+[%/if .data.member.user.group_id %]
+[%if .data.member.roles# %]
+<p>Roles:
+[%loop .data.member.roles join=", " %]
+[%= name %]
+[%/loop .data.member.roles %]
+</p>
+[%/if .data.member.roles# %]
+
+[%if .can.poard %]
+Show all forum messages by
+<a href="[%= .self %]/poard/msgs_by_nick/[%= .data.member.user.id %]">[%= .data.member.user.nick %]</a>
+[%/if .can.poard %]
+
+<p />
+[%if .data.member.user.profile %]
+<table class="overview" cellspacing="1" width="100%">
+[%with .data.member.user.profile %]
+[%if foto_url %]
+<tr><td colspan="2" align="center">
+<a href="[%= .redir %]?[%= foto_url escape=url %]">Photo</a>
+</td></tr>
+[%/if foto_url %]
+<tr>
+<td width="20%">Homepage:</td>
+<td>[%if homepage %]
+<a href="[%= .redir %]?[%= homepage escape=url %]">[%= homepage %]</a>
+[%/if homepage %]
+</td>
+</tr>
+<tr>
+<td>Location:</td><td>[%= location %]</td>
+</tr>
+<tr>
+<td>Birthday:</td>
+<td>Month/Day: [%= birth_day %] Year: [%= birth_year %]</td>
+</tr>
+<tr><td>Sex:</td><td>[%= sex_label %]</td></tr>
+<tr><td>ICQ:</td><td>[%= icq %]</td></tr>
+<tr><td>AOL:</td><td>[%= aol %]</td></tr>
+<tr><td>Yahoo:</td><td>[%= yahoo %]</td></tr>
+<tr><td>MSN:</td><td>[%= msn %]</td></tr>
+<tr><td>Interests:</td><td>[%= interests %]</td></tr>
+
+<tr><td>Member since:</td><td>[%= .data.member.user.ctime escape=TIME_HTML_SHORT %]</td></tr>
+<tr><td>Last change of profile:</td><td>[%= mtime escape=TIME_HTML_SHORT %]</td></tr>
+<tr><td>Last login:</td><td>[%= .data.member.user.lastlogin escape=TIME_HTML_SHORT %]</td></tr>
+[%/with .data.member.user.profile %]
+[%/if .data.member.user.profile %]
+</table>
+
+[%case send_pm %]
+
+<form action="[%= .self %]/member/send_pm" method="POST">
+[%= .user.token.hidden escape=0 %]
+<table class="border_table">
+    <tr><td colspan="2">Send message to</td></tr>
+<tr><td valign="top">
+[%loop .data.member.recipients %]
+<input type="checkbox" name="pm.to" value="[%= id %]" checked="checked"/>
+[%= nick %]
+<br />
+[%/loop .data.member.recipients %]
+</td>
+<td valign="top">
+[%if .data.member.abook[1]# %]
+<select name="pm.add_recip" size="3" multiple="multiple">
+[%html_option_loop .data.member.abook %]
+<option value="[%= value %]">[%= label %]</option>
+[%/html_option_loop .data.member.abook %]
+</select>
+<input type="submit" name="submit.preview" value="Additional Recipients" class="button"/>
+[%else %]<i>To select additional recipients you have to add them into your addressbook first.</i>
+[%/if .data.member.abook# %]
+</td>
+</tr>
+<tr><td colspan="2"><hr /></td></tr>
+<tr>
+<td colspan="2">
+Subject: <input type="text" name="pm.subject" value="[%= .data.member.pm.subject %]" />
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<textarea name="pm.message" cols="75" rows="10">[%= .data.member.pm.message %]</textarea>
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<input type="submit" name="submit.preview" value="Preview" class="button" />
+<input type="submit" name="submit.send" value="Send" class="button" />
+</td>
+</tr>
+<tr>
+<td colspan="2">
+    [%= .data.member.pm.rendered_message escape=0 %]
+</td>
+</tr>
+</table>
+</form>
+
+[%case view_pm %]
+
+Box <a href="[%= .self %]/member/view_box/[%= .data.member.box.id %]">[%= .data.member.box.name %]</a>
+
+<p />
+
+<table class="overview" cellspacing="1" width="100%">
+<tr>
+<td>From</td><td><a href="[%= .self %]/member/profile/[%= .data.member.pm.sender.id %]">[%= .data.member.pm.sender.nick %]</a></td>
+</tr>
+<tr>
+<td>Date</td><td>[%= .data.member.pm.ctime escape=TIME_HTML_FULL %]</td>
+</tr>
+<tr>
+<td>To</td>
+<td>[%loop .data.member.pm.recipients join=", "%]
+[%if has_read %]
+<a href="[%= .self %]/member/profile/[%= recipient.id %]">[%= recipient.nick %]</a>
+[%else %]
+<b><a href="[%= .self %]/member/profile/[%= recipient.id %]">[%= recipient.nick %]</a></b>
+[%/if has_read %]
+[%/loop .data.member.pm.recipients %]
+</td>
+</tr>
+<tr>
+<td>Subject</td><td>[%= .data.member.pm.rendered_subject escape=0 %]</td>
+</tr>
+<tr>
+<td colspan="2">
+[%= .data.member.pm.rendered_message escape=0 %]
+</td>
+</tr>
+
+<tr>
+<td>
+<form action="[%= .self %]/member/send_pm" method="POST">
+<input type="hidden" name="pm.to" value="[%= .data.member.pm.sender.id %]">
+<input type="hidden" name="pm.quote" value="[%= .data.member.pm.id %]">
+<input class="button" type="submit" name="submit.preview" value="[%translate id=global_action_reply %]">
+</form>
+</td>
+<td>
+<form action="[%= .self %]/member/delete_pm/[%= .data.member.pm.id %]" method="POST">
+<input class="submit button" type="submit" name="submit.delete" value="Delete Message"
+onclick="return confirm('Really delete?')" />
+[%= .user.token.hidden escape=0 %]
+</form>
+</td></tr>
+</table>
+
+[%case delete_pm %]
+[%if .data.member.error.token %]
+[%include name="token_expired.html" %]
+[%/if %]
+<form action="[%= .self %]/member/delete_pm/[%= .data.member.pm.id %]" method="POST">
+<input type="submit" name="submit.delete" value="Delete Message" class="button" />
+[%= .user.token.hidden escape=0 %]
+</form>
+
+[%case box_list %]
+
+<table class="overview" cellspacing="1">
+<tr>
+<th>Box</th><th>Messages</th><th>Edit</th>
+</tr>
+[%loop .data.member.boxes %]
+<tr>
+<td><a href="[%= .self %]/member/view_box/[%= id %]">[%= name %]</a></td>
+<td>[%= message_count %]</td>
+<td><a href="[%= .self %]/member/edit_box/[%= id %]">edit</a></td>
+</tr>
+[%/loop .data.member.boxes %]
+</table>
+
+<p />
+<a href="[%= .self %]/member/create_box">Create new box</a>
+
+[%case create_box %]
+
+
+<form action="[%= .self %]/member/create_box/[%= .data.member.pm.id %]" method="POST">
+<input type="text" name="box.name" value="[%= .data.member.box.name %]" /><br />
+<input type="submit" name="submit.create" value="Create" class="button" />
+[%= .user.token.hidden escape=0 %]
+</form>
+
+[%case edit_box %]
+
+Edit box [%= .data.member.box.name %]
+<br />
+<form action="[%= .self %]/member/edit_box/[%= .data.member.box.id %]" method="POST">
+New name: <input type="text" name="box.name" value="[%= .data.member.box.name %]" /><br />
+<input type="submit" name="submit.save" value="Save" class="button" />
+[%= .user.token.hidden escape=0 %]
+</form>
+
+<p />
+Delete box:
+<form action="[%= .self %]/member/edit_box/[%= .data.member.box.id %]" method="POST">
+<input type="submit" name="submit.delete" value="Delete" class="button" />
+[%= .user.token.hidden escape=0 %]
+</form>
+
+[%case view_box %]
+
+Box [%= .data.member.box.name %]<p />
+<form action="[%= .self %]/member/edit_pms/[%= .data.member.box.id %]" method="POST">
+
+[%with .data.member.pager %]
+[%include name="pager.html" %]
+[%/with .data.member.pager %]
+
+<br />
+<table class="overview" cellspacing="1">
+<tr>
+<th>From</th>
+<th>Subject</th>
+<th>Date</th>
+<th>select</th>
+</tr>
+[%loop .data.member.box.messages %]
+<tr>
+<td>[%= sender.nick %]</td>
+<td><a [%unless has_read %]class="unread"[%/unless %] href="[%= .self %]/member/view_pm/[%= id %]">[%= subject %]</a></td>
+<td>[%= ctime escape=TIME_HTML_SHORT %]</td>
+<td><input type="checkbox" name="pm.id" value="[%= id %]" />
+</tr>
+[%/loop .data.member.box.messages %]
+</table>
+
+<input type="submit" name="submit.delete" value="Delete selected messages" class="button" />
+<br />
+<input type="submit" name="submit.move" value="Move selected messages to" class="button" />
+<select name="box.id">
+[%html_option_loop .data.member.boxes %]
+<option value="[%= value %]" [%= selected %] >[%= label %]</option>
+[%/html_option_loop .data.member.boxes %]
+</select>
+[%= .user.token.hidden escape=0 %]
+</form>
+
+[%case stats %]
+
+[%= .data.member.stats.membercount %] [%translate id=member_members count=".data.member.stats.membercount" %]
+<br>
+Logged in during the last month: [%= .data.member.stats.logged_in_last_month %]
+<br>
+<br>
+<table class="overview" cellspacing="1">
+<tr><th>Year</th><th>New users</th></tr>
+[%each .data.member.stats.member_by_year %]
+<tr><td>[%= __key__ %]</td><td>[%= __value__ %]</td></tr>
+[%/each .data.member.stats.member_by_year %]
+</table>
+
+<br>
+<br>
+<table class="overview" cellspacing="1">
+<tr><th>Month</th><th>New users</th></tr>
+[%each .data.member.stats.member_by_last_months %]
+<tr><td>[%= __key__ %]</td><td>[%= __value__ %]</td></tr>
+[%/each .data.member.stats.member_by_last_months %]
+</table>
+
+[%/switch action %]

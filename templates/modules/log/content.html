@@ -1,0 +1,49 @@
+[%switch .action %]
+
+[%case start %]
+
+<p align="center">
+[%with .data.log.pager %]
+[%include name="pager.html" %]
+[%/with .data.log.pager %]
+</p>
+
+<table class="overview" cellspacing="1">
+<th>UID
+[%with .data.log.sorter.sort_fields.userid %]
+[%include sorter.html %]
+[%/with .data.log.sorter.sort_fields.userid %]
+</th>
+<th>time</th>
+<th>module
+[%with .data.log.sorter.sort_fields.module %]
+[%include sorter.html %]
+[%/with .data.log.sorter.sort_fields.module %]
+</th>
+<th>action
+[%with .data.log.sorter.sort_fields.action %]
+[%include sorter.html %]
+[%/with .data.log.sorter.sort_fields.action %]
+</th>
+<th>object/type</th>
+<th>IP <span title="Forwarded For IP">(FF)</span></th>
+<th>Comment</th>
+<th>Referrer</th>
+<th>Country/City</th>
+[%loop .data.log.entries %]
+<tr>
+<td class="dark"><a href="[%= .self %]/member/profile/[%= user_id %]">[%= user_id %]</a></td>
+<td class="light">[%= ctime escape=TIME_HTML %]</td>
+<td class="dark">[%= module %]</td>
+<td class="dark">[%= action %]</td>
+<td class="light">
+<span title="[%= object_type %]">[%= object_type_short %](<tt>[%= object_id %]</tt>)</span></td>
+<td class="dark"><tt>[%= ip %]<br />([%= forwarded_for %])</tt></td>
+<td class="light">[%= comment %]</td>
+<td class="dark">[%= referrer %]</td>
+<td class="light">[%= country %]<br>[%= city %]</td>
+</tr>
+[%/loop .data.log.entries %]
+</table>
+
+[%/switch .actin %]

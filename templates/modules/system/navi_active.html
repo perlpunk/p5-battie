@@ -1,0 +1,6 @@
+<ul>
+[%if .can.system.language %]<li><a href="[%= .self %]/system/language">[%translate id="global_language" %]</a></li>[%/if %]
+[%if .can.system.translation %]<li><a href="[%= .self %]/system/translation">Translations</a></li>[%/if %]
+[%if .can.system.terms %]<li><a href="[%= .self %]/system/terms">Terms &amp; Conditions</a></li>[%/if %]
+[%if .can.system.term %]<li><a href="[%= .self %]/system/term">[%translate id=global_terms_conditions %]</a></li>[%/if %]
+</ul>

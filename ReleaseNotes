@@ -1,0 +1,630 @@
+2012-09-08
+
+MySQL:
+ALTER TABLE TABLE_PREFIX_survey_vote ADD COLUMN meta text NOT NULL DEFAULT '';
+update TABLE_PREFIX_survey_vote set meta = '{}';
+
+PostgreSQL:
+ALTER TABLE TABLE_PREFIX_survey_vote ADD COLUMN "meta" text DEFAULT '' NOT NULL;
+update TABLE_PREFIX_survey_vote set meta = '{}';
+
+  "meta" character varying(256) NOT NULL,
+2012-09-01
+
+add poard/edit_survey to role user and poard/edit_survey_change to moderator
+
+2012-08-31
+
+add poard/close_survey to role user and poard/mod_close_survey to role moderator
+
+MySQL:
+ALTER table TABLE_PREFIX_survey change status status enum('onhold','active','deleted','closed') NOT NULL DEFAULT 'onhold'
+
+PostgreSQL: nothing to do
+
+2012-03-20
+
+MySQL:
+
+TRUNCATE TABLE_PREFIX_au_session;
+ALTER TABLE TABLE_PREFIX_au_session CHANGE COLUMN ctime ctime integer(11) NOT NULL DEFAULT 0,
+                                    CHANGE COLUMN mtime mtime integer(11) NOT NULL DEFAULT 0,
+                                    CHANGE COLUMN expires expires integer(11) NOT NULL DEFAULT 0;
+
+
+Postgres:
+
+TRUNCATE TABLE_PREFIX_au_session;
+ALTER TABLE TABLE_PREFIX_au_session ALTER COLUMN ctime SET DEFAULT 0;
+ALTER TABLE TABLE_PREFIX_au_session ALTER COLUMN mtime SET DEFAULT 0;
+ALTER TABLE TABLE_PREFIX_au_session ALTER COLUMN expires SET DEFAULT 0;
+
+
+
+
+2012-02-25
+
+MySQL
+
+CREATE TABLE `TABLE_PREFIX_group` (
+  id integer(10) NOT NULL auto_increment,
+  name varchar(64) NOT NULL DEFAULT '',
+  rtype varchar(32) NOT NULL DEFAULT '',
+  PRIMARY KEY (id)
+) ENGINE=InnoDB;
+
+CREATE TABLE `TABLE_PREFIX_group_role` (
+  group_id integer(10) NOT NULL,
+  role_id integer(10) NOT NULL,
+  INDEX TABLE_PREFIX_group_role_idx_group_id (group_id),
+  INDEX TABLE_PREFIX_group_role_idx_role_id (role_id),
+  PRIMARY KEY (group_id, role_id),
+  CONSTRAINT TABLE_PREFIX_group_role_fk_group_id FOREIGN KEY (group_id) REFERENCES `TABLE_PREFIX_group` (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT TABLE_PREFIX_group_role_fk_role_id FOREIGN KEY (role_id) REFERENCES `TABLE_PREFIX_role` (id)
+) ENGINE=InnoDB;
+
+ALTER TABLE TABLE_PREFIX_poard_user ADD COLUMN group_id integer(10) NOT NULL DEFAULT 0,
+                                    ADD COLUMN extra_roles tinyint(1) NOT NULL DEFAULT 0;
+
+Postgres:
+
+CREATE TABLE "TABLE_PREFIX_group" (
+  "id" serial NOT NULL,
+  "name" character varying(64) DEFAULT '' NOT NULL,
+  "rtype" character varying(32) DEFAULT '' NOT NULL,
+  PRIMARY KEY ("id")
+);
+
+CREATE TABLE "TABLE_PREFIX_group_role" (
+  "group_id" integer NOT NULL,
+  "role_id" integer NOT NULL,
+  PRIMARY KEY ("group_id", "role_id")
+);
+CREATE INDEX "TABLE_PREFIX_group_role_idx_group_id" on "TABLE_PREFIX_group_role" ("group_id");
+CREATE INDEX "TABLE_PREFIX_group_role_idx_role_id" on "TABLE_PREFIX_group_role" ("role_id");
+
+ALTER TABLE TABLE_PREFIX_poard_user ADD COLUMN group_id integer DEFAULT 0 NOT NULL;
+
+ALTER TABLE TABLE_PREFIX_poard_user ADD COLUMN extra_roles integer DEFAULT 0 NOT NULL;
+
+
+
+
+2011-07-31
+
+Attachments:
+
+MySQL:
+
+CREATE TABLE `TABLE_PREFIX_poard_attachment` (
+  message_id bigint(20) NOT NULL,
+  attach_id integer(10) NOT NULL,
+  type varchar(32) NOT NULL,
+  filename varchar(32) NOT NULL,
+  size integer(10) NOT NULL,
+  deleted integer(1) NOT NULL DEFAULT 0,
+  meta text NOT NULL,
+  thumb integer(1) NOT NULL DEFAULT 0,
+  ctime datetime NOT NULL,
+  mtime datetime NOT NULL,
+  INDEX TABLE_PREFIX_poard_attachment_idx_message_id (message_id),
+  PRIMARY KEY (message_id, attach_id),
+  CONSTRAINT TABLE_PREFIX_poard_attachment_fk_message_id FOREIGN KEY (message_id) REFERENCES `TABLE_PREFIX_poard_message` (id)
+) ENGINE=InnoDB;
+
+
+Postgres:
+CREATE TABLE "TABLE_PREFIX_poard_attachment" (
+  "message_id" integer NOT NULL,
+  "attach_id" integer NOT NULL,
+  "type" character varying(32) NOT NULL,
+  "filename" character varying(32) NOT NULL,
+  "size" integer NOT NULL,
+  "deleted" integer DEFAULT 0 NOT NULL,
+  "meta" character varying(256) NOT NULL,
+  "thumb" integer DEFAULT 0 NOT NULL,
+  "ctime" timestamp NOT NULL,
+  "mtime" timestamp NOT NULL,
+  PRIMARY KEY ("message_id", "attach_id")
+);
+CREATE INDEX "TABLE_PREFIX_poard_attachment_idx_message_id" on "TABLE_PREFIX_poard_attachment" ("message_id");
+
+
+Add action poard/message_attach to role 'user'
+Add action poard/attachment to role 'guest'
+
+Add the following to battie.ini:
+
+# relative to BATTIE_SERVER_ROOT
+# should not be in document root; files will be delivered through the
+# application
+ATTACHMENT_PATH=poard_attach
+# which mimetypes should be uploaded
+ATTACHMENT_TYPES=text/plain;image/gif;image/png;image/jpeg;application/pdf;text/html;application/xml
+# temp dir for uploading files before they will be moved to ATTACHMENT_PATH
+ATTACHMENT_TMPDIR=/tmp
+# max size for one file
+ATTACHMENT_MAX_SIZE=1024000
+# max size for all attachments per message
+ATTACHMENT_MAX_TOTALSIZE=5120000
+# max number of attachments per message
+ATTACHMENT_MAX=5
+# where attachment thumbnails will be located
+# relative to BATTIE_DOCUMENT_ROOT
+ATTACHMENT_THUMBNAILS=attachments
+
+
+
+
+
+
+2011-05-03
+
+add action poard/tag_suggest to role guest
+
+2011-04-20
+
+new configuration: GENERAL / KEYWORDS
+
+2011-04-16
+
+add action poard/markup_help to role 'guest'
+
+new translations
+
+2011-04-02
+
+new translations in pard.csv
+
+2011-03-20
+
+Add action poard/edit_thread_tags to role 'user'
+
+2011-03-12
+
+MySQL:
+ALTER TABLE TABLE_PREFIX_poard_board ADD COLUMN meta text
+
+CREATE TABLE `TABLE_PREFIX_poard_user_tag` (
+  tag_id bigint(20) NOT NULL,
+  user_id bigint(20) NOT NULL,
+  ctime datetime NOT NULL,
+  INDEX TABLE_PREFIX_poard_user_tag_idx_tag_id (tag_id),
+  PRIMARY KEY (tag_id, user_id),
+  CONSTRAINT TABLE_PREFIX_poard_user_tag_fk_tag_id FOREIGN KEY (tag_id) REFERENCES `TABLE_PREFIX_poard_tag` (id)
+) ENGINE=InnoDB;
+
+
+CREATE TABLE `TABLE_PREFIX_poard_tag` (
+  id bigint(20) NOT NULL auto_increment,
+  name varchar(128) NOT NULL DEFAULT '',
+  PRIMARY KEY (id),
+  UNIQUE poard_tag_name (name)
+) ENGINE=InnoDB;
+
+CREATE TABLE `TABLE_PREFIX_poard_thread_tag` (
+  tag_id bigint(20) NOT NULL,
+  thread_id bigint(20) NOT NULL,
+  INDEX TABLE_PREFIX_poard_thread_tag_idx_tag_id (tag_id),
+  INDEX TABLE_PREFIX_poard_thread_tag_idx_thread_id (thread_id),
+  PRIMARY KEY (tag_id, thread_id),
+  CONSTRAINT TABLE_PREFIX_poard_thread_tag_fk_tag_id FOREIGN KEY (tag_id) REFERENCES `TABLE_PREFIX_poard_tag` (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT TABLE_PREFIX_poard_thread_tag_fk_thread_id FOREIGN KEY (thread_id) REFERENCES `TABLE_PREFIX_poard_thread` (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+Postgres:
+ALTER TABLE TABLE_PREFIX_poard_board ADD COLUMN meta text;
+
+CREATE TABLE "TABLE_PREFIX_poard_tag" (
+  "id" bigserial NOT NULL,
+  "name" character varying(128) DEFAULT '' NOT NULL,
+  PRIMARY KEY ("id"),
+  CONSTRAINT "poard_tag_name" UNIQUE ("name")
+);
+CREATE TABLE "TABLE_PREFIX_poard_user_tag" (
+  "tag_id" integer NOT NULL,
+  "user_id" integer NOT NULL,
+  "ctime" timestamp NOT NULL,
+  PRIMARY KEY ("tag_id", "user_id")
+);
+CREATE INDEX "TABLE_PREFIX_poard_user_tag_idx_tag_id" on "TABLE_PREFIX_poard_user_tag" ("tag_id");
+
+CREATE TABLE "TABLE_PREFIX_poard_thread_tag" (
+  "tag_id" integer NOT NULL,
+  "thread_id" integer NOT NULL,
+  PRIMARY KEY ("tag_id", "thread_id")
+);
+CREATE INDEX "TABLE_PREFIX_poard_thread_tag_idx_tag_id" on "TABLE_PREFIX_poard_thread_tag" ("tag_id");
+CREATE INDEX "TABLE_PREFIX_poard_thread_tag_idx_thread_id" on "TABLE_PREFIX_poard_thread_tag" ("thread_id");
+
+
+2011-01-27
+
+new translations.
+
+database changes:
+MySQL:
+
+CREATE TABLE `TABLE_PREFIX_poard_msglog` (
+  message_id bigint(20) NOT NULL,
+  log_id integer(10) NOT NULL,
+  action varchar(64) NOT NULL,
+  comment text,
+  user_id integer(20) NOT NULL,
+  ctime datetime NOT NULL,
+  INDEX TABLE_PREFIX_poard_msglog_idx_message_id (message_id),
+  PRIMARY KEY (message_id, log_id),
+  CONSTRAINT TABLE_PREFIX_poard_msglog_fk_message_id FOREIGN KEY (message_id) REFERENCES `TABLE_PREFIX_poard_message` (id)
+) ENGINE=InnoDB;
+
+ALTER TABLE TABLE_PREFIX_poard_message ADD COLUMN changelog integer(1) NOT NULL DEFAULT '0',
+                                       ADD COLUMN has_attachment integer(1) NOT NULL DEFAULT '0';
+
+Postgres:
+CREATE TABLE "TABLE_PREFIX_poard_msglog" (
+  "message_id" integer NOT NULL,
+  "log_id" integer NOT NULL,
+  "action" character varying(64) NOT NULL,
+  "comment" character varying(256),
+  "user_id" integer NOT NULL,
+  "ctime" timestamp NOT NULL,
+  PRIMARY KEY ("message_id", "log_id")
+);
+CREATE INDEX "TABLE_PREFIX_poard_msglog_idx_message_id" on "TABLE_PREFIX_poard_msglog" ("message_id");
+ALTER TABLE TABLE_PREFIX_poard_message ADD COLUMN changelog integer DEFAULT '0' NOT NULL;
+ALTER TABLE TABLE_PREFIX_poard_message ADD COLUMN has_attachment integer DEFAULT '0' NOT NULL;
+
+
+2010-06-23
+
+New action:
+add action userprefs/timezone to guest role
+
+New config variable:
+In section "GENERAL": TIMEZONE
+
+2010-05-22
+
+New actions:
+add action poard/mod_view_thread_log to your moderator group
+add action poard/mod_solve_thread to your moderator group
+add action poard/solve_thread to user group
+
+MySQL:
+ALTER TABLE TABLE_PREFIX_poard_thread ADD COLUMN solved tinyint(1) NOT NULL DEFAULT '0';
+
+PostgreSQL:
+ALTER TABLE TABLE_PREFIX_poard_thread ADD COLUMN solved integer DEFAULT '0' NOT NULL;
+
+2010-04-01
+
+in conf/battie.ini:
+# set to 1 if your site is accessible via HTTPS
+ENABLE_HTTPS=0
+
+will read header 'Front-End-Https'
+
+
+2010-03-08
+
+MySQL:
+ALTER TABLE TABLE_PREFIX_poard_read_messages ADD COLUMN meta text;
+ALTER TABLE TABLE_PREFIX_poard_thread ADD COLUMN meta text;
+
+PostgreSQL:
+ALTER TABLE TABLE_PREFIX_poard_read_messages ADD COLUMN meta text;
+ALTER TABLE TABLE_PREFIX_poard_thread ADD COLUMN meta text;
+
+
+2010-03-07
+
+MySQL:
+ALTER TABLE TABLE_PREFIX_poard_message ADD COLUMN title varchar(128);
+
+PostgreSQL:
+ALTER TABLE TABLE_PREFIX_poard_message ADD COLUMN title character varying(128);
+
+2010-02-27
+
+MySQL:
+CREATE TABLE `TABLE_PREFIX_system_term_user` (
+  term_id char(32) NOT NULL,
+  user_id integer(20) NOT NULL,
+  start_date datetime NOT NULL,
+  PRIMARY KEY (term_id, start_date, user_id)
+);
+ALTER TABLE TABLE_PREFIX_users_new_user ADD COLUMN meta text;
+
+PostgreSQL:
+CREATE TABLE "TABLE_PREFIX_system_term_user" (
+  "term_id" character(32) NOT NULL,
+  "user_id" integer NOT NULL,
+  "start_date" timestamp NOT NULL,
+  PRIMARY KEY ("term_id", "start_date", "user_id")
+);
+ALTER TABLE TABLE_PREFIX_users_new_user ADD COLUMN meta text;
+
+2010-02-26
+
+New feature: Terms & Conditions
+conf/battie.ini:
+under:
+[Module WWW::Battie::Modules::System]
+
+create a new line:
+TERMS=terms_conditions
+
+In the System module, you can add Terms & Conditions (the ID here
+would be terms_conditions).
+
+These Terms will be shown when registering.
+
+In the Useradmin module, add the action "system/term" to the role "guest".
+
+Database changes:
+
+MySQL:
+CREATE TABLE `TABLE_PREFIX_system_terms` (
+  id char(32) NOT NULL,
+  name varchar(128) NOT NULL,
+  style varchar(16) NOT NULL,
+  content text,
+  start_date datetime NOT NULL,
+  PRIMARY KEY (id, start_date)
+);
+
+PostgreSQL:
+CREATE TABLE "TABLE_PREFIX_system_terms" (
+  "id" character(32) NOT NULL,
+  "name" character varying(128) NOT NULL,
+  "style" character varying(16) NOT NULL,
+  "content" text,
+  "start_date" timestamp NOT NULL,
+  PRIMARY KEY ("id", "start_date")
+);
+
+
+2009-12-08
+
+MySQL:
+ALTER TABLE TABLE_PREFIX_poard_notify
+ ADD COLUMN msg_id bigint(20),
+ CHANGE COLUMN thread_id thread_id bigint(20) NOT NULL;
+
+PostgreSQL:
+ALTER TABLE TABLE_PREFIX_poard_notify ADD COLUMN msg_id integer;
+ALTER TABLE TABLE_PREFIX_poard_notify ALTER COLUMN thread_id DROP DEFAULT;
+
+
+2009-11-20
+
+Go to useradmin -> roles -> role 'User':
+Add action poard/settings
+
+MySQL:
+ALTER TABLE TABLE_PREFIX_user_profile ADD COLUMN meta text;
+
+PostgreSQL:
+ALTER TABLE TABLE_PREFIX_user_profile ADD COLUMN meta text;
+
+
+2009-11-13
+
+MySQL:
+CREATE TABLE `TABLE_PREFIX_poard_archived_message` (
+  `id` bigint(20) NOT NULL auto_increment,
+  `msg_id` bigint(20) NOT NULL,
+  `lasteditor_id` bigint(20),
+  `thread_id` bigint(20) NOT NULL,
+  `message` text,
+  `ctime` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+
+postgres:
+CREATE TABLE "TABLE_PREFIX_poard_archived_message" (
+  "id" bigserial NOT NULL,
+  "msg_id" integer NOT NULL,
+  "lasteditor_id" integer,
+  "thread_id" integer NOT NULL,
+  "message" text,
+  "ctime" timestamp NOT NULL,
+  PRIMARY KEY ("id")
+);
+
+
+2009-10-21
+
+New config variables ACTIONLOG and ACTIONLOG_FORMAT, see
+conf/battie.ini.sample
+
+2009-10-12
+
+When updating
+lib/WWW/Battie/Module/Model.pm
+you have to convert your database because the old version double-encoded
+all non-ascii.
+
+mysqldump --default-character-set=latin1 databsase > database.dump
+perl -pi.bak -e's/SET NAMES latin1/SET NAMES utf8/' database.dump
+mysql mysql --default-character-set=utf8 databsase < database.dump
+
+2009-09-11
+
+MySQL:
+CREATE TABLE `TABLE_PREFIX_content_motd` (
+  `id` integer(10) NOT NULL auto_increment,
+  `weight` integer(4) NOT NULL,
+  `content` text,
+  `start` datetime NOT NULL,
+  `end` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+PostgreSQL:
+CREATE TABLE "TABLE_PREFIX_content_motd" (
+  "id" serial NOT NULL,
+  "weight" integer NOT NULL,
+  "content" text,
+  "start" timestamp NOT NULL,
+  "end" timestamp NOT NULL,
+  PRIMARY KEY ("id")
+);
+
+
+2009-09-03
+
+MySQL:
+ALTER TABLE TABLE_PREFIX_poard_user ADD UNIQUE poard_user_nick (nick);
+ALTER TABLE TABLE_PREFIX_user_profile CHANGE COLUMN email email varchar(128) NOT NULL DEFAULT '';
+CREATE TABLE `TABLE_PREFIX_users_new_user` (
+  `id` bigint(20) NOT NULL auto_increment,
+  `token` varchar(32) NOT NULL,
+  `email` varchar(128) NOT NULL DEFAULT '',
+  `nick` varchar(64) NOT NULL DEFAULT '',
+  `password` varchar(32) NOT NULL DEFAULT '',
+  `openid` varchar(16),
+  `mtime` datetime NOT NULL,
+  `ctime` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE `users_new_user_nick` (`nick`)
+);
+
+PostgreSQL:
+ALTER TABLE TABLE_PREFIX_poard_user ADD CONSTRAINT "poard_user_nick" UNIQUE (nick);
+ALTER TABLE TABLE_PREFIX_user_profile ALTER COLUMN email TYPE character varying(128);
+ALTER TABLE TABLE_PREFIX_role DROP COLUMN mtime;
+ALTER TABLE TABLE_PREFIX_role DROP COLUMN ctime;
+ALTER TABLE TABLE_PREFIX_role_action DROP COLUMN mtime;
+ALTER TABLE TABLE_PREFIX_role_action DROP COLUMN ctime;
+CREATE TABLE "TABLE_PREFIX_users_new_user" (
+  "id" bigserial NOT NULL,
+  "token" character varying(32) NOT NULL,
+  "email" character varying(128) DEFAULT '' NOT NULL,
+  "nick" character varying(64) DEFAULT '' NOT NULL,
+  "password" character varying(32) DEFAULT '' NOT NULL,
+  "openid" character varying(16),
+  "mtime" timestamp NOT NULL,
+  "ctime" timestamp NOT NULL,
+  PRIMARY KEY ("id"),
+  CONSTRAINT "users_new_user_nick" UNIQUE ("nick")
+);
+
+
+
+
+2009-05-05
+
+New config var:
+[Module WWW::Battie::Modules::Poard]
+# Number of threads shown in a board
+ROWS_BOARD=20
+
+2009-04-30
+
+Go to useradmin -> List Roles
+
+Select the role which should be able to delete messages/threads from trash, e.g. moderators
+or board admins.
+
+Add action poard/admin_really_delete to this role.
+
+2009-04-27
+
+MySQL:
+ALTER TABLE TABLE_PREFIX_user_profile CHANGE geo `geo` varchar(21);
+
+postgres:
+ALTER TABLE TABLE_PREFIX_user_profile ALTER geo set character varying(21);
+
+2009-04-26
+
+Go to Useradmin - List Roles -> Guest
+Add actions: member/stats and member/geo
+
+new config variable:
+GOOGLE_API_KEY (if you want to use the new google worldmap function)
+
+MySQL;
+ALTER TABLE TABLE_PREFIX_user_profile add column `geo` varchar(15);
+
+postgres:
+ALTER TABLE TABLE_PREFIX_user_profile add column `geo` varying(15);
+
+2009-04-25
+
+MySQL:
+CREATE TABLE `TABLE_PREFIX_au_session` (
+  `id` char(64) NOT NULL,
+  `user_id` bigint(20),
+  `data` text,
+  `ctime` datetime NOT NULL,
+  `mtime` datetime NOT NULL,
+  `expires` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+postgres:
+CREATE TABLE "TABLE_PREFIX_au_session" (
+  "id" character(64) NOT NULL,
+  "user_id" integer,
+  "data" text,
+  "ctime" timestamp(0) NOT NULL,
+  "mtime" timestamp(0) NOT NULL,
+  "expires" timestamp(0) NOT NULL,
+  PRIMARY KEY ("id")
+);
+
+2009-04-22
+
+use Image::Resize, drop Image::Size & Image::Magick
+
+2009-04-22
+
+MySQL:
+alter table `TABLE_PREFIX_theme` change active `active` integer(1) NOT NULL DEFAULT 0;
+alter table `TABLE_PREFIX_theme` change is_news `is_news` integer(1) NOT NULL DEFAULT 0;
+alter table `TABLE_PREFIX_theme` change can_comment `can_comment` integer(1) NOT NULL DEFAULT 0;
+alter table `TABLE_PREFIX_theme` change message `message` text;
+
+postgres:
+ALTER TABLE TABLE_PREFIX_theme alter active set default 0;
+ALTER TABLE TABLE_PREFIX_theme alter is_news set default 0;
+ALTER TABLE TABLE_PREFIX_theme alter can_comment set default 0;
+ALTER TABLE TABLE_PREFIX_theme alter message set NULL; ??
+
+2009-03-19
+See conf/battie.ini.sample for WWW::Battie::Modules::Poard:
+You can set a new value for indexing and archiving:
+SEO_INDEX=start,thread,message
+SEO_ARCHIVE=start,thread,message
+
+2009-03-16
+ALTER TABLE TABLE_PREFIX_poard_board DROP COLUMN mtime;
+ALTER TABLE TABLE_PREFIX_poard_board DROP COLUMN ctime;
+
+ALTER TABLE TABLE_PREFIX_role DROP COLUMN mtime;
+ALTER TABLE TABLE_PREFIX_role DROP COLUMN ctime;
+
+ALTER TABLE TABLE_PREFIX_role_action DROP COLUMN mtime;
+ALTER TABLE TABLE_PREFIX_role_action DROP COLUMN ctime;
+
+
+
+2009-03-08
+ALTER TABLE TABLE_PREFIX_poard_board CHANGE description description varchar(256) NOT NULL default '';
+
+postgres:
+ALTER TABLE TABLE_PREFIX_poard_board ALTER description TYPE VARCHAR(256);
+ALTER TABLE TABLE_PREFIX_poard_board ALTER description SET NOT NULL;
+ALTER TABLE TABLE_PREFIX_poard_board ALTER description SET default '';
+
+2008-09-25
+Useradmin -> List Roles -> Guest -> Add Role gallery/init
+
+2008-09-22
+MySQL:
+ALTER TABLE TABLE_PREFIX_poard_board ADD COLUMN lft integer(10),
+                                     ADD COLUMN rgt integer(10);
+

@@ -1,0 +1,16 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+[%set_var SELF value=".self" %]
+<html>
+<head>
+[%include name="head.html" %]
+</head>
+<body>
+<table class="outer_table" height="100%" width="100%" cellspacing="1" cellpadding="1" valign="top">
+<tr>
+<td class="inner_table" valign="top" colspan="2">
+[%with .data.poard.message %][%include name="poard/message.html" %][%/with %]
+</td>
+</tr>
+</table>
+
+</body></html>

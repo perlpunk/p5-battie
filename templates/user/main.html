@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>[%include name="head.html" %]</head>
+<body [%if expr=".page eq 'member' and .action eq 'geo'" %]onload="load()" onunload="GUnload()"[%/if %]>
+
+[%comment %]
+This is the top navigation. Don't change the template tags
+if you want to change the layout, only the html.
+[%/comment %]
+<div class="header">
+&nbsp;
+<div style="width: 75%; position: absolute; top: 5px; right: 5px; margin-left: 200px;">
+
+<div style="horizontal-align: right; display: inline; float: right; margin-right: 5px;">
+<table><tr><td>
+<form action="[%= .self %]/[%= .ma %]" method="POST">
+<input type="hidden" name="battie_view" value="small">
+<input type="image" src="[%= .data.userprefs.theme %]/icons/layout-hf.png" name="battie" value="small"
+title="Switch to small view with navigation at the bottom" class="image">
+</form>
+</td><td>
+<form action="[%= .self %]/[%= .ma %]" method="POST">
+<input type="hidden" name="battie_view" value="mini">
+<input type="image" src="[%= .data.userprefs.theme %]/icons/mobile-phone.png" class="image" name="battie" value="small"
+title="Switch to mini view without navigation">
+</form>
+</td></tr>
+[%unless .data.userprefs.font_set %]
+<tr>
+<td colspan="2" align="right"><small><a class="icon_link" title="[%translate id=global_font %] - [%translate id=global_preferences %]" href="[%= .self %]/userprefs/set_theme#quickset"><img style="vertical-align: bottom;" src="[%= .data.userprefs.theme %]/icons/edit-small-caps.png" alt="">[%translate id=global_font %]</a></small></td>
+</tr>
+[%/unless %]
+</table>
+</div>
+
+<div style="display: inline; float: right; margin-right: 5px;">
+[%loop .elements.header %][%= content escape=0 %][%/loop .elements.header %]
+</div>
+
+<div style="display: inline; margin-right: 10px; float: right; width: 50%;" id="motd" class="motd">
+[%loop .elements.motd %][%= content escape=0 %][%/loop .elements.motd %]
+</div>
+
+</div>
+
+[%if .elements.navi_top %]
+<div class="navi_horizontal_container navi_horizontal_container_top">
+<ul class="navig navi_horizontal">
+[%loop .elements.navi_top %]
+<li [%if active %]class="navigation_active"[%/if%]>[%= content escape=0 %]</li>
+[%/loop .elements.navi_top %]
+</ul>
+</div>
+[%/if .elements.navi_top %]
+
+</div>
+
+<div class="main_breadcrumb" title="You are here">
+[%loop .crumbs.crumbs %][%unless __first__ %] &middot; [%/unless %]
+[%if_defined url %]
+<a href="[%= .self %]/[%= url %]" [%if __last__ %]class="last"[%/if %]>[%= title %]</a>
+[%else %][%= title %][%/if %]
+[%/loop .crumbs %]
+</div>
+
+
+<div id="left_navi" style="float:left; width: 16%; margin-right: 10px; ">
+[%if .elements.navi_left_top %]
+<ul class="navig navi_vertical">
+<li><small title="[%= .now escape=TIME%]" >[%= .now escape=TIME_YMD_HMS %]</small>
+<br><small><a href="[%= .self %]/userprefs/timezone" title="time zone">[%= .timezone %]</a></small>
+</small>
+</li>
+[%loop .elements.navi_left_top %]
+<li [%if active %]class="navigation_active"[%/if%]>[%= content escape=0 %]</li>
+[%/loop .elements.navi_left_top %]
+</ul>
+[%/if .elements.navi_left_top %]
+</div>
+<div style="float:left; width: 80%; border-radius: 5px;" class="navi_links_div" id="top_navi">
+[%= .active escape=0 %]
+</div>
+<div style="float:left; width: 80%;">
+[%include_var .templates.content %]
+</div>
+
+[%if .elements.navi_bottom %]
+<div class="navi_horizontal_container" style="clear: left; width: 99%;">
+<ul class="navig navi_horizontal">
+[%loop .elements.navi_bottom %]
+<li [%if active %]class="navigation_active"[%/if%]>[%= content escape=0 %]</li>
+[%/loop .elements.navi_bottom %]
+</ul>
+</div>
+[%/if .elements.navi_bottom %]
+
+<div style="width: 80%; position: relative; clear: left; margin-top: 1em; horizontal-align: center; margin-left: 100px; margin-right: auto;" id="footer">
+<div style="float:left; margin-top: 1em;" >[%include powered.html %]</div>
+<div style="float:left; margin-left: 10px;" >
+<a href="http://www.perl.org/"><img src="[%= .docurl %]/img/perl_powered-1.png" alt="Powered by the Perl Programming Language" title="Powered by the Perl Programming Language"></a>
+</div>
+<div style="float:left; margin-left: 10px;" >
+<!-- Do not remove this link from the template unless you own a license -->
+Some Icons are from<br>
+<a href="http://www.pinvoke.com/">Fugue Icons</a>
+</div>
+</div>
+<br>
+
+[%if .debug %][%include debug.html%][%/if .debug %]
+
+</body></html>

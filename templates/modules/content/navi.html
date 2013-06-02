@@ -1,0 +1,5 @@
+[%loop .data.content.pages %]
+[%= indent %]
+<a href="[%= .self %]/content/view/[%= page.url %]">[%= page.title %]</a><br>
+[%/loop .data.content.pages %]
+

@@ -1,0 +1,23 @@
+<div class="posting_content">
+[%= rendered escape=0 %]
+[%if has_attachment %]
+<hr>[%translate id=poard_attachment count=0 %]<br>
+[%loop attachments %]
+<div class="message_attachment" >
+[%= type %]<br>
+[%if meta.lines %][%= meta.lines %] lines<br>[%/if %]
+[%if meta.width %][%= meta.width %] x [%= meta.height %]<br>[%/if %]
+[%if thumb %]<img src="[%= thumbnail_url %]" alt="[%= filename %]"><br>[%/if %]
+<a href="[%= $SELF escape=0 %]/poard/attachment/[%= message_id escape=0 %]/[%= attach_id escape=0 %]/[%= filename %]">[%= filename %]</a><br>
+</div>
+[%/loop attachments %]
+[%/if has_attachment %]
+[%if mtime_epoch %][%if expr="(ctime_epoch + 60) < mtime_epoch" %]
+<br><small><i>Last edited: [%= mtime_epoch escape=TIME %]</i>[%if changelog %][%if .can.poard.view_message_log %] <a href="[%= $SELF escape=0 %]/poard/view_message_log/[%= id escape=0 %]">Log</a>[%/if %][%/if changelog %]</small>[%/if %][%/if mtime %]
+
+[%with author %][%with profile %][%if rendered_sig %]
+[%if .data.settings.poard.articles.signature %]
+<div class="signature">[%= rendered_sig escape=0 %]</div>
+[%/if %]
+[%/if rendered_sig %][%/with profile %][%/with author %]
+</div>

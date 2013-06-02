@@ -1,0 +1,182 @@
+[%switch .action %]
+
+[%case auth_openid %]
+
+OpenID
+
+[%case auth %]
+[%if .data.login.error.login_failed %]
+[%translate id="global_error_login_failed" %]<br />
+[%/if .data.login.login_failed %]
+[%include login.html %]
+[%case ajaxshow %]
+
+<table cellspacing="0" cellpadding="0">
+<tr>
+    <td class="transparent" width="20" height="20"></td>
+    <td class="transparent" height="20" ></td>
+    <td class="transparent" width="20" height="20"></td>
+</tr>
+<tr><td class="transparent" width="20"></td>
+<td class="transparent_content">
+<a href="#" title="Close" onclick="hide_login(); return false"><img src="[%= .data.userprefs.theme %]/top.png" border="0" alt="&gt;&lt;"></a>
+[%include login.html %]
+<a href="[%= .self %]/login/register">Register</a>/
+<a href="[%= .self %]/login/info">more</a><br>
+</td>
+<td class="transparent" width="20"></td>
+</tr>
+<tr>
+    <td class="transparent" width="20" height="20"></td>
+    <td class="transparent" height="20"></td>
+    <td class="transparent" width="20" height="20" ></td>
+</tr>
+</table>
+
+[%case register %]
+[%if .user.logged_in %]
+Already registered
+[%else %]
+
+[%if .data.login.confirmation %]
+[%translate id="global_login_confirm %1:s" args=".data.login.subject" %]
+[%else %]
+[%if .data.login.error.spam %]
+<span class="error">Registration not accepted</span>
+[%/if %]
+<form action="[%= .self %]/login/register" method="POST">
+[%switch .data.login.antispam %]
+[%case AKISMET %]
+<input type="checkbox" name="antispam_ok" value="1">
+[%translate id=global_antispam_info_akismet %]
+[%/switch .data.login.antispam %]
+<br>
+
+[%translate id="global_username" %]:
+<input type="text" name="user.nick" value="[%= .data.login.newuser.nick %]" />
+[%if .data.login.error.nick %]<span class="error">[%translate id="global_error_user_invalid" %]</span>[%/if %]
+[%if .data.login.error.nick_exists %]<span class="error">[%translate id="global_error_user_exists" %]</span>[%/if %]
+<br>
+[%translate id="global_your_email" %]
+<input type="text" name="user.email" value="[%= .data.login.newuser.email %]" />
+[%if .data.login.error.email %]<span class="error">[%translate id="global_your_email_invalid" %]</span>[%/if %]
+<br>
+[%translate id="global_your_password" %]:
+<input type="password" name="user.password1" value="[%= .data.login.newuser.password %]" />
+<br>
+[%translate id="global_your_password_retype" %]:
+<input type="password" name="user.password2" value="[%= .data.login.newuser.password %]" />
+<br>
+[%loop .data.login.active_terms %]
+<input type="checkbox" name="term.[%= term.id %]" value="[%= term.start_date %]"> I read <a href="[%= .self %]/system/term/[%= term.id %]">[%= term.name %]</a>
+[%if error %]<span class="error">Please read</span>[%/if %]
+<br>
+[%/loop .data.login.active_terms %]
+<input type="submit" class="button" name="submit.register" value="[%translate id="global_register_me" %]">
+
+</form>
+[%/if .data.login.confirmation %]
+
+[%/if .user.logged_in %]
+[%case logout %]
+
+[%if .data.login.error.token %]
+[%include name="token_expired.html" %]
+[%/if %]
+<p align="center">
+<table class="border_table"><tr><td>
+<b>Please click "Logout" to log out.</b><br />
+<form action="[%= .self %]/login/logout" method="POST">
+<input type="submit" class="button" name="submit.logout" value="Logout">
+</p>
+[%= .user.token.hidden escape=0 %]
+</form></td></tr></table>
+
+[%case forbidden %]
+The page you requested is not allowed for you.
+
+[%case auth_required %]
+Hello guest,<br>
+you have to login to see the page you requested.
+[%include login.html %]
+
+[%case forgot_pass %]
+[%if .user.logged_in %]
+You are logged in as <b>[%= .user.name %]</b><br>
+[%else %]
+
+[%if .data.login.error.no_user_found %]
+No user with this login exists.
+[%else %]
+[%/if .data.login.error.no_user_found %]
+[%if .data.login.sent_confirmation %]
+
+If the user account exists,
+you should get an email now with a link to change your password.
+
+[%elsif .data.login.change_pass %]
+
+    [%if .data.login.error.wrong_email_or_nick %]
+    Sorry, could not identify you.
+    [%elsif .data.login.error.new_password_match %]
+    Your passwords didn't match.
+    [%/if .data.login.wrong_email_or_nick %]
+
+    [%if .data.login.error_no_token %]
+    Sorry, not a valid request for password changing.
+
+    [%else %]
+    <form action="[%= .self %]/login/forgot_pass/[%= .data.login.token %]" method="POST">
+    <br />
+    Type in your username <b>or</b> your email-address:<br />
+    Username: <input type="text" name="username" /><br />
+    or Email: <input type="text" name="email" /><br />
+    <p>
+    Type in your new password twice:<br />
+    <input type="password" name="password1" /><br />
+    <input type="password" name="password2" /><br />
+    <input type="submit" class="button" name="submit.change" value="Change">
+    </form>
+    [%/if .data.login.error_no_token %]
+
+
+[%elsif .data.login.changed_pass %]
+Successfully changed your password. You may now
+<a href="[%= .self %]/login/info">login</a>
+
+[%else %]
+
+[%if .data.login.error.no_email %]
+Sorry, this account doesn't have an email address.
+[%/if %]
+<form action="[%= .self %]/login/forgot_pass" method="POST">
+You forgot your password?
+<br />
+Type in your username <b>or</b> your email-address, and you'll get an email with
+a link to set a new password.<br />
+Username: <input type="text" name="username" /><br />
+or Email: <input type="text" name="email" /><br />
+<input type="submit" class="button" name="submit.send_pass" value="Send">
+</form>
+
+[%/if .data.login.sent_confirmation %]
+[%/if .user.logged_in %]
+
+[%case confirm %]
+
+[%translate id="global_success_register" %]
+<a href="[%= .self %]/login/show">login</a>.
+
+[%case %]
+<h3>[%translate id="global_action_login" %]</h3>
+[%if .user.logged_in %]
+You are logged in as <b>[%= .user.name %]</b><br>
+<p>
+[%else %]
+[%include login.html %]
+
+[%/if %]
+
+
+
+[%/switch .action %]

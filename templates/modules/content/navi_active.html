@@ -1,0 +1,8 @@
+[%loop .data.content.sub_pages %]
+[%if subs %]
+[%loop subs %]
+<li><a href="[%= .self %]/content/view/[%= url %]"><img src="[%= .data.userprefs.theme %]/arrow_right.png" border="0" alt="&gt;" style="vertical-align: bottom;"> [%= title %]</a></li>
+[%/loop subs %]
+<br>
+[%/if subs %]
+[%/loop .data.content.sub_pages %]

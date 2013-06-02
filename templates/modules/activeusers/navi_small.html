@@ -1,0 +1,8 @@
+<li><a href="[%= .self %]/activeusers/start"
+[%if .can.activeusers.show_active_nicks %]title="[%loop .data.activeusers.list join=", " %][%= get_nick %][%/loop %]"[%/if %]
+>
+[%= .data.activeusers.total_count %] [%translate id="global_user" count=".data.activeusers.count" %] online
+[%if .data.activeusers.guest_count %], [%= .data.activeusers.guest_count %]
+[%translate id="global_guest" count=".data.activeusers.guest_count" %][%/if %]
+</a>
+</li>

@@ -1,0 +1,7 @@
+<ul>
+<li><a href="[%= .self %]/blog/start">Blogs</a></li>
+[%if .can.blog.create_blog %]
+<li><a href="[%= .self %]/blog/create_blog">Create new Blog Category</a></li>
+[%/if .can.blog.create_blog %]
+<li><a href="[%= .self %]/blog/xml_rss">RSS</a></li>
+</ul>

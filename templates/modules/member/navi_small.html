@@ -1,0 +1,17 @@
+[%if .can.member.view_box %]
+<li>
+[%if .data.member.new_messages %]
+<a href="[%= .self %]/member/view_box"><img src="[%= .data.userprefs.theme %]/mail_new.png" alt="mail"> [%translate id=member_messages %]</a>
+<a href="[%= .self %]/member/view_box">([%= .data.member.new_messages %] unread)</a>
+[%else %]
+<a href="[%= .self %]/member/view_box"><img src="[%= .data.userprefs.theme %]/email.png" alt=""> [%translate id=member_messages %]</a>
+[%/if .data.member.new_messages %]
+</li>
+[%/if .can.member.view_box %]
+
+<li>
+[%if .can.member.list %]<a href="[%= .self %]/member/list"><img src="[%= .data.userprefs.theme %]/people.png" border="0" alt=""> [%translate id=member_members %]</a>
+[%elsif .can.member.stats %]
+<a href="[%= .self %]/member/stats">Statistics</a>
+[%/if %]
+</li>

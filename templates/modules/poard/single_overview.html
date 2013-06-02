@@ -1,0 +1,27 @@
+<tr id="board_row_[%= ..id %]_[%= __counter__ %]">
+<td><a href="[%= .self %]/poard/board/[%= id %]">[%= name %]</a>
+<br /><small>[%= description %]</small>
+</td>
+<td>[%= thread_count %]</td>
+<td>[%= answer_count %]</td>
+<td>
+[%if latest %]
+[%with latest %]
+[%if is_read %]
+Thread: <a href="[%= .self %]/poard/thread/[%= id %][%if last_read %]?read=[%= last_read %][%/if %]">[%= title %]</a>
+[%else %]
+<b>Thread: <a href="[%= .self %]/poard/thread/[%= id %][%if last_read %]?read=[%= last_read %][%/if %]">[%= title %]</a></b>
+[%/if is_read %]
+by
+[%if last.author %]
+<a href="[%= .self %]/member/profile/[%= last.author.id %]">[%= last.author.nick %]</a>
+[%else %]
+<i>[%= last.author_name %]</i>
+[%/if %]
+<br />
+<small>[%= mtime %]</small>
+[%/with latest %]
+[%/if latest %]
+</td>
+</tr>
+

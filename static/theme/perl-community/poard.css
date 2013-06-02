@@ -1,0 +1,217 @@
+table.message_table {
+    width: 100%;
+    padding: 0em;
+    margin-top: 2px;
+    border-spacing: 0px;
+}
+
+table.message_table td {
+    padding: 0px;
+    margin: 0px;
+}
+table.message_title_buttons, table.message_title_buttons td {
+    margin: 0em;
+    padding: 0em;
+}
+
+div.message_buttons {
+  overflow: auto;
+  width: 100%;
+  background-color: #eeeeee;
+  padding-top:0.4em;
+  padding-bottom:0.4em;
+}
+
+div.message_buttons > * {
+  margin-left:0.4em;
+}
+
+div.signature .code th {
+    display: none;
+}
+
+ul.message_tree {
+    padding-left: 0.5em;
+    list-style: none;
+    padding-right: 0em;
+    padding-top: 0.1em;
+    margin-bottom: 0.0em;
+}
+ul.message_tree_last {
+    padding-left: 0em;
+    margin-bottom: 0em;
+}
+ul.message_tree_root {
+    margin: 0.5em 0.5em 0em 0em;
+    padding-left: 0em;
+}
+
+li.message_tree {
+  list-style: none;
+  padding-left:1em;
+  padding-top:0.2em;
+  margin:0em;
+  margin-left: 0em;
+  padding-right: 0em;
+}
+li.message_tree_hidden {
+    display: none;
+    visibility: hidden;
+}
+li.tree_info_hidden {
+    display: none;
+    visibility: hidden;
+}
+li.tree_info_show {
+    padding-left: 0.9em;
+    visibility: visible;
+    display: block;
+}
+
+div.posting .subtrees {
+    clear: both;
+}
+
+div.posting {
+    border-radius: 5px;
+    border-left: 1px solid #aaaaaa;
+    overflow: auto;
+    width: 100%
+}
+
+div.posting_headline .collapse {
+  float: left;
+  width: 50px;
+}
+
+
+div.posting_headline {
+  border-bottom: 1px solid #aaaaaa;
+  overflow: auto;
+  width: 100%;
+  /*
+  background-color: #eeeeee;
+  */
+}
+
+table.posting_headline a, td.posting_headline a, div.posting_headline a {
+    text-decoration: none;
+}
+td.posting_headline, th.posting_headline, div.posting_headline {
+    margin: 0em;
+    padding-top: 0.1em;
+    padding-bottom: 1px;
+}
+
+div.posting_headline .author {
+  float: left;
+  margin-left: 2em;
+  min-width: 15%;
+}
+div.posting_headline .posting_date {
+  float:left;
+}
+div.posting_headline .anchor {
+  float:right;
+}
+
+
+
+div.author_info {
+  float:left;
+  clear:both;
+  border-right: 1px solid #aaaaaa;
+  margin-right:-1px;
+  padding-top:0.2em;
+}
+
+div.posting_content .signature {
+  font-size: smaller;
+  clear: both;
+  width: 90%;
+  overflow: auto;
+  padding-left:0.3em;
+  padding-top:0.2em;
+}
+div.posting_content {
+  border-left: 1px solid #aaaaaa;
+  overflow: auto;
+  padding-left:0.3em;
+  padding-top:0.2em;
+}
+
+
+td.author_info {
+    width: 100px;
+}
+td.posting_content {
+    height: 100%;
+    padding-bottom: 1ex;
+    padding-right: 5px;
+}
+td.posting_content div.signature {
+    font-size: smaller;
+    margin-top:   1ex;
+    margin-right: 20px;
+    padding-left: 2em;
+}
+
+label.board_label {
+    font-weight: normal;
+}
+label.board_label_selected {
+    font-weight: bold;
+}
+
+table.board_admin td.board_name {
+    margin-right: 0em;
+}
+table.board_admin {
+    padding-right: 0em;
+    width: 100%;
+}
+table.board_admin td.board_label {
+    width: 20px;
+}
+table.board_admin td.board_target {
+    width: 380px;
+}
+ul.board_root {
+    padding-right: 0em;
+    margin-right: 0em;
+    margin-left: 0em;
+    padding-left: 0em;
+    list-style-type: none;
+}
+ul.board_tree_last {
+    margin-right: 0em;
+    padding-left: 1em;
+    list-style-type: none;
+}
+ul.board_tree {
+    padding-right: 0em;
+    margin-right: 0em;
+    padding-left: 1em;
+    margin-bottom: 0.5em;
+    padding-bottom: 0.5em;
+    list-style-type: none;
+}
+
+li.board_tree_last {
+    padding-right: 0em;
+    margin-right: 0em;
+}
+li.board_tree {
+    padding-right: 0em;
+    margin-right: 0em;
+}
+ul.board_root > li > ul {
+    margin-left: -1em;
+}
+
+li.board_tree th, li.board_tree_last th {
+    margin-top: 1em;
+    padding-top: 0.5em;
+    text-align: left;
+}
+

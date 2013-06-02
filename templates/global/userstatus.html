@@ -1,0 +1,52 @@
+[%if .user.logged_in %]
+    <a href="[%= .self %]/login/info">[%translate id=global_user %]: [%= .user.name %]</a><br>
+    <a href="[%= .self %]/login/logout"><img style="vertical-align: bottom;" src="[%= .data.userprefs.theme %]/icons/door-open-out.png" alt=""> [%translate id="global_action_logout" %]</a>
+[%else %]
+<script type="text/javascript">
+var show = 0;
+function activate() {
+    var lfield = document.getElementById('login_field');
+    if (show) {
+        lfield.style.display="none";
+        lfield.style.visibility="hidden";
+        lfield.style.position="absolute";
+        show = 0;
+    }
+    else {
+        lfield.style.display="block";
+        lfield.style.visibility="visible";
+        show = 1;
+    }
+    return;
+}
+</script>
+<a href="[%= .self %]/login/show?login.from=[%= .data.login.from %]"
+    name="ajaxlink" onClick="activate();return false">[%translate id="global_action_login" %]</a>
+    <small>(<a href="[%= .self %]/login/register">[%translate id="global_action_register" %]</a>)</small>
+<div id="resultdiv">
+</div>
+<div class="login_field" id="login_field">
+<table cellspacing="0" cellpadding="0">
+<tr>
+    <td class="transparent" width="20" height="20"></td>
+    <td class="transparent" height="20" >
+    <td class="transparent" width="20" height="20"></td>
+</tr>
+<tr><td class="transparent" width="20"></td>
+<td class="transparent_content">
+<a href="#" title="Close" onclick="activate(); return false"><img src="[%= .data.userprefs.theme %]/top.png" border="0" alt="&gt;&lt;"></a>
+[%include login.html %]
+<a href="[%= .self %]/login/register">Register</a>/
+<a href="[%= .self %]/login/info">more</a><br>
+</td>
+<td class="transparent" width="20"></td>
+</tr>
+<tr>
+    <td class="transparent" width="20" height="20"></td>
+    <td class="transparent" height="20">
+    <td class="transparent" width="20" height="20" ></td>
+</tr>
+</table>
+</div>
+
+            [%/if %]

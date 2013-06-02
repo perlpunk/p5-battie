@@ -1,0 +1,9 @@
+<ul>
+[%if .user.logged_in %]
+[%if .can.login.info %]<li><a href="[%= .self %]/login/info">Info</a></li>[%/if %]
+[%else %]
+[%if .can.login.info %]<li><a href="[%= .self %]/login/info">[%translate id="global_action_login" %]</a></li>[%/if %]
+[%if .can.login.register %]<li><a href="[%= .self %]/login/register">[%translate id="global_action_register" %]</a></li>[%/if %]
+[%if .can.login.forgot_pass %]<li><a href="[%= .self %]/login/forgot_pass">[%translate id="global_forgot_pass" %]</a></li>[%/if %]
+[%/if .user.logged_in %]
+</ul>

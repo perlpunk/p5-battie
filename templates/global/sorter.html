@@ -1,0 +1,16 @@
+<table cellpadding="0" cellspacing="1" class="border_table">
+<tr>
+[%if asc %]
+<th><img border="0" src="[%= .data.userprefs.theme %]/sort_up.png" alt="/\" /></th>
+<th><a href="[%= uri %];sort=[%= name %]-0"><img border="0" src="[%= .data.userprefs.theme %]/sort_none_i.png" alt="--" /></a></th>
+<th><a href="[%= uri %];sort=[%= name %]-D"><img border="0" src="[%= .data.userprefs.theme %]/sort_down_i.png" alt="V" /></a></th>
+[%elsif desc %]
+<th><a href="[%= uri %];sort=[%= name %]-A"><img border="0" src="[%= .data.userprefs.theme %]/sort_up_i.png" alt="/\" /></a></th>
+<th><a href="[%= uri %];sort=[%= name %]-0"><img border="0" src="[%= .data.userprefs.theme %]/sort_none_i.png" alt="--" /></a></th>
+<th><img border="0" src="[%= .data.userprefs.theme %]/sort_down.png" alt="V" /></th>
+[%else %]
+<th><a href="[%= uri %];sort=[%= name %]-A"><img border="0" src="[%= .data.userprefs.theme %]/sort_up_i.png" alt="/\" /></a></th>
+<th><img border="0" src="[%= .data.userprefs.theme %]/sort_none.png" alt="--" /></th>
+<th><a href="[%= uri %];sort=[%= name %]-D"><img border="0" src="[%= .data.userprefs.theme %]/sort_down_i.png" alt="V" /></a></th>
+[%/if %]
+</tr></table>

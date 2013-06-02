@@ -1,0 +1,48 @@
+
+[%if .data.poard.trash_list %]
+
+[%if .data.poard.trash_list.messages %]
+Deleted Messages:
+<form action="[%= .self %]/poard/admin_really_delete/messages" method="POST">
+<table class="overview" cellspacing="1">
+<tr><th>Deleted By</th><th>When</th><th>Message</th><th>Comment</th><th>Select</th></tr>
+[%loop .data.poard.trash_list.messages %]
+<tr>
+    <td class="dark">[%= user.nick %]</td>
+    <td class="light">[%= ctime escape=TIME_HTML %]</td>
+    <td class="dark">
+    <a href="[%= .self %]/poard/message/[%= msid %]">[%= msid %]</a>
+    </td>
+    <td>[%= get_comment %]</td>
+    <td class="dark"><input type="checkbox" name="trash.id" value="[%= id %]"></td>
+</tr>
+[%/loop .data.poard.trash_list.messages %]
+
+[%elsif .data.poard.trash_list.threads %]
+Deleted Threads:
+<form action="[%= .self %]/poard/admin_really_delete/threads" method="POST">
+<table class="overview" cellspacing="1">
+<tr><th>Deleted By</th><th>When</th><th>Thread</th><th>Comment</th><th>Select</th></tr>
+[%loop .data.poard.trash_list.threads %]
+<tr>
+    <td class="dark">[%= user.nick %]</td>
+    <td class="light">[%= ctime escape=TIME_HTML %]</td>
+    <td class="dark"><a href="[%= .self %]/poard/thread/[%= thread_id %]">[%= thread_id %]</a></td>
+    <td class="light">[%= get_comment %]</td>
+    <td class="dark">
+    <input type="checkbox" name="trash.id" value="[%= id %]">
+    </td>
+</tr>
+[%/loop .data.poard.trash_list.threads %]
+[%/if %]
+</table>
+Really <input type="submit" name="submit.delete" value="[%translate id="global_action_delete" %]" class="button submit">
+[%= .user.token.hidden escape=0 %]
+</form>
+
+[%else %]
+<a href="[%= .self %]/poard/view_trash/messages">Deleted Messages: [%= .data.poard.trash.msg_count %]</a><br>
+<a href="[%= .self %]/poard/view_trash/threads">Deleted Threads: [%= .data.poard.trash.thread_count %]</a><br>
+[%/if .data.poard.trash_list %]
+
+

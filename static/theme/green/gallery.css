@@ -1,0 +1,13 @@
+td.gallery:hover {
+    border-bottom:1px solid #ffffff;
+    border-right: 1px solid #ffffff;
+    border-left:  1px solid #5555ff;
+    border-top:   1px solid #5555ff;
+}
+td.gallery {
+    border-top:   1px solid #ffffff;
+    border-left:  1px solid #ffffff;
+    border-right: 1px solid #5555ff;
+    border-bottom:1px solid #5555ff;
+    background-image:url(verlauf.gif);
+}

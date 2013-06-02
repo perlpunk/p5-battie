@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+[%include name="head.html" %]
+</head>
+   <body>
+<script src="[%= .docurl %]/js/chatterbox.js" type="text/javascript"></script>
+
+        <table style="height: 100%; width: 100%;" class="overview" cellspacing="1">
+        <tr>
+        <td>
+
+<script type="text/javascript"><!--
+document.write('<span class="hint"><i>Reloading every <span id="info_reload">' + reload/1000 + '</span> seconds. <span id="wait_div"></span></i></span>');
+start_reload();
+--></script>
+<noscript><span class="hint">Use refresh button of your browser or activate Javascript.</span></noscript>
+
+<div id="chatterbox" style="overflow: auto; height: 80%;">
+[%if .data.chat.msgs# %]
+[%include activeusers/chatterbox_messages.html %]
+
+[%/if .data.chat.msgs# %]
+<span id="end"></span>
+</div>
+<div id="scroll">
+<script type="text/javascript">
+var end = document.getElementById('end');
+end.scrollIntoView(true);
+</script>
+</div>
+
+</td></tr>
+<tr><td style="height: 25px;">
+[%if .can.activeusers.chat %]
+<form action="[%= .self %]/activeusers/chat" method="POST"
+onsubmit="chatmsg2(this,true);return false"
+>
+<input type="text" name="chat.msg" id="chat.msg">
+<input type="submit" name="submit.send" value="[%translate id="activeusers_action_chat" %]/Refresh" class="button">
+<input type="hidden" name="login.from" value="[%= .data.login.from %]">
+[%= .user.token.hidden escape=0 %]
+</form>
+<div id="result_chat" >
+</div>
+[%/if .can.activeusers.chat %]
+</td></tr></table>
+<script type="text/javascript">
+/* start_reload(); */
+</script>
+
+    </body>
+</html>
+

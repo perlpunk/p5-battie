@@ -1,0 +1,5 @@
+[%if .can.system.start %]
+<a href="[%= .self %]/system/start">System</a>
+[%elsif .can.system.term %]
+<a href="[%= .self %]/system/term">[%translate id=global_terms_conditions %]</a>
+[%/if %]

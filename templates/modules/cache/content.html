@@ -1,0 +1,12 @@
+Cache is using
+[%= .data.cache.module %]
+
+<br>
+
+[%if .can.cache.clear %]
+<form action="[%= .self %]/cache/clear" method="POST">
+<input type="submit" class="button" name="submit.clear" value="Clear cache" />
+[%= .user.token.hidden escape=0 %]
+</form>
+[%/if .can.cache.clear %]
+[%= .data.cache.stats escape=DHTML %]

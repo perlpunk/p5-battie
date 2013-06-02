@@ -1,0 +1,13 @@
+[%if .can.poard.show_unapproved_messages %]
+[%if .data.poard.onhold# %]
+<div class="functions functions_small">
+[%switch .data.poard.onhold# %][%case 1 %]
+<a class="action" href="[%= .self %]/poard/message/[%= .data.poard.onhold[0].id %]">[%= .data.poard.onhold# %] unapproved messages.</a><br>
+[%case default %]
+<a class="action" href="[%= .self %]/poard/show_unapproved_messages">[%= .data.poard.onhold# %] unapproved messages.</a><br>
+[%/switch %]
+</div>
+[%else %]
+[%/if .data.poard.onhold# %]
+
+[%/if .can.poard.show_unapproved_messages %]

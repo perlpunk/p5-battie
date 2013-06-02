@@ -1,0 +1,26 @@
+<ul>
+<li><a href="[%= .self %]/poard/start">Start</a></li>
+<li><a href="[%= .self %]/poard/latest/24h">[%translate id=poard_last_24_hours %]</a> /
+<a href="[%= .self %]/poard/latest/7d">[%translate id=poard_7_days %]</a></li>
+<li><a href="[%= .self %]/poard/statistic">[%translate id=poard_statistics %]</a></li>
+[%if .can.poard.admin_list_boards %]
+<li><a href="[%= .self %]/poard/admin_list_boards">Admin</a></li>
+[%/if %]
+[%if .can.poard.view_trash %]
+<li><a href="[%= .self %]/poard/view_trash">Trash</a></li>
+[%/if %]
+[%if .can.poard.subscriptions %]
+<li><a href="[%= .self %]/poard/subscriptions">[%translate id=poard_my_subscriptions %]</a></li>
+[%/if %]
+[%if .can.poard.msgs_by_nick %]
+<li><a href="[%= .self %]/poard/msgs_by_nick/[%= .user.id %]">[%translate id=poard_my_articles %]</a></li>
+[%/if %]
+[%if .can.poard.search %]
+<li><a href="[%= .self %]/poard/search">[%translate id=global_action_search %]</a></li>
+[%/if %]
+[%if .can.poard.settings %]
+<li><a href="[%= .self %]/poard/settings">[%translate id=global_settings %]</a></li>
+[%/if %]
+<li><a href="[%= .self %]/poard/xml_messages_rss" title="RSS"><img src="[%= .data.userprefs.theme %]/icons/feed.png" alt="[feed]"></a>
+</li>
+</ul>

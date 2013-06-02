@@ -1,0 +1,42 @@
+[%if is_last %]
+<li class="board_tree_last">
+[%else %]
+<li class="board_tree">
+[%/if is_last %]
+[%if is_root %]
+[%= name %]
+[%else %]
+<table class="board_admin">
+<tr>
+<td class="board_label">
+<input type="radio" name="board.id" id="board_radio_[%= id %]" value="[%= id %]" class="board_radio"
+onchange="admin_toggle_label([%= id %])">
+</td>
+<td class="board_name">
+<label for="board_radio_[%= id %]" id="board_label_[%= id %]" class="board_label">[%= name %]</label>
+<a href="[%= .self %]/poard/admin_edit_board?board.id=[%= id %];edit=1">(edit)</a>
+</td>
+<td class="board_target">
+<input type="submit" class="button submit" name="submit.split" value="Split" [%unless is_leaf %]disabled="disabled"[%/unless %]>
+<input type="submit" class="button submit" name="submit.up" value="up" [%if is_first %]disabled="disabled"[%/if %]>
+<input type="submit" class="button submit" name="submit.down" value="down" [%if is_last %]disabled="disabled"[%/if %]>
+[%if is_leaf %]
+Split first to create a sub board
+[%else %]
+<a href="[%= .self %]/poard/admin_edit_board?board.parent_id=[%= id %];edit=1">New Sub-Board</a>
+[%/if is_leaf %]
+</td>
+</tr>
+</table>
+[%/if is_root %]
+</li>
+[%unless is_leaf %]
+[%if is_last %]
+<ul class="board_tree_last">
+[%else %]
+<ul class="board_tree">
+[%/if is_last %]
+[%/unless is_leaf %]
+
+[%loop level_down %]</ul>[%/loop level_down %]
+

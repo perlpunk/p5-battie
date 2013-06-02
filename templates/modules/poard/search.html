@@ -1,0 +1,114 @@
+<br>
+<div class="page_options">
+<tt title="BBCode for this search">Link to this search in BBCode:<br>
+[forumsearch=[%=.data.poard.search.numrows %] [%if .data.poard.search.sbid %]boards=[%= .data.poard.search.sbid %] [%/if %][%if .data.poard.search.sort_by_date %]bydate=1 [%/if %][%if .data.poard.search.search_in_title %]intitle=1[%/if %]][%= .data.poard.search_term %][/forumsearch]</tt>
+</div>
+[%if .data.poard.search.type_tag %]
+Search for Tags:<br>
+[%loop .data.poard.search.tags %]
+<span class="tag">[%= name %]</span>
+[%/loop .data.poard.search.tags %]
+[%else %]
+Detailed Search:
+<form action="[%= .self %]/poard/search" method="get">
+<table>
+<tr>
+<td valign="top">
+<input type="hidden" name="where" value="[%= .data.poard.search.where %]">
+<input type="text" name="query" value="[%= .data.poard.search_term %]" size="50">
+<br>
+[%if .data.poard.kinosearch %]
+Example: perl AND carp AND NOT fatalsToBrowser
+[%/if .data.poard.kinosearch %]
+<br><br>
+<input type="submit" name="search" value="[%translate id="global_action_search" %]" class="button">
+</td>
+<td>
+<table>
+<tr>
+<td>Search in Board</td>
+<td>
+<select name="sbid">
+<option value="">-- All boards --</option>
+[%html_option .data.poard.search.board_options %]
+</select>
+</td>
+[%if .data.poard.search.stid %]
+<tr>
+<td>Search in Thread '[%= .data.poard.search.thread.title %]'</td>
+<td><input type="checkbox" name="stid" value="[%= .data.poard.search.stid %]" checked="checked"></td>
+</tr>
+[%/if %]
+<tr>
+<td><label for="sort_by_date">Sort by date:</label></td>
+<td><input type="checkbox" name="by_date" value="1" id="sort_by_date"
+[%if .data.poard.search.sort_by_date %]checked="checked"[%/if %]></td>
+</tr>
+<tr>
+<td><label for="search_in_title">Search only in titles:</label></td>
+<td><input type="checkbox" name="in_title" value="1" id="search_in_title"
+[%if .data.poard.search.search_in_title %]checked="checked"[%/if %]></td>
+</tr>
+<tr>
+<td>Results per page:</td>
+<td><select name="rows">
+[%html_option .data.poard.search.rows %]
+</select>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</form>
+[%/if %]
+<br>
+<br>
+[%with .data.poard.pager %][%include name="pager.html" %][%/with %]
+
+<table class="searchresults" cellspacing="1">
+[%if .data.poard.search.type_tag %]
+<tr><th>Thread</th><th>Date</th><th>Author</th><th>Board</th></th>
+[%loop .data.poard.found %]
+<tr>
+<td><a href="[%= .self %]/poard/thread/[%= id %]">[%= title %]</a></td>
+<td class="small">[%if mtime %][%= mtime escape=TIME_HTML %][%else %][%= ctime escape=TIME_HTML %][%/if %]</td>
+<td class="dark">
+[%if author %]<a href="[%= .self %]/member/profile/[%= author.id %]">[%= author.nick %]</a>[%else %]<i>guest [%= author_name %]</i>
+[%/if author %]
+</td>
+<td><a href="[%= .self %]/poard/board/[%= board.id %]">[%= board.name %]</a></td>
+</tr>
+[%/loop .data.poard.found %]
+[%else %]
+<tr><th>Thread (Message)</th><th>Date</th><th>Author</th>
+[%if .data.poard.kinosearch %]<th>Score</th>[%/if %]
+<th>Board</th>
+</tr>
+[%loop .data.poard.found %]
+[%unless __first__ %]<tr><td class="delimiter" colspan="5"></td></tr>[%/unless %]
+<tr>
+<td class="thread" [%if .data.poard.kinosearch %]rowspan="2"[%/if %]><a href="[%= .self %]/poard/thread/[%= thread.id %]#ms_[%= id %]">[%if .data.poard.kinosearch %][%= thread.title escape=0 %][%else %][%= thread.title %][%/if %]</a>
+(<a href="[%= .self %]/poard/message/[%= id %]">#[%= id %]</a>)</td>
+<td class="small">[%if mtime %][%= mtime escape=TIME_HTML %][%else %][%= ctime escape=TIME_HTML %][%/if %]</td>
+<td class="dark">
+[%if author %]<a href="[%= .self %]/member/profile/[%= author.id %]">[%= author.nick %]</a>[%else %]<i>guest [%= author_name %]</i>
+[%/if author %]
+</td>
+[%if .data.poard.kinosearch %]
+<td title="[%= score %]">[%loop score_list %]<img src="[%= .data.userprefs.theme_color %]/[%= _ %].gif" border="0" alt="*" height="10">[%/loop %]</td>
+[%/if %]
+<td class="small"><a href="[%= .self %]/poard/board/[%= thread.board.id %]">[%= thread.board.name %]</a></td>
+</tr>
+[%if .data.poard.kinosearch %]
+<tr>
+<td class="excerpt" colspan="4">[%= message escape=0 %]</td>
+</tr>
+[%/if %]
+[%/loop .data.poard.found %]
+
+[%/if%]
+</table>
+[%with .data.poard.pager %][%include name="pager.html" %][%/with %]
+
+

@@ -1,0 +1,22 @@
+[%switch .action %]
+
+[%case start %]
+Nothing to see here yet
+[%case view %]
+
+<h2>[%= .data.content.page.get_title %]</h2>
+[%= .data.content.html escape="0" %]
+
+<hr>
+<small>
+Created at [%= .data.content.page.ctime_epoch escape=TIME_HTML %]<br>
+Last modified at [%= .data.content.page.mtime_epoch escape=TIME_HTML %]<br>
+</small>
+[%if .can.cms %]
+<a href="[%= .self %]/cms/edit_page_textile/[%= .data.content.page.get_id %]">Edit</a><br>
+<a href="[%= .self %]/cms/set_page/[%= .data.content.page.get_id %]?page.parent=[%= .data.content.page.get_parent %]">Position</a><br>
+<a href="[%= .self %]/cms/set_markup/[%= .data.content.page.get_id %]">Set markup (current: [%= .data.content.page.get_markup %])</a><br>
+<a href="[%= .self %]/cms/edit_page_textile?cms.parent_id=[%= .data.content.page.get_id %]">Create new Page</a><br>
+[%/if .can.cms %]
+
+[%/switch .action %]

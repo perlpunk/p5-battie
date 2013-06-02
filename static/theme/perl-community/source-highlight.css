@@ -1,0 +1,48 @@
+/* code highlighting options (Perl, PHP, ...) */
+.comment {
+  color:      #9A1900;
+  font-style: italic;
+  background-color: inherit;
+}
+.keyword {
+  color:       #0000FF;
+  font-weight: normal;
+  background-color: inherit;
+}
+.string {
+  color: #990000;
+  background-color: inherit;
+}
+.type {
+  color: #009900;
+  background-color: inherit;
+}
+.symbol {
+  color: #990000;
+  background-color: inherit;
+}
+.cbracket {
+  color:      #9A1900;
+  /* font-style: italic; */
+  background-color: inherit;
+}
+.function {
+  color:      #000000;
+  font-weight: normal;
+  background-color: inherit;
+}
+.normal {
+  color: #222222;
+  background-color: inherit;
+}
+.number {
+  color: #993399;
+  background-color: inherit;
+}
+.preproc {
+  color:      #000000;
+  font-weight: normal;
+  background-color: inherit;
+}
+
+

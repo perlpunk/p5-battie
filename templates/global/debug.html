@@ -1,0 +1,94 @@
+<p>
+<table class="debug_outer" width="100%">
+    <tr>
+        <th class="debug_inner" colspan="2" align="center">
+            <h2 class="error">Debugging Info</h</h2>
+        </td>
+    </tr>
+    [%if .data.exception %]
+    <tr>
+        <td colspan="2" class="error"><tt>[%= .debug.exception %]</tt></td>
+    </tr>
+    [%/if %]
+    <tr>
+        <tr>
+        <td valign="top" class="debug_inner">
+            <table class="debug_inner" width="100%" height="100%">
+                <tr>
+                    <th colspan="2">Session</th>
+                </tr>
+                <tr>
+                    <td valign="top">Session-ID:</td>
+                    <td>[%= .sid %]</td>
+                </tr>
+
+                [%with .debug.session %]
+                <tr>
+                    <td valign="top">Created:</td>
+                    <td>[%= ctime %]</td>
+                </tr>
+                <tr>
+                    <td valign="top">Acessed:</td>
+                    <td>[%= atime %]</td>
+                </tr>
+                <tr>
+                    <td valign="top">Expire:</td>
+                    <td>[%= expire %]</td>
+                </tr>
+                [%/with .debug.session %]
+
+                <tr>
+                    <th colspan="2">User</th>
+                </tr>
+                <tr>
+                    <td valign="top">User:</td>
+                    <td>[%= .user.name %]</td>
+                </tr>
+                <tr>
+                    <td valign="top">Roles:</td>
+                    <td>
+                        <ul>
+                            [%loop .debug.roles %]
+                            <li>[%= _ %]</li>
+                            [%/loop .debug.roles %]
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="top">Module:</td>
+                    <td>
+                        [%= .debug.page %]
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="top">Action:</td>
+                    <td>
+                        [%= .debug.action %]
+                    </td>
+                </tr>
+            </td>
+        </table>
+    </td>
+    <td class="debug_inner" valign="top">
+        <table class="debug_inner" width="100%" height="100%">
+            <tr>
+                <th colspan="2">Modules</th>
+            </tr>
+            [%loop .debug.modules %]
+            <tr>
+                <td valign="top">[%= name %]</td>
+                <td>
+                    <ul>[%set_var mymod value=_ %]
+                        [%loop actions %]
+                        <li><a href="[%= .self %]/[%= $mymod.name %]/[%= name %]">[%= name %]</a> ([%= class %])</li>
+                    [%/loop actions %]
+                </ul>
+                </td>
+            </tr>
+            [%/loop .debug.modules %]
+        </table>
+    </td>
+</tr>
+
+</table>
+

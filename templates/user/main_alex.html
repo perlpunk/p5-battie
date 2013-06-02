@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+
+[%include name="head.html" %]
+
+</head>
+    <body>
+
+		<div id="main">
+			<div id="links_container">
+				<div id="logo"><h1>Battie</h1><h2>Just another Perl Punk!</h2></div>
+				<div id="links">
+					<br /><br /><br />
+					<!-- **** INSERT LINKS HERE **** -->
+					<!-- <a href="#">another link</a> | <a href="#">another link</a> -->
+					<!-- [%= .active escape=0 %] -->
+				</div>
+			</div>
+		
+			[%comment %]
+			This is the top navigation. Don't change the template tags
+			if you want to change the layout, only the html.
+			[%/comment %]
+			[%if .elements.navi_top %]
+			<div id="menu">
+			  <ul>
+				<!-- **** INSERT NAVIGATION ITEMS HERE (use id="selected" to identify the page you're on **** -->
+				<!-- <li><a id="selected" href="#">home</a></li> -->
+				[%loop .elements.navi_top %]
+				<li [%if active %]class="selected"[%/if%]>[%= content escape=0 %]</li>
+				[%/loop .elements.navi_top %]
+			  </ul>
+			</div>
+			[%/if .elements.navi_top %]
+			
+			<div id="breadcrumb" class="breadcrumb">
+				[%= .active escape=0 %]
+			</div>
+			
+			<div id="content">
+				<div id="column1">
+					<div class="sidebaritem">
+						[%= .now escape=TIME_HTML_FULL %]
+					</div>
+					<div class="sidebaritem">
+						<h1>additional links</h1>
+					
+						<div class="sbilinks">
+							[%if .elements.navi_left_top %]
+								<ul>
+									[%loop .elements.navi_left_top %]
+									<li [%if active %]class="selected"[%/if%]>
+										[%= content escape=0 %]
+									</li>
+									[%/loop .elements.navi_left_top %]
+								</ul>
+							[%/if .elements.navi_left_top %]
+						</div>
+					</div>
+				</div>
+			
+				<div id="column2">
+					[%include_var .templates.content %]
+				</div>
+			
+			</div><!-- /content -->
+	
+		</div><!-- /main -->
+
+		<div id="footer">
+			
+			[%if .elements.navi_bottom %]
+			<ul class="menu">
+				[%loop .elements.navi_bottom %]
+				<li [%if active %]class="selected"[%/if%]>[%= content escape=0 %]</li>
+				[%/loop .elements.navi_bottom %]
+			</ul>
+			[%/if%]
+			
+			<div>[%include powered.html %]</div>
+			
+			<a href="http://validator.w3.org/check?uri=referer">XHTML 1.1</a> | <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a> | <a href="http://www.dcarter.co.uk">design by dcarter</a>
+			<form action="[%= .self %]/[%= .ma %]" method="POST">
+				<input type="hidden" name="battie_view" value="small">
+				<input type="submit" name="battie" value="Small View">
+			</form>
+		
+			[%if .debug %]
+			<div class="debug">
+			[%include debug.html%]
+			</div>
+			[%/if .debug %]
+		
+		</div>
+	
+    </body>
+</html>

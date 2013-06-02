@@ -1,0 +1,12 @@
+Thread <a href="[%= .self %]/poard/thread/[%= thread.id %]#ms_[%= id %]">[%= thread.title %]</a>
+([%= thread.messagecount %] answers)
+<br>
+Opened by
+[%if thread.author %]
+<a href="[%= .self %]/member/[%= thread.author.id %]">[%= thread.author.nick %]</a>
+[%else %][%= thread.author_name %][%/if %]
+at [%= expr="thread.ctime_epoch || thread.ctime" escape=TIME_HTML %]
+<p />
+[%include name="poard/single_message.html" %]
+<p />
+View full thread <a href="[%= .self %]/poard/thread/[%= thread.id %]#ms_[%= id %]">[%= thread.title %]</a>

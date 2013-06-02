@@ -1,0 +1,29 @@
+[%switch .action %]
+
+[%case edit_image_title %]
+<i>saved</i>
+
+[%case view_image %]
+[%with .data.gallery.previous_image %]
+<a href="#"
+    onclick="show_pic([%= id %], '[%= suffix %]', [%= info.id%]); return false"
+>
+<img src="[%= .data.userprefs.theme %]/arrow_left.png" border="0" alt="&gt;&gt;">
+<!--<img src="[%= .data.gallery.image_url %]/[%= info.id %]/thumbs/[%= id %].[%= suffix %]" alt="[previous]" height="40">-->
+</a>
+[%/with .data.gallery.previous_image %]
+__pjx__
+[%with .data.gallery.next_image %]
+<a href="#"
+    onclick="show_pic([%= id %], '[%= suffix %]', [%= info.id%]); return false"
+>
+<img src="[%= .data.userprefs.theme %]/arrow_right.png" border="0" alt="&gt;&gt;">
+<!--<img src="[%= .data.gallery.image_url %]/[%= info.id %]/thumbs/[%= id %].[%= suffix %]" alt="[next]" height="40">-->
+</a>
+[%/with .data.gallery.next_image %]
+__pjx__
+[%with .data.gallery.next_image %]
+<img src="[%= .data.gallery.image_url %]/[%= info.id %]/[%= id %].[%= suffix %]" alt="[next]" height="0"width="0">
+[%/with .data.gallery.next_image %]
+
+[%/switch .action %]

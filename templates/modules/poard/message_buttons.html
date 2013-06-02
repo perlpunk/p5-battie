@@ -1,0 +1,24 @@
+[%if expr=".data.poard.thread.closed and (not (.can.poard.mod_close_thread))" %]
+<span class="inactive_action">[%translate id="poard_answer" %] [%translate id="poard_with_quote" %]</span>
+[%else %]
+<form action="[%= $SELF escape=0 %]/poard/post_answer/[%= .data.poard.thread.get_id escape=0 %]/[%= id escape=0 %]" method="POST">
+<input type="hidden" name="lft" value="[%= lft escape=0 %]"><input type="hidden" name="rgt" value="[%= rgt escape=0 %]">
+<input type="submit" name="submit.preview" value="[%translate id=poard_answer %]" style="float: left;" class="action_button">
+<input type="submit" name="submit.preview_quote" value="[%translate id=poard_with_quote %]" style="float: left;" class="action_button">
+</form>
+[%/if %]
+
+[%if is_editable %]
+<form action="[%= $SELF escape=0 %]/poard/edit_message/[%= id escape=0 %]" method="POST">
+<input type="submit" name="submit.preview" value="[%translate id=global_action_edit %]" style="float: left;" class="action_button">
+</form>
+[%/if %]
+
+[%if .can.poard.subscribe_thread %]
+<form action="[%= $SELF escape=0 %]/poard/subscribe_thread/[%= thread_id escape=0 %]/[%= id escape=0 %]" method="POST">
+<input type="submit" name="submit.subscribe" value="[%translate id=global_action_subscribe %]" style="float: left;" class="action_button" title="subscribe to message">
+[%= .user.token.hidden escape=0 %]
+</form>
+[%/if %]
+
+[%if .can.poard.approve_message %][%include poard/message_mod.html %][%/if %]

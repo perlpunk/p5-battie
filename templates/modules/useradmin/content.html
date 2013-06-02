@@ -1,0 +1,213 @@
+<h2>Useradmin</h2>
+[%if .data.useradmin.error.token %]
+[%include name="token_expired.html" %]
+[%/if %]
+[%switch .action%]
+
+[%case clear_cache %]
+<form action="[%= .self %]/useradmin/clear_cache" method="post">
+This will delete all roles and guest actions from the cache. (Not the actions
+for each user.)
+<br>
+
+<br>
+Clear group cache also:<br>
+[%loop .data.useradmin.groups %]
+<input type="checkbox" name="group_id" value="[%= id %]" id="group.[%= id %]">
+<label for="group.[%= id %]">[%= name %]</label><br>
+[%/loop .data.useradmin.groups %]
+
+<br>
+[%= .user.token.hidden escape=0 %]
+<input type="submit" class="button" name="submit.clear" value="Clear Cache">
+</form>
+
+
+
+[%case create %]
+[%if .data.useradmin.error.user_exists %]
+A user with that nick exists already.
+[%/if .data.useradmin.error.user_exists %]
+[%case list%]
+New user:<br>
+<form action="[%= .self %]/useradmin/create" method="POST">
+    Username: <input type="text" name="user.name"><br>
+    <input type="submit" class="button" name="submit.create" value="Create">
+[%= .user.token.hidden escape=0 %]
+</form>
+<p>
+List of users:<br>
+[%with .data.useradmin.pager %]
+[%include name="pager.html" %]
+[%/with .data.useradmin.pager %]
+<table class="overview" cellspacing="1">
+<tr>
+<th>Nick</th><th>User since</th><th>Last Login</th>
+<th>Group</th>
+<th>Roles</th><th colspan="2">actions</th>
+<th>Active</th>
+</tr>
+[%loop .data.users %]
+<tr>
+    <td class="dark"><a href="[%= .self %]/member/profile/[%= id %]">[%= nick %]</a></td>
+    <td class="light">[%= ctime escape=TIME_HTML %]</td>
+    <td class="dark">[%= lastlogin %]</td>
+    <td class="light">[%= group_id %]: [%= groupname %]</td>
+    <td class="light">
+[%loop roles join=", " %]
+<a href="[%= .self %]/useradmin/edit_role/[%= id %]">[%= name %] ([%= rtype %])</a>
+[%/loop roles %]
+</td>
+    <td colspan="2" class="dark">Edit <a href="[%= .self %]/useradmin/edit/[%= get_id %]">User</a>
+    / <a href="[%= .self %]/useradmin/edit_user_roles/[%= get_id %]">Roles</a></td>
+<td class="light">[%if active %]yes[%else %]no[%/if %]</td>
+</tr>
+[%/loop .data.users %]
+</table>
+
+[%case edit%]
+
+Edit:<br>
+[%= .data.useradmin.user.nick %]
+<form action="[%= .self %]/useradmin/edit/[%= .data.useradmin.user.get_id %]" method="POST">
+<br />
+<input type="radio" name="active" value="yes" [%if .data.useradmin.user.active %]checked="checked"[%/if %] />Active<br>
+<input type="radio" name="active" value="no" [%unless .data.useradmin.user.active %]checked="checked"[%/unless %] />Inactive<br>
+    <input type="submit" class="button" name="submit.save" value="Save">
+[%= .user.token.hidden escape=0 %]
+</form>
+
+<br>
+<form action="[%= .self %]/useradmin/delete/[%= .data.useradmin.user.get_id %]" method="POST">
+    <input type="submit" class="button" name="submit.delete" value="Delete user"
+    onClick="javascript:return confirm('Really delete user &quot;[%= .data.useradmin.user.get_id %]&quot;?')">
+[%= .user.token.hidden escape=0 %]
+</form>
+<br>
+Change Password:
+<form action="[%= .self %]/useradmin/edit/[%= .data.useradmin.user.get_id %]" method="POST">
+    <input type="password" name="user.pass">
+    <input type="submit" class="button" name="submit.change_pass" value="Change">
+[%= .user.token.hidden escape=0 %]
+</form>
+
+Edit Roles:<br>
+<a href="[%= .self %]/useradmin/edit_user_roles/[%= .data.useradmin.user.get_id %]">Edit</a>
+
+<br>
+Email: <b>[%= .data.useradmin.profile.get_email %]</b>
+
+[%case start%]
+
+<a href="[%= .self %]/useradmin/list">List Users</a><br>
+<a href="[%= .self %]/useradmin/list_roles">List Roles</a><br>
+<p>
+
+[%case edit_user_roles %]
+<form action="[%= .self %]/useradmin/edit_user_roles/[%= .data.useradmin.user.get_id %]" method="POST">
+Edit roles of user [%= .data.useradmin.user.nick %]<p>
+<table>
+    <tr>
+        <td valign="top">
+    <select name="useradmin.roles" multiple size="5" class="colorselect">
+        <option value="" >---------------</option>
+    [%html_option .data.useradmin.user_roles %]
+    </select>
+        </td>
+        <td align="center">
+            <input type="submit" class="button" name="submit.remove_roles" value="Remove -&gt;">
+            <br>
+            <input type="submit" class="button" name="submit.add_roles" value="&lt; Add">
+        </td>
+        <td valign="top">
+
+    <select name="system.roles" multiple size=5>
+        <option value="">---------------</option>
+    [%html_option .data.useradmin.available_roles %]
+    </select>
+</td>
+</tr>
+</table>
+[%= .user.token.hidden escape=0 %]
+</form>
+
+[%case list_roles %]
+<h3>Roles</h3>
+
+
+<form action="[%= .self %]/useradmin/create_role" method="POST">
+    <input type="text" name="role.id">
+    <input type="submit" class="button" name="submit.create_role" value="Create Role">
+</form>
+
+<table class="overview" cellspacing="1">
+<tr><th>Role</th><th>Actions</th></tr>
+[%loop .data.useradmin.roles %]
+<tr>
+<td class="dark"><a href="[%= .self %]/useradmin/edit_role/[%= get_id %]">[%= name %] ([%= rtype %])</a></td>
+<td><tt>
+[%loop get_actions join=", "%]
+[%= action %]
+[%/loop get_actions %]
+</tt></td>
+</tr>
+[%/loop .data.useradmin.roles %]
+</table>
+
+[%case edit_role %]
+
+<form action="[%= .self %]/useradmin/edit_role/[%= .data.useradmin.role_id %]" method="POST">
+<input type="text" name="role.name" value="[%= .data.useradmin.role.name %]" />
+<input type="submit" class="button" name="submit.set_name" value="Set name" />
+[%= .user.token.hidden escape=0 %]
+</form>
+
+Edit allowed actions of role <b>[%= .data.useradmin.role.name %] ([%= .data.useradmin.role.rtype %])</b>
+
+<form action="[%= .self %]/useradmin/edit_role/[%= .data.useradmin.role_id %]" method="POST">
+[%= .user.token.hidden escape=0 %]
+<table>
+    <tr>
+        <td valign="top">
+    <select name="useradmin.actions" multiple size="10" class="colorselect">
+        <option value="" >---------------</option>
+    [%html_option .data.useradmin.options.role_actions %]
+    </select>
+        </td>
+
+    [%if .data.useradmin.options.actions %]
+        <td align="center">
+            <input type="submit" class="button" name="submit.remove_actions" value="Remove -&gt;">
+            <br>
+            <input type="submit" class="button" name="submit.add_actions" value="&lt; Add">
+        </td>
+        <td valign="top">
+    <select name="system.actions" multiple size="10">
+        <option value="">---------------</option>
+        [%html_option .data.useradmin.options.actions %]
+    </select>
+    <br>
+            <input type="submit" class="button" name="submit.show_modules" value="Show modules">
+
+    [%elsif .data.useradmin.options.modules %]
+        <td align="center">
+            <input type="submit" class="button" name="submit.remove_actions" value="Remove -&gt;">
+            <br>
+            <input type="submit" class="button" name="submit.add_modules" value="&lt; Add">
+        </td>
+        <td valign="top">
+    <select name="system.modules" multiple size="10">
+        <option value="">---------------</option>
+        [%html_option .data.useradmin.options.modules %]
+    </select>
+            <br>
+            <input type="submit" class="button" name="submit.show_actions" value="Show actions">
+    [%/if %]
+</td>
+</tr>
+</table>
+</form>
+
+[%/switch .action%]
+
+</p>

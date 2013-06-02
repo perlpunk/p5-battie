@@ -1,0 +1,65 @@
+<title>[%= .data.subtitle %] - [%= .title %]</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+<meta name="keywords" content="[%= .response.keywords %]">
+
+<link rel="shortcut icon" type="image/x-icon" href="[%= .docurl %]/favicon.ico">
+<link rel="stylesheet" href="[%= .data.userprefs.theme %]/layout.css" type="text/css" >
+<link rel="stylesheet" href="[%= .data.userprefs.theme %]/bbcode.css" type="text/css" >
+<link rel="stylesheet" href="[%= .data.userprefs.theme_color %]/global.css" type="text/css" >
+<link rel="stylesheet" href="[%= .data.userprefs.theme %]/switch_[%= .request.browserswitch %].css" type="text/css" >
+<script src="[%= .docurl %]/js/json2.js" type="text/javascript" ></script>
+
+<!-- **** colour scheme stylesheet **** -->
+<link rel="stylesheet" type="text/css" href="[%= .data.userprefs.theme %]/color.css" >
+    
+[%with .data.userprefs %]<!-- css -->
+[%each local_css %]<link rel="stylesheet" href="[%= theme %]/[%= __key__ %].css"  type="text/css" >
+[%/each %]
+[%each local_color_css %]<link rel="stylesheet" href="[%= theme_color %]/[%= __key__ %].css"  type="text/css" >
+[%/each %]
+<!-- js -->
+[%each local_js %]<script src="[%= .docurl %]/js/[%= __key__ %].js" type="text/javascript" ></script>
+[%/each %]
+<!-- rss -->
+[%each local_rss %]<link rel="alternate" type="application/rss+xml" title="[%= __value__ %]" href="[%= __key__ %]">
+[%/each %]
+<!-- user css -->
+[%if css_url %]<link rel="stylesheet" href="[%= css_url %]"  type="text/css" >[%/if %]
+[%/with .data.userprefs %]
+<style type="text/css">
+[%if .data.settings.inline_css %]
+body, table {
+font-size: [%= .data.settings.userprefs.font_size %][%= .data.settings.userprefs.font_entity %];
+}
+[%/if .data.settings.inline_css %]
+[%if .data.settings.poard.articles.codebox_y %]
+div.code_container {
+max-height: [%= .data.settings.poard.articles.codebox_y %]em;
+overflow-y:auto;
+}
+[%/if .data.settings.poard.articles.codebox_y %]
+[%if .data.settings.poard.articles.codebox_x %]
+div.codebox {
+width: [%= .data.settings.poard.articles.codebox_x %]em;
+max-width: [%= .data.settings.poard.articles.codebox_x %]em;
+overflow-x:scroll;
+}
+[%/if .data.settings.poard.articles.codebox_y %]
+</style>
+<meta name="robots" content="[%unless .seo.index %]no[%/unless %]index,[%unless .seo.archive %]no[%/unless %]archive">
+<link rel="alternate" type="application/rss+xml" title="[%= .data.blog.rss_title %]" href="[%= .server %][%= .self %]/blog/xml_rss" >
+<script src="[%= .docurl %]/js/ajax.js" type="text/javascript" ></script>
+<script type="text/javascript"><!--
+function ajaxshow() {
+var args = ajaxshow.arguments;
+call_ajax('[%= .self %]?',args,"ajaxshow",args[2]);
+}
+document.write('<style type="text/css">span.javascript, div.javascript, td.javascript { visibility: visible; }</' + 'style>');
+var theme = '[%= .data.userprefs.theme %]';
+var token = 't__[%= .user.token.id %]';
+--></script>
+
+<!--[if IE 7]><style type="text/css">
+div.code pre { padding-bottom: 1em; overflow-y: scroll }
+</style><![endif]-->

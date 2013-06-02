@@ -1,0 +1,96 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use Time::HiRes qw/ gettimeofday tv_interval /;
+#BEGIN {
+#    open STDERR, ">>battie.log";
+#}
+
+my %log_filehandles;
+
+$WWW::Battie::DEBUG = 0;
+if (0) {
+    # if you need to switch the site off
+    print "Content-Type: text/plain\n\nmaintenance";
+    exit;
+}
+
+eval {
+    require WWW::Battie;
+    # TODO for load balancers
+    if (0) {
+		repair_ip();
+    }
+    $WWW::Battie::DEBUG = 0;
+    my $start_time = [gettimeofday];
+    my $inifile = '/path/to/battie.ini';
+    my $ini = WWW::Battie::Config::Ini->create($inifile);
+    #warn Data::Dumper->Dump([\$hash], ['hash']);
+    my $battie = WWW::Battie->from_ini( $ini );
+    $battie->clear;
+    $battie->set_logs({ action => {}});
+    $battie->run;
+    my ($out, $mode) = $battie->output;
+    binmode STDOUT, $mode;
+    print $out if defined $out;
+
+    my $actionlogs = $battie->logs->{action};
+    $actionlogs->{IP} = $ENV{REMOTE_ADDR};
+    my $time = time;
+    my $ts = localtime($time);
+    $actionlogs->{TS} = $ts;
+    $actionlogs->{EPOCH} = $time;
+	my $log_fh = create_logfh($battie, $inifile, \%log_filehandles);
+    my $elapsed = tv_interval ( $start_time );
+    $actionlogs->{TIME} = sprintf "%0.2f", $elapsed * 1000;
+    $actionlogs->{PID} = $$;
+    $battie->clear;
+    print $log_fh $battie->print_action_log($actionlogs) . $/;
+};
+if ($@) {
+    warn $@;
+    print <<'EOM';
+Content-Type: text/plain
+
+There was an error. Please see logfile.
+EOM
+    exit;
+}
+
+sub create_logfh {
+	my ($battie, $inifile, $filehandles) = @_;
+	my $log_fh = $filehandles->{ $inifile };
+    if ($log_fh) {
+    }
+    else {
+        if (my $path = $battie->get_paths->{actionlog}) {
+            unless (File::Spec->file_name_is_absolute($path)) {
+                $path = File::Spec->catfile($battie->get_paths->{serverroot}, $path);
+            }
+            open $log_fh, ">>", $path
+                or die "ACTIONLOG $path is not writeable: $!";
+            my $old_fh = select $log_fh;
+            $|++;
+            select $old_fh;
+			$log_filehandles{ $inifile } = $log_fh;
+        }
+        else {
+            $log_fh = \*STDERR;
+        }
+    }
+	return $log_fh;
+}
+
+# for load balancers
+sub repair_ip {
+	my $ff = $ENV{HTTP_FORWARDED_FOR} || $ENV{HTTP_X_FORWARDED_FOR} || $ENV{HTTP_CLIENT_IP};
+	my $host = $ENV{REMOTE_ADDR};
+	if ($host eq $ENV{SERVER_ADDR} and $ff) {
+		my (@forwarded) = split m/\s*,\s*/, $ff;
+		#print STDERR "====== forwarded: @forwarded\n";
+		$ENV{REMOTE_ADDR} = pop @forwarded;
+		$ENV{HTTP_FORWARDED_FOR} = join ",", @forwarded;
+	}
+}
+
+

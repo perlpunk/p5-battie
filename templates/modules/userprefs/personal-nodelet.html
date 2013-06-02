@@ -1,0 +1,20 @@
+<a href="[%= .self %]/userprefs/personal_nodelet">[%translate id="global_personal_nodelet" %]</a><br style="clear: both;">
+<form action="[%= .self %]/userprefs/personal_nodelet" method="post"
+onsubmit="nodelet_add_url('[%= .data.userprefs.theme %]','[%= .user.token.id %]',this);return false">
+<input type="hidden" name="nodelet.url" value="[%= .current_url %]">
+<input type="hidden" name="nodelet.title" value="[%= .data.subtitle %]">
+<input type="image" src="[%= .data.userprefs.theme %]/icons/clipboard-paste-document-text.png" name="submit.add"
+title="[%translate id=global_add_current_url %]">
+[%= .user.token.hidden escape=0 %]
+</form>
+[%if .data.settings.userprefs.nodelet.hidden %]
+<script src="[%= .docurl %]/js/userprefs.js" type="text/javascript" ></script>
+
+<div id="personal_nodelet_toggle" style="display: inline;">
+<a title="show" href="javascript:nodelet_toggle('show')"><img src="[%= .data.userprefs.theme %]/arrow_down.png" alt="show"></a>
+</div>
+<div id="personal_nodelet" class="personal_nodelet" style="display: none;">
+<a title="hide" href="javascript:nodelet_toggle('hide')"><img src="[%= .data.userprefs.theme %]/arrow_up.png" alt="hide"></a>
+[%else %]<div class="personal_nodelet" id="personal_nodelet">[%/if %]
+[%= .data.userprefs.mynodelet.rendered escape=0 %]
+</div>

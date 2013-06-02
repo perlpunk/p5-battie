@@ -1,0 +1,360 @@
+[GENERAL]
+# set DEBUG to 1 if template output should include filenames
+DEBUG=0
+# set to 1 if your site is accessible via HTTPS
+ENABLE_HTTPS=0
+# set a default timezone, e.g. Europe/Berlin
+# for possible values look in DateTime::TimeZone
+TIMEZONE=Europe/Berlin
+
+# global keywords for your site, will appear in html meta
+KEYWORDS=test forum
+
+# in the following examples, replace /public_html with the full path
+# to your documnt root
+[PATHS]
+# "document root" for battie. say your document_root is /public_html, and
+# in there is battie/static, that would be
+BATTIE_DOCUMENT_ROOT=/public_html/battie/static
+BATTIE_ROOT_URL=/battie/static
+# not in document_root, if possible
+BATTIE_SERVER_ROOT=/path/to/battie_root
+
+# different example
+# / => /web/index.html
+# BATTIE_DOCUMENT_ROOT=/web
+# BATTIE_ROOT_URL=
+
+# http://domain.example
+SERVER=http://domain.example
+# dir under /battie_dir for example
+# relative to BATTIE_SERVER_ROOT or absolute
+TEMPLATES=templates/user;templates/global;templates/modules
+# for caching templates
+# relative to BATTIE_SERVER_ROOT or absolute
+TEMPLATE_CACHE=htc_cache
+
+# upload status data, needs to be in document_root
+UPLOAD_INFO=/public_html/battie_uploads
+# absolute path to your battie.pl script, e.g. if
+# http://domain.example/cgi/battie.pl
+VIEW=/cgi/battie.pl
+# path to redirect script
+REDIR=/perl/battie_redir.pl
+# relative to BATTIE_DOCUMENT_ROOT, but should start with /
+BBCODE_IMAGES_URL=/bbcode
+
+# what page should be called when called without arguments
+DEFAULT_PAGE=content/start
+# what appears in the <title>
+HOMEPAGE_TITLE=my c00l website
+
+DEFAULT_DBH=DEFAULT
+DEFAULT_TABLE_PREFIX=battie
+
+GOOGLE_API_KEY=.....
+
+# you can log all requests in an extra logfile with some useful
+# infos like request time, user, process size, ...
+# ACTIONLOG: relative to BATTIE_SERVER_ROOT or absolute
+# leave it empty to log into the webserver's error_log
+ACTIONLOG=logs/action.log
+
+# $TS: Tue Oct 20 20:44:14 2009
+# $EPOCH: epoch seconds
+# $PID: process id
+# $USER: user nick or empty (guest)
+# $UID: user id or empty (guest)
+# $COOKIE: user agent can cookies? 1 or 0
+# $IP
+# $UA: user agent
+# $TIME: milliseconds the request took
+# $REQUEST: REUEST_URI
+# $PSIZE: process size
+# $PSHARED: process shared size
+# $PSIZE_BEFORE: process size before request
+# $PSHARED_BEFORE: process shared size before request
+ACTIONLOG_FORMAT=$EPOCH,$TS,$IP,$PID,$USER,$COOKIE,$TIME,$REQUEST,$PSIZE_BEFORE,$PSHARED_BEFORE,$PSIZE,$PSHARED,$UA
+
+
+[EMAIL]
+FROM=from@yourdomain.example
+TYPE=sendmail
+# path to sendmail (options '-t -oi -oem' will be added by default)
+SENDMAIL=/usr/lib/sendmail
+# or:
+#TYPE=smtp
+#USER=username
+#PASSWORD=pass
+#SERVER=your.smtp.server
+# or:
+#TYPE=debug
+#LOGFILE=email.log
+
+
+# layout elements referenced in templates/user/main.html
+[LayoutElement header]
+ELEMENTS=nodelet:content-search
+
+
+[LayoutElement navi_left_top]
+DEFAULT=1
+ELEMENTS=module:userprefs;nodelet:userprefs-personal;module:blog;module:content;module:gallery
+[LayoutElement navi_top]
+ELEMENTS=module:start;module:useradmin;module:login
+
+[LayoutElement navi_bottom]
+ELEMENTS=module:system;module:cache;module:cms;module:useradmin;module:log
+
+[LayoutElement invisible]
+# for error messages; should not be in the navigation
+ELEMENTS=module:error
+
+
+# --------------- Modules
+
+[Module WWW::Battie::Modules::Error]
+ACTIVE=yes
+SEO_ARCHIVE=no
+SEO_INDEX=no
+
+[Module WWW::Battie::Modules::Log]
+ACTIVE=yes
+SEO_ARCHIVE=no
+SEO_INDEX=no
+# optional:
+# If you have Geo::IP installed (and the c library), and you have
+# the GeoIP Database (both database and library available from
+# http://www.maxmind.com/, they have free versions also), then
+# add the path to the database here.
+# Then you will be able to see the country of the user in the log
+#GEOIP=/path/to/GeoIP.dat
+
+[Module WWW::Battie::Modules::MemCache]
+# activate if you have a memcached running and deactivate
+# WWW::Battie::Modules::Cache below
+# You need the perl module Cache::Memcached for this
+ACTIVE=no
+SEO_ARCHIVE=no
+SEO_INDEX=no
+# comma seperated list of servers, e.g.
+# SERVERS=127.0.0.1:11211,127.0.0.2:11211
+SERVERS=127.0.0.1:11211
+
+# 1-3 characters [a-zA-Z0-9]
+CACHE_NAMESPACE=bt
+
+[Module WWW::Battie::Modules::Cache]
+ACTIVE=yes
+SEO_ARCHIVE=no
+SEO_INDEX=no
+# relative to BATTIE_SERVER_ROOT or absolute
+# it's a good idea to put this directory on its own filesystem
+# just to be sure that you don't run out of space
+DIR=/data_cache
+
+[Module WWW::Battie::Modules::Member]
+ACTIVE=yes
+SEO_ARCHIVE=no
+SEO_INDEX=no
+
+[Module WWW::Battie::Modules::Poard]
+ACTIVE=yes
+#SEO_INDEX=start,thread,message
+#SEO_ARCHIVE=start,thread,message
+SEO_ARCHIVE=no
+SEO_INDEX=no
+# define how many unapproved messages can be in a thread
+# (prevent scripting attacks)
+MAX_UNAPPROVED=5
+# how many unapproved threads per board
+MAX_UNAPPROVED_THREADS=5
+# define how many seconds a user must wait before
+# posting a new message (avoid double posts and scripting attacks)
+POST_DELAY=20
+MAX_LENGTH_RSS_MSG=100
+RSS_TITLE=battie forum news
+HTML_TITLE_BOARD=Board %board
+HTML_TITLE_THREAD=Board %board - Thread %thread
+HTML_TITLE_MSG=Board %board - Thread %thread - #%id
+SEARCH=Database
+# for KinoSearch install KinoSearch from CPAN and use 
+# bin/poard_create_index.pl to create the search index
+#SEARCH=KinoSearch
+# create a directory readable and writeable for apache user
+#SEARCH_INDEX=/path/to/searchindex
+
+# Number of threads shown in a board
+ROWS_BOARD=20
+
+STATISTICS_GROUPING=0,1,2,5,10
+STATISTICS_ROWS_PP=3
+
+
+# Number of threads shown in a board
+ROWS_BOARD=20
+
+
+ANTISPAM=
+# e.g.
+#ANTISPAM=AKISMET
+
+# relative to BATTIE_SERVER_ROOT
+# should not be in document root; files will be delivered through the
+# application
+ATTACHMENT_PATH=poard_attach
+# which mimetypes should be uploaded
+ATTACHMENT_TYPES=text/plain;image/gif;image/png;image/jpeg;application/pdf;text/html;application/xml
+# temp dir for uploading files before they will be moved to ATTACHMENT_PATH
+ATTACHMENT_TMPDIR=/tmp
+# max size for one file
+ATTACHMENT_MAX_SIZE=1024000
+# max size for all attachments per message
+ATTACHMENT_MAX_TOTALSIZE=5120000
+# max number of attachments per message
+ATTACHMENT_MAX=5
+# where attachment thumbnails will be located
+# relative to BATTIE_DOCUMENT_ROOT
+ATTACHMENT_THUMBNAILS=attachments
+
+
+
+[Module WWW::Battie::Modules::ActiveUsers]
+ACTIVE=yes
+SEO_ARCHIVE=no
+SEO_INDEX=no
+MESSAGE_ONLINE=Who's online?
+
+[Module WWW::Battie::Modules::Content]
+ACTIVE=yes
+SEO_ARCHIVE=no
+SEO_INDEX=yes
+# url to static content
+URL=/content
+
+[Module WWW::Battie::Modules::UserPrefs]
+ACTIVE=yes
+SEO_ARCHIVE=no
+SEO_INDEX=no
+AVATAR_MAX=3000
+AVATAR_MAX_X=100
+AVATAR_MAX_Y=100
+# absoulte path to theme directory
+# browser path
+# relative to BATTIE_DOCUMENT_ROOT, but should start with /
+THEME_URL=/theme
+AVATAR_URL=/avatars
+
+[Module WWW::Battie::Modules::Useradmin]
+ACTIVE=yes
+SEO_ARCHIVE=no
+SEO_INDEX=no
+ROWS_USER_LIST=30
+
+[Module WWW::Battie::Modules::Login]
+ACTIVE=yes
+SEO_ARCHIVE=no
+SEO_INDEX=no
+# seconds a token should be valid
+TOKEN_EXPIRE=86400
+REGISTRATION_TOKEN_EXPIRE=86400
+EMAIL_TOKEN_EXPIRE=86400
+PASSWORD_TOKEN_EXPIRE=86400
+# which encryption should be used?
+PASSWORD_ENCRYPT=crypt_md5,crypt,md5_username
+
+[Module WWW::Battie::Modules::CMS]
+ACTIVE=yes
+SEO_ARCHIVE=no
+SEO_INDEX=no
+# directory visible by web browser
+# relative to BATTIE_DOCUMENT_ROOT, but should start with /
+URL=/content
+
+[Module WWW::Battie::Modules::Blog]
+ACTIVE=yes
+SEO_ARCHIVE=no
+SEO_INDEX=yes
+# directory for public galleries. must be accessable by browser
+# must be writeable by webserver user
+# relative to BATTIE_DOCUMENT_ROOT, but should start with /
+PUBLIC_IMAGE_URL=/blog_images
+
+RSS_TITLE=#battie news
+
+[Module WWW::Battie::Modules::Gallery]
+ACTIVE=yes
+SEO_ARCHIVE=no
+SEO_INDEX=yes
+# url for public galleries. must be accessable by browser
+# must be writeable by webserver user
+# relative to BATTIE_DOCUMENT_ROOT, but should start with /
+PUBLIC_IMAGE_URL=/battie_images
+# directory for private galleries. should not be accessable by browser
+# must be writeable by webserver user
+# If it starts with a / it is an absolute path
+# If there is no / at the beginning it is relative to BATTIE_SERVER_ROOT
+PRIVATE_IMAGE_DIR=/path/to/battie_images
+# to which height/width should the thumbnails be scaled
+SCALE=100
+
+[Module WWW::Battie::Modules::System]
+ACTIVE=yes
+SEO_ARCHIVE=no
+SEO_INDEX=no
+# see module System - Terms & Conditions
+# TERMS=terms_conditions
+TERMS=
+
+[Module WWW::Battie::Modules::Guest]
+ACTIVE=yes
+SEO_ARCHIVE=no
+SEO_INDEX=no
+MAX_UNAPPROVED=10
+ROWS=10
+MAX_ENTRY_LENGTH=1024
+
+# --------------- Models
+
+[Model WWW::Battie::Schema::Log]
+# only if you know what you're doing:
+# if you have different settings here than the
+# default, do:
+#TABLE_PREFIX=my_prefix
+# define below as [DBH MYDBH]
+#DBH=MYDBH
+
+[Model WWW::Battie::Model::DBIC::Gallery]
+
+[Model WWW::Battie::Model::DBIC::ActiveUsers]
+
+[Model WWW::Battie::Model::DBIC::Blog]
+
+[Model WWW::Battie::Model::DBIC::Content]
+
+[Model WWW::Poard::Model]
+
+[Model WWW::Battie::Schema::User]
+
+[Model WWW::Battie::Schema::Guest]
+
+[Model WWW::Battie::Schema::System]
+
+# -------------- DBH
+
+[DBH DEFAULT]
+# which database system (supported is 'mysql' and 'Pg' (for PostgreSQL))
+DBS=mysql
+# database host
+HOST=db.domain.example
+# default mysql port is 3306
+PORT=3306
+# socket file (use either HOST and PORT or SOCKET)
+#SOCKET=/var/run/mysqld/mysqld.sock
+# database username
+USER=login
+# database name
+DATABASE=battie_db
+# database password
+PASSWORD=pass
+

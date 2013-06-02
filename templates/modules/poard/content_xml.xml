@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
+<channel>
+
+<title>[%= .data.poard.title %]</title>
+<description>perl</description>
+<link>[%= .server %]/</link>
+<language>de-de</language>
+<dc:creator>just another perl punk,</dc:creator>
+
+[%loop .data.poard.messages %]<item>
+    <dc:creator>[%if author %][%= author.nick %][%else %][%= author_name %] (Guest)[%/if %]</dc:creator>
+    <title>[%if position %]Re^[%= position %]: [%= thread.title %]
+    [%else %][%= thread.title %][%/if %]</title>
+    <dc:date>[%= mtime %]+00:00</dc:date>
+    <description><![CDATA[
+[%= rendered escape=0 %]
+    ]]></description>
+    <guid isPermaLink="false">[%= .server %][%= .self %]/poard/thread/[%= thread.get_id %]#ms_[%= id %]</guid>
+    <link>[%= .server %][%= .self %]/poard/thread/[%= thread.get_id %]#ms_[%= id %]</link>
+</item>
+[%/loop .data.poard.messages %]
+
+</channel>
+</rss>

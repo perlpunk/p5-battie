@@ -1,0 +1,19 @@
+[%loop level_down %]</ul>[%/loop level_down %]
+[%if is_last %]
+<li class="message_tree_last">
+[%else %]
+<li class="message_tree">
+[%/if is_last %]
+[%if is_selectable %]
+<input id="msg_[%= id %]" type="radio" name="msg" value="[%= id %]">
+[%/if is_selectable %]
+<label for="msg_[%= id %]">msg #[%= id %]</label>
+[%unless is_leaf %]
+[%if is_last %]
+<ul class="message_tree_last">
+[%else %]
+<ul class="message_tree">
+[%/if is_last %]
+[%else is_leaf %]
+</li>
+[%/unless is_leaf %]

@@ -1,0 +1,70 @@
+[%loop .data.poard.thread.messages %]
+[%comment %]
+[%if leaf_posting %]</li>[%else leaf_posting %]<ul>[%/if leaf_posting %]
+[%/comment %]
+[%loop level_down %]</ul></li>[%/loop level_down %]
+[%unless leaf_posting %]
+<li id="tree_[%= id escape=0 %]" class="tree_info_hidden">
+<div class="posting_headline posting_headline_[%= age_level escape=0 %]">
+<a href="#" onclick="hide_subtree([%= id escape=0 %]); return false">
+<img style="vertical-align: middle; margin-left: 18px;"
+ src="[%= .data.userprefs.theme %]/icons/arrow-branch.png" border="0" alt="close" title="collapse"></a> 
++[%= children_count_incl %] replies</div></li>
+[%/unless leaf_posting %]
+<li class="message_tree [%if is_last %]message_tree_last[%/if is_last %] tree_user_[%= author_id escape=0 %]" id="li_[%= id escape=0 %]">
+<div class="posting posting_user_[%= author_id escape=0 %] [%if get_is_new %]unread_msg[%else %]read_msg[%/if %]">
+<div class="posting_headline posting_headline_[%if is_deleted %]del[%else %][%= age_level escape=0 %][%/if %]">
+    <div class="collapse">
+    <a href="#" onclick="hide_message_static([%= id escape=0 %]); return false">
+    <img id="collapse_[%= id escape=0 %]" src="[%= .data.userprefs.theme %]/remove.png" border="0" alt="close" title="collapse" style="vertical-align: middle;"></a>
+    [%unless leaf_posting %]
+    <a href="#" onclick="hide_subtree([%= id escape=0 %]); return false">
+    <img id="collapse_tree_1_[%= id escape=0 %]" style="vertical-align: middle;"
+     src="[%= .data.userprefs.theme %]/icons/arrow-merge-090.png" border="0" alt="close" title="collapse"></a>
+    [%/unless leaf_posting %]
+    </div>
+
+[%if expr="is_approved or .can.poard.approve_message" %]
+
+[%include poard/message_titlebar.html %]
+[%unless __first__ %][%if_defined title %]
+<div class="subtrees">
+<a href="[%= $SELF escape=0 %]/poard/thread/[%= thread_id escape=0 %]/[%= id escape=0 %]" >
+<img style="vertical-align: middle; "
+ src="[%= .data.userprefs.theme %]/icons/arrow-branch.png" border="0" alt="close" title="collapse">
+Subtree with [%= children_count_incl %] replies: [%= title %]</a>
+</div>
+[%/if_defined title %][%/unless __first__ %]
+</div>
+
+
+<div id="div_msg_[%= id escape=0 %]">
+[%include poard/message_main.html %]
+</div>
+</div>
+
+[%else %]
+<div >
+[%if is_deleted %]
+<span class="hint">[%translate id=poard_msg_deleted %]</span>
+[%else %]
+<span class="hint">[%translate id=poard_msg_not_approved_yet %]</span>   
+[%/if %]
+test
+<a name="ms_[%= id escape=0 %]">&nbsp;</a>[%= expr="ctime_epoch || ctime" escape=TIME_HTML %]
+</div>
+
+[%/if is_approved %]
+
+
+<!-- posting --></div>
+[%unless leaf_posting %]
+[%if is_last %]<ul class="message_tree message_tree_last" id="ul_[%= id escape=0 %]"
+[%else %]<ul class="message_tree" id="ul_[%= id escape=0 %]"
+[%/if is_last %]
+>
+[%else leaf_posting %]
+</li>
+[%/unless leaf_posting %]
+[%/loop %]
+

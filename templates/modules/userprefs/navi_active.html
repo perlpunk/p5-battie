@@ -1,0 +1,11 @@
+<ul>
+[%if .can.userprefs.set_email %]<li><a href="[%= .self %]/userprefs/set_email">Email</a></li>[%/if %]
+[%if .can.userprefs.set_password %]<li><a href="[%= .self %]/userprefs/set_password">Password</a></li>[%/if %]
+[%if .can.userprefs.profile %]<li><a href="[%= .self %]/userprefs/profile">Profile</a></li>[%/if %]
+[%if .can.userprefs.avatar %]<li><a href="[%= .self %]/userprefs/avatar">Avatar</a></li>[%/if %]
+[%if .can.userprefs.set_theme %]<li><a href="[%= .self %]/userprefs/set_theme">Theme</a></li>[%/if %]
+[%if .can.userprefs.set_lang %]<li><a href="[%= .self %]/userprefs/set_lang">Language</a></li>[%/if %]
+[%if .can.userprefs.timezone %]<li><a href="[%= .self %]/userprefs/timezone">Timezone</a></li>[%/if %]
+[%if .can.userprefs.personal_nodelet %]<li><a href="[%= .self %]/userprefs/personal_nodelet">My Nodelet</a></li>[%/if %]
+</ul>
+

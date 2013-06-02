@@ -1,0 +1,51 @@
+<script src="[%= .docurl %]/js/chatterbox.js" type="text/javascript" ></script>
+
+[%if .can.activeusers.show_active_nicks %]
+<a href="[%= .self %]/activeusers/start"><img src="[%= .data.userprefs.theme %]/people.png" border="0" alt=""> [%= .data.activeusers.message_online %]</a><br style="clear: both;" >
+<small>[%= .data.activeusers.count %]
+[%translate id="global_user" count=".data.activeusers.count" %][%if .data.activeusers.anonymous_count %],
+[%= .data.activeusers.anonymous_count %] hidden[%/if %][%if .data.activeusers.guest_count %], [%= .data.activeusers.guest_count %]
+[%translate id="global_guest" count=".data.activeusers.guest_count" %][%/if %]<br>
+[%loop .data.activeusers.list %]
+<a href="[%= .self %]/member/profile/[%= id %]">[%= get_nick %]</a><br>
+[%/loop .data.activeusers.list %]
+
+</small>
+[%elsif .can.activeusers.show_active %]
+<img src="[%= .data.userprefs.theme %]/people.png" border="0" alt=""> [%= .data.activeusers.message_online %]<br>
+[%= .data.activeusers.total_count %] [%translate id="global_user" count=".data.activeusers.count" %] online<br>
+[%if .data.activeusers.guest_count %][%= .data.activeusers.guest_count %]
+[%translate id="global_guest" count=".data.activeusers.guest_count" %][%/if %]
+[%/if .can.activeusers.show_active %]
+
+[%if .can.activeusers.chat %]
+<hr>
+<script type="text/javascript"><!--
+document.write('<span id="wait_div"><'+'/span>');
+--></script>
+<a href="[%= .self %]/activeusers/chatterbox" target="_blank"
+title="Open extra window for chatterbox"
+onclick="window.open('[%= .self %]/activeusers/chatterbox','chatterbox','height=400,width=500');return false"><img src="[%= .data.userprefs.theme %]/icons/magnifier-zoom.png" alt="Open extra window for chatterbox"></a>
+<form action="[%= .self %]/activeusers/chat" method="POST"
+onsubmit="chatmsg2(this,false);return false"
+>
+<input type="text" size="15" name="chat.msg" id="chat.msg">
+<input src="[%= .data.userprefs.theme %]/icons/balloon.png" type="image" name="submit.send" value="1" title="[%translate id=activeusers_action_chat %]/Refresh" alt="[%translate id=activeusers_action_chat %]/Refresh" class="image">
+<input type="hidden" name="login.from" value="[%= .data.login.from %]">
+[%= .user.token.hidden escape=0 %]
+</form>
+[%/if .can.activeusers.chat %]
+<div id="result_chat" >
+</div>
+
+<div id="chatterbox" class="chatterbox_div">
+[%if .data.chat.msgs# %]
+[%include activeusers/chatterbox_messages.html %]
+
+<span id="end"></span>
+[%/if .data.chat.msgs# %]
+</div>
+<script type="text/javascript">
+var end = document.getElementById('end');
+//end.scrollIntoView(true);
+</script>

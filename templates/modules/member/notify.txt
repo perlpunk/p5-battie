@@ -1,0 +1,6 @@
+Hi,
+you got [%= .data.member.msgs# %] message(s):
+[%loop .data.member.msgs %]
+Message [%= __counter__ %] from [%= sender_user.nick %]
+[%= .server %][%= .self %]/member/view_pm/[%= id %]
+[%/loop .data.member.msgs %]

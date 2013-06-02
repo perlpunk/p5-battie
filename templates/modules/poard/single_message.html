@@ -1,0 +1,21 @@
+<div class="posting posting_user_[%= author_id %] [%if get_is_new %]unread_msg[%else %]read_msg[%/if %]">
+<div class="posting_headline posting_headline_[%if is_deleted %]del[%else %][%= age_level %][%/if %]">
+[%if expr="is_approved or .can.poard.approve_message" %]
+[%include poard/message_titlebar.html %]
+</div>
+[%include poard/message_main.html %]
+</div>
+
+[%else %]
+<div >
+[%if is_deleted %]
+<span class="hint">[%translate id=poard_msg_deleted %]</span>
+[%else %]
+<span class="hint">[%translate id=poard_msg_not_approved_yet %]</span>   
+[%/if %]
+<a name="ms_[%= id %]">&nbsp;</a>[%= expr="ctime_epoch || ctime" escape=TIME_HTML %]
+</div>
+
+[%/if is_approved %]
+
+</div>

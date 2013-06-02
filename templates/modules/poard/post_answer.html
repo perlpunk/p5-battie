@@ -1,0 +1,146 @@
+[%if .data.poard.confirmation %]
+Your message has been created, but it might not be visible immediately. You
+have to wait until a janitor or moderator approves it.<br>
+This happens if you are a guest poster or if this is one of your first posts.<br>
+<a href="[%= .self %]/poard/thread/[%= .data.poard.thread_id %][%if .data.poard.subtree %]/[%= .data.poard.subtree %][%/if %]#ms_[%= .data.poard.msg_id %]">Your message</a>
+
+[%else %]
+Post answer in thread <a href="[%= .self %]/poard/thread/[%= .data.poard.thread.get_id %]">[%= .data.poard.thread.get_title %]</a>
+[%if .data.poard.post_hint %]
+<br><span class="hint"><b>[%translate id=poard_post_hint %]</b></span>
+[%/if %]
+<script type="text/javascript">
+var poard_autosave_article = 'poard_autosave_articles5';
+if (sessionStorage) {
+    var autosave_articles = sessionStorage.getItem(poard_autosave_article);
+    if (! autosave_articles) {
+        autosave_articles = new Object;
+        var string = JSON.stringify(autosave_articles);
+        sessionStorage.setItem(poard_autosave_article, string);
+    }
+}
+</script>
+[%if .data.poard.thread.closed %]
+<br>
+<br>
+<strong class="error">Note: Thread is closed!</strong>
+[%/if .data.poard.thread.closed %]
+[%if .data.poard.hint.new_answers %]
+<strong class="error">([%translate id=poard_hint_new_answers %])</strong>
+[%/if .data.poard.hint.new_answers %]
+<p>
+[%if .data.poard.error.post_delay %]
+<span class="error">You have to wait a few seconds until posting again; please try again later.</span>
+<br>
+[%elsif .data.poard.error.name_required %]
+<span class="error">You are posting as an anonymous user, so a name is required.</span>
+<br>
+[%elsif .data.poard.error.message_in_different_thread %]
+<span class="error">The message you are replying to moved to a new
+<a href="[%= .self %]/poard/thread/[%= .data.poard.error.message_in_different_thread %]">thread.</a></span>
+<br>
+[%elsif .data.poard.error.token %]
+[%include name="token_expired.html" %]
+[%elsif .data.poard.error.spam %]
+<span class="error">Posting not accepted</span>
+[%elsif .data.poard.error.attachment %]
+<span class="error">Attachment error:
+[%loop .data.poard.error.attachment join=", " %]
+[%switch _ %]
+[%case max_size %]Attachment too big
+[%case max_totalsize %]Attachment total size too high
+[%case mimetype %]Unsupported mime type
+[%case max %]Maximum number of uploads
+[%case dup_filename %]Duplicate filename
+[%/switch %]
+[%/loop .data.poard.error.attachment %]
+</span>
+[%/if %]
+[%with .data.poard.error.message %]
+<span class="error">
+[%if too_long %]Message too long<br>[%/if %]
+[%if too_long2 %]Message very long, please use <tt>[more]</tt> tags.<br>[%/if %]
+[%if bbcode %]BBCode auto-corrected<br>[%/if %]
+[%if url %]URLs auto-corrected<br>[%/if %]
+</span>
+<hr>
+[%/with .data.poard.error.message %]
+<table><tr><td class="posting_content">
+[%= .data.poard.message.rendered escape=0%]
+</td></tr></table>
+<form id="post_answer_form" action="[%= .self %]/poard/post_answer/[%= .data.poard.thread.id %]/[%= .data.poard.msid %]" method="POST" enctype="multipart/form-data"
+onSubmit="autosave_article([%= .data.poard.thread.id %], [%= .data.poard.msid %]);javascript:window.setTimeout(function(){document.getElementById('submitbutton').disabled=true;}, 10);return true">
+[%if .can.poard.post_answer_authorized %]
+<input type="hidden" name="antispam_ok" value="1">
+[%else %]
+[%switch .data.poard.antispam %]
+[%case AKISMET %]
+<input type="checkbox" name="antispam_ok" value="1">
+[%translate id=global_antispam_info_akismet %]
+[%/switch .data.poard.antispam %]
+[%/if .can.poard.post_answer_authorized %]
+<input type="hidden" name="form" value="1">
+<table>
+<tr><td valign="top">
+<br>
+[%unless .user.logged_in %]
+Your name: <input type="text" name="message.author_name" tabindex="1" value="[%= .data.poard.message.author_name %]">
+<br>
+[%/unless %]
+[%if_defined .data.poard.new_title %]
+New title for subthread:
+<input type="text" tabindex="6" name="message.title" size="50" maxlength="128" value="[%= .data.poard.new_title %]"><br><br>
+[%/if_defined .data.poard.new_title %]
+[%translate id="global_article" %]:
+<span class="hint"><a href="[%= .self %]/poard/markup_help/"><i>[%translate id=poard_markup_help %]</i></a></span>
+<script type="text/javascript"><!--
+write_markup_help('help_result', 'markup_teaser');
+--></script>
+<br><br>
+<div id="autofill_hint" class="hint"></div>
+<textarea tabindex="2" name="message.message"
+cols="[%= .data.settings.poard.edit.textarea.cols %]"
+rows="[%= .data.settings.poard.edit.textarea.rows %]"
+>[%= .data.poard.message.message %]</textarea>
+[%if .can.poard.settings %]<small><a href="[%= .self %]/poard/settings/edit#textarea">[%translate id=global_settings %]</a></small>[%/if %]
+<br>
+<input type="submit" tabindex="3" name="submit.preview" value="[%translate id="global_action_preview" %]" class="button">
+<input type="submit" tabindex="4" name="submit.post" accesskey="s" value="[%translate id="global_action_submit" %]" class="button submit" id="submitbutton" >
+<input type="submit" tabindex="5" name="submit.preview_quote" value="[%translate id="poard_insert_quote" %]" class="button" style="margin-left: 5em;">
+<br><br><span title="Try to correct wrong bbcode/forgotten closing tags"><input id="correct_bbcode" type="checkbox" name="correct_bbcode" value="1" [%if .data.poard.correct_bbcode %]checked="checked"[%/if %]> <label for="correct_bbcode"><span title="[%translate id=poard_hint_correct_bbcode_explain %]">[%translate id=poard_hint_correct_bbcode %]</span></label></span>
+<br><span title="Replace internal urls to board with the corresponding bbcode tags"><input id="correct_urls" type="checkbox" name="correct_urls" value="1" [%if .data.poard.correct_urls %]checked="checked"[%/if %]> <label for="correct_urls"><span title="[%translate id=poard_hint_correct_urls_explain %]">[%translate id=poard_hint_correct_urls %]</span></label></span>
+<!--
+[%if .data.poard.thread.is_tree %]
+<input type="submit" tabindex="5" name="submit.preview_new_title" value="New title" class="button">
+[%/if .data.poard.thread.is_tree %]
+-->
+<br><br>
+<input type="hidden" name="lft" value="[%= .data.poard.last_lft %]">
+<input type="hidden" name="rgt" value="[%= .data.poard.last_rgt %]">
+</td>
+<td valign="top"><div id="help_result" style="max-height: 400px;"><div id="markup_teaser"></div></div></td></tr>
+</table>
+[%= .user.token.hidden escape=0 %]
+<span class="hint"><a href="[%= .self %]/poard/markup_help/"><i>[%translate id=poard_markup_help %]</i></a></span>
+<script type="text/javascript"><!--
+write_markup_help('help_result_bottom', 'markup_teaser_bottom');
+--></script>
+<div id="help_result_bottom" style="max-height: 400px;"><div id="markup_teaser_bottom"></div></div>
+
+
+<hr>
+<h3><a name="attach">[%translate id=poard_attachment count=0 %]</a></h3><br>
+[%if .can.poard.message_attach %][%include poard/edit_attach.html %]
+[%else %]No Attachments allowed[%/if %]
+<script type="text/javascript">
+fill_saved_article([%= .data.poard.thread.id %], [%= .data.poard.msid %]);
+</script>
+</form>
+
+[%loop .data.poard.previous %]
+[%include name="poard/single_message_minimal.html" %]
+[%/loop .data.poard.previous %]
+</table>
+
+[%/if .data.poard.confirmation %]
+

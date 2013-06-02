@@ -1,0 +1,38 @@
+[%if .can.poard.mod_view_message_log %]<a class="action" href="[%= $SELF escape=0 %]/poard/mod_view_message_log/[%= id escape=0 %]">View Log</a>[%/if %]
+
+[%if is_approved %]
+<span id="status_[%= id escape=0 %]">[%if approved_by %]
+<span class="cell_okay"><i><small>[%translate id="poard_approved_by" %]: [%= approved_by.nick %]</small></i></span>
+[%/if approved_by %]</span>
+
+
+[%else is_approved %]
+
+[%if is_deleted %]
+[%if .can.poard.mod_undelete_message %]
+<form action="[%= $SELF escape=0 %]/poard/mod_undelete_message/[%= id escape=0 %]" method="POST" style="display: inline;">
+<input type="submit" name="submit.undelete" value="Undelete" class="button">
+[%= .user.token.hidden escape=0 %]
+</form>
+[%else %]
+Message is deleted
+[%/if .can.poard.mod_undelete_message %]
+
+[%else is_deleted %]
+<span id="status_[%= id escape=0 %]"><span class="error_cell"></span></span>
+<form action="[%= $SELF escape=0 %]/poard/approve_message/[%= id escape=0 %]" method="POST" style="display: inline;"
+onSubmit="javascript:approve_message([%= get_id escape=0 %],['status_[%= id escape=0 %]']);return false">
+[%= .user.token.hidden escape=0 %]
+<input type="submit" name="submit.approve" value="[%translate id="poard_approve" %]" class="button">
+</form>
+
+[%/if is_deleted %]
+
+[%/if is_approved %]
+
+[%if get_position %]
+[%if .can.poard.mod_split_thread %]<a class="action" href="[%= $SELF escape=0 %]/poard/mod_split_thread/[%= thread_id escape=0 %]/[%= id escape=0 %]" >Split Thread</a>[%/if %]
+[%if .can.poard.mod_reparent %]<a class="action" href="[%= $SELF escape=0 %]/poard/mod_reparent/[%= thread_id escape=0 %]/[%= id escape=0 %]" >Reparent</a>[%/if %]
+[%/if get_position %]
+[%if .can.poard.mod_delete_message %][%include name="poard/delete_form.html" %][%/if %]
+

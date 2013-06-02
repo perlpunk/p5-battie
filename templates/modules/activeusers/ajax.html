@@ -1,0 +1,17 @@
+[%switch .action %]
+
+[%case chat %]
+[%if .data.chat.ok %]
+ok
+__pjx__
+[%include activeusers/chatterbox_messages.html %]
+<span id="end"></span>
+__pjx__
+[%= .data.chat.reload %]:[%= .data.chat.reload_count %]
+[%else %]
+[%/if .data.chat.ok %]
+
+
+
+
+[%/switch .action %]

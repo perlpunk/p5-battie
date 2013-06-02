@@ -1,0 +1,57 @@
+[%switch .action %]
+
+[%case message %]
+
+[%if .data.exception %]
+
+<div class="error">
+    <b>Error:</b><p>
+    [%= .data.exception.class %]-Exception:
+    [%= .data.exception.text %]
+</div>
+
+[%/if %]
+
+[%case token %]
+
+Your token expired. Usually that means that you had a form open for a long time and tried
+to submit it. For security reasons there is a token sent with every form that expires
+after several hours. You just have to click on 'Confirm' to submit:
+
+<form action="[%= .self %]/[%= .data.error.action %]" method="post">
+[%loop .data.error.params %]
+<input type="hidden" name="[%= _[0] %]" value="[%= _[1] %]" />
+[%/loop .data.error.params %]
+
+    <input type="submit" class="button" name="__submit" value="Confirm">
+[%= .user.token.hidden escape=0 %]
+</form>
+
+[%case cookie %]
+
+You seem to have deactivated cookies. Please activate and try again.
+<form action="[%= .self %]/[%= .data.error.action %]" method="post">
+[%loop .data.error.params %]
+<input type="hidden" name="[%= _[0] %]" value="[%= _[1] %]" />
+[%/loop .data.error.params %]
+
+    <input type="submit" class="button" name="__submit" value="Confirm">
+[%= .user.token.hidden escape=0 %]
+</form>
+
+
+[%case notfound %]
+
+The page you requested was not found: [%= .data.exception.text %]
+
+[%if .data.exception.suggestions# %]
+<br>
+You might want to go to the following page:
+<ul>
+[%loop .data.exception.suggestions %]
+<li><a href="[%= .self %][%= url %]">[%= .self %][%= url %]</a> - [%= desc %]</li>
+[%/loop .data.exception.suggestions %]
+</ul>
+[%/if .data.exception.suggestions# %]
+
+[%/switch .action %]

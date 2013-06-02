@@ -1,0 +1,19 @@
+[%set_var mysurvey value=.data.poard.survey %]
+Thread <a href="[%= .self %]/poard/thread/[%= $mysurvey.thread_id %]">[%= $mysurvey.thread.title %]</a>
+<form action="[%= .self %]/poard/edit_survey/[%= $mysurvey.id %]" method="POST">
+
+Question: [%= $mysurvey.question %]
+<br>
+<table class="overview">
+[%loop $mysurvey.options %]
+<tr>
+    <td class="dark">[%= position %].</td>
+    <td >[%= answer %]</td>
+</tr>
+[%/loop $mysurvey.options %]
+</table>
+New option: <input type="text" size="30" name="answer" value="" /><br>
+
+[%= .user.token.hidden escape=0 %]
+<input type="submit" name="submit.add" value="Add" class="button">
+</form>

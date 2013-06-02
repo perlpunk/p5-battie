@@ -1,0 +1,44 @@
+[%if is_approved %]
+<td valign="top" class="dark">
+[%if is_survey %]<img src="[%= .data.userprefs.theme %]/chart.png" alt="[Survey]" title="Survey">[%/if is_survey %]
+[%if subscribed %]<img src="[%= .data.userprefs.theme %]/icons/asterisk.png" alt="[subscribed]" title="subscribed">[%/if subscribed %]
+[%if solved %]<img src="[%= .data.userprefs.theme %]/icons/tick.png" alt="[[%translate id=poard_solved %]]" title="[%translate id=poard_solved %]">[%/if solved %]
+[%if fixed %]<img src="[%= .data.userprefs.theme %]/pin.gif" alt="[fixed]" title="fixed">[%/if fixed %]
+[%if closed %]<img src="[%= .data.userprefs.theme %]/closed.gif" alt="[closed]" title="closed">[%/if closed %]
+<a [%unless is_read %]class="unread"[%/unless %] href="[%= $SELF escape=0 %]/poard/thread/[%= id escape=0 %][%if last_read %]?read=[%= last_read %][%/if %]">[%= title %]</a>
+[%if subtrees %]
+<br>
+<small>
+[%set_var mythread value=_ %]
+[%loop subtrees join=", " %]
+<a [%unless read %]class="unread"[%/unless %] href="[%= $SELF escape=0 %]/poard/thread/[%= $mythread.id escape=0 %]/[%= id %]">[%= title %] ([%= children %])</a>[%/loop subtrees %]
+</small>
+[%/if subtrees %]
+</td>
+
+<td valign="top" class="light">[%if author %]<a href="[%= $SELF escape=0 %]/member/profile/[%= author.id escape=0 %]">[%= author.nick %]</a>[%else %]<i>guest [%= author_name %]</i>[%/if author %]
+<br><small>[%= expr="ctime || ctime_epoch" escape=TIME_HTML %]</small></td>
+<td valign="top" class="dark"><br><small>[%if expr="mtime_epoch || mtime" %][%= expr="mtime_epoch || mtime" escape=TIME_HTML %][%/if %]</small></td>
+
+[%else %]
+    [%if .can.poard.approve_message %]
+    <td valign="top" class="dark">[Not approved]
+	<a [%unless is_read %]class="unread"[%/unless %] href="[%= $SELF escape=0 %]/poard/thread/[%= id escape=0 %]">[%= title %]</a>
+    </td>
+	<td valign="top" class="light">[%if author %]<a href="[%= $SELF escape=0 %]/member/profile/[%= author.id escape=0 %]">[%= author.nick %]</a>[%else %]<i>guest [%= author_name %]</i>[%/if author %]
+    <br><small>[%= expr="ctime_epoch || ctime" escape=TIME_HTML %]</small></td>
+    <td valign="top" class="dark"><small>[%= expr="mtime || mtime_epoch" escape=TIME_HTML %]</small></td>
+
+    [%else %]
+    <td valign="top" colspan="2" class="dark">[Not approved yet]
+    <br><small>[%= expr="ctime || ctime_epoch" escape=TIME_HTML %]</small></td>
+    <td valign="top" class="light"><small>[%= expr="mtime || mtime_epoch" escape=TIME_HTML %]</small></td>
+    [%/if .can.poard.approve_message %]
+[%/if is_approved %]
+
+<td valign="top" class="light">[%with last %]
+[%if author %]<a href="[%= $SELF escape=0 %]/member/profile/[%= author.id escape=0 %]">[%= author.nick %]</a>[%else %]<i>guest [%= author_name %]</i>[%/if author %]
+<br><small>[%= expr="ctime || ctime_epoch" escape=TIME_HTML %]</small>
+[%/with last %]</td>
+<td valign="top" class="dark">[%= messagecount escape=0 %]
+<br>([%= readers escape=0 %])</td>

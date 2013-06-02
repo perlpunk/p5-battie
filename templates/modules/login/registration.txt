@@ -1,0 +1,6 @@
+Hi [%= .register.nick %]!
+
+[%translate id=login_goto_url %]:
+[%= .server %][%= .self %]/login/confirm/[%= .register.uid %]/[%= .register.token %]/[%= .register.new_user_id %]
+[%translate id=login_to_finish_registration %]
+

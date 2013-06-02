@@ -1,0 +1,8 @@
+<li>
+[%if .user.logged_in %]
+    <a href="[%= .self %]/login/info">[%translate id=global_user %]: [%= .user.name %]</a>
+    <a href="[%= .self %]/login/logout"><img style="vertical-align: bottom;" src="[%= .data.userprefs.theme %]/icons/door-open-out.png" alt=""> [%translate id="global_action_logout" %]</a>
+[%else %]
+<a href="[%= .self %]/login/show?login.from=[%= .data.login.from %]">Login</a>
+[%/if %]
+</li>

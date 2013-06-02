@@ -1,0 +1,19 @@
+[%switch .layout %]
+[%case mini %]
+[%case default %]
+<div class="author_info">[%with author %]<small>
+User since<br>[%= ctime_epoch escape=TIME_YMD %]<br>
+[%= get_settings.messagecount %]
+[%translate id="poard_articles" count="get_settings.messagecount" %]<br>
+[%if group_id %]<i>[%= groupname %]</i><br>[%/if %]
+
+[%with profile %]
+[%if homepage %]<a href="[%= .redir %]?[%= homepage escape=URL %]"><img src="[%= .data.userprefs.theme %]/homepage.gif" alt="[Homepage]"></a>[%/if homepage %]
+
+[%if .data.settings.poard.articles.avatar %][%if avatar %]
+<br><img src="[%= .data.userprefs.avatar_url %]/[%= user_id escape=0 %]_[%= avatar %]" alt="user image" >
+[%else %]<img src="[%= .data.userprefs.theme %]/default_avatar.gif" alt="[default_avatar]">
+[%/if avatar %][%/if %]
+[%/with profile %]
+</small>[%/with author %]</div>
+[%/switch .layout %]

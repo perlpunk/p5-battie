@@ -1,0 +1,36 @@
+[%set_var SELF value=".self" %]
+[%with .data.poard.message %]
+Thread [[%= thread.title %]]([%= .server %][%= $SELF escape=0 %]/poard/thread/[%= thread.id %]#ms_[%= id %])
+======================================================
+([%= thread.messagecount %] messages)
+Opened by [%if thread.first.author %]
+"[%= thread.first.author.nick %]":[%= .server %][%= $SELF escape=0 %]/member/[%= thread.first.author.id %]
+[%else %]
+[%= thread.first.author_name %]
+[%/if %]
+at [%= thread.ctime %]
+
+Author:
+[%if author %]
+[%if .can.member.profile %]
+[[%= author.nick %]]([%= .server %][%= $SELF escape=0 %]/member/profile/[%= author.id %])
+User since [%= author.ctime %]
+[%= author.get_settings.messagecount %] [%translate id="poard_articles" count="author.get_settings.messagecount" %]
+[%else %]
+[%= author.nick %]
+[%/if %]
+[%else %]__[%= author_name %]__
+[%/if %]
+
+[%= ctime %]
+
+[%if is_approved %]
+
+---
+[%= rendered escape=0 %]
+---
+[%if mtime %]Last edited: [%= mtime %][%/if mtime %]
+---
+
+[%/if is_approved %]
+[%/with .data.poard %]

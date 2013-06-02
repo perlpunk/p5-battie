@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
+		<channel>
+				<title>[%= .data.latest_news_rss.title %]</title>
+				<description>
+						perl
+				</description>
+				<link>[%= .server %]/</link>
+				<language>de-de</language>
+				<dc:creator>just another perl punk,</dc:creator>
+				[%loop .data.latest_news_rss.list %]
+				<item>
+                        <dc:creator>[%= posted_by_user.nick %]</dc:creator>
+						<title>[%= title %]</title>
+                        <dc:date>[%= ctime %]+00:00</dc:date>
+						<description>[%= abstract %]</description>
+                        <guid isPermaLink="false">[%= .server %][%= .self %]/blog/theme/[%= id %]</guid>
+						<link>[%= .server %][%= .self %]/blog/theme/[%= id %]</link>
+				</item>
+				[%/loop .data.latest_news_rss.list %]
+		</channel>
+</rss>

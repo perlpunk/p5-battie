@@ -1,0 +1,19 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use Carp qw(carp croak);
+
+use HTML::Template::Compiled;
+use WWW::Battie;
+
+# preload templates to share memory
+my $c = '/path_to_your_cache_dir';
+my $preloaded = HTML::Template::Compiled->preload( $c );
+print STDERR "Preloaded $preloaded HTC templates\n";
+
+# preload ini to save startup time for apache children
+my $inifile = '/path/to/your/battie.ini';
+my $ini = WWW::Battie::Config::Ini->create($inifile);
+$ini->load_all_classes;
+
+1;
