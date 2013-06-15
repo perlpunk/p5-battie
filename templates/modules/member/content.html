@@ -526,7 +526,7 @@ Box [%= .data.member.box.name %]<p />
 [%loop .data.member.box.messages %]
 <tr>
 <td>[%= sender.nick %]</td>
-<td><a [%unless has_read %]class="unread"[%/unless %] href="[%= .self %]/member/view_pm/[%= id %]">[%= subject %]</a></td>
+<td><a [%unless has_read %]class="unread"[%/unless %] href="[%= .self %]/member/view_pm/[%= id %]">[%if subject %][%= subject %][%else %][no subject][%/if %]</a></td>
 <td>[%= ctime escape=TIME_HTML_SHORT %]</td>
 <td><input type="checkbox" name="pm.id" value="[%= id %]" />
 </tr>
