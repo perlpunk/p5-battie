@@ -94,9 +94,11 @@ sub handler {
     @$actionlogs{qw/ PSIZE_BEFORE PSHARED_BEFORE /} = ($size, $shared);
     $battie->timer_start("start");
     $battie->run;
-    {
-        my ($out, $mode) = $battie->output;
-        #binmode STDOUT, ":encoding(utf-8)";
+    $actionlogs->{IP} = $ENV{REMOTE_ADDR};
+    $actionlogs->{PID} = $$;
+    my ($out, $mode) = $battie->output;
+    my $elapsed = tv_interval ( $start_time );
+
         binmode STDOUT, $mode;
         eval {
             print $out if defined $out;
@@ -105,20 +107,17 @@ sub handler {
             # e.g. "Software caused connection abort"
             warn "ERROR in print: $@";
         }
-    }
+
     $battie->timer_step("after output");
     $battie->set_session(undef);
     ($size, $shared) = $Apache2::SizeLimit::HOW_BIG_IS_IT->();
     @$actionlogs{qw/ PSIZE PSHARED /} = ($size, $shared);
-    $actionlogs->{IP} = $ENV{REMOTE_ADDR};
     my $time = time;
     my $ts = localtime($time);
     $actionlogs->{TS} = $ts;
     $actionlogs->{EPOCH} = $time;
-	my $log_fh = create_logfh($battie, $inifile, \%log_filehandles);
-    my $elapsed = tv_interval ( $start_time );
+    my $log_fh = create_logfh($battie, $inifile, \%log_filehandles);
     $actionlogs->{TIME} = sprintf "%0.2f", $elapsed * 1000;
-    $actionlogs->{PID} = $$;
     $battie->clear;
     print $log_fh $battie->print_action_log($actionlogs) . $/;
 
