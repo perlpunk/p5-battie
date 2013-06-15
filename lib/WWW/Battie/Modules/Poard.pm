@@ -4276,7 +4276,8 @@ sub message_to_cache {
     $battie->$method("poard/msginthread/$msg_id", $entry, time + CACHE_MSG_TIME);
     my $msg_codes;
     my $syntax_h = 0;
-    if (my $code_count = $tag_info->{code}) {
+    my $code_count = $tag_info->{code} || 0;
+    if ($code_count) {
         my @codes = [];
         my $bbcode = $message->message;
         my $tree =  $battie->get_render->parse_message($bbcode);
@@ -4305,7 +4306,7 @@ sub message_to_cache {
     }
     my $e = tv_interval($start)*1000;
     my $l = sprintf "%.03f", length($message->message) / 1024;
-    warn __PACKAGE__.':'.__LINE__.": cache message $msg_id ($l kb, $syntax_h syntax highlights) took $e ms\n";
+    warn __PACKAGE__.':'.__LINE__.": cache message $msg_id ($l kb, $code_count codes, $syntax_h highlights) took $e ms\n";
     return wantarray ? ($msg_ro, $entry) : $msg_ro;
 }
 
