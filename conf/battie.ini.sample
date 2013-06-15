@@ -33,6 +33,8 @@ TEMPLATES=templates/user;templates/global;templates/modules
 # for caching templates
 # relative to BATTIE_SERVER_ROOT or absolute
 TEMPLATE_CACHE=htc_cache
+# for development set to something like 1 second
+TEMPLATE_EXPIRE=3600
 
 # upload status data, needs to be in document_root
 UPLOAD_INFO=/public_html/battie_uploads

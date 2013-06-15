@@ -30,6 +30,7 @@ sub create {
     my $server = $cfg->val(PATHS => 'SERVER');
     my $uploads = $cfg->val(PATHS => 'UPLOAD_INFO');
     my $tcache = $cfg->val(PATHS => 'TEMPLATE_CACHE');
+    my $texpire = $cfg->val(PATHS => 'TEMPLATE_EXPIRE') || 60 * 60;
     #my $bbcode = $cfg->val(PATHS => 'BBCODE_IMAGES_DIR');
     my $bbcode_url = $cfg->val(PATHS => 'BBCODE_IMAGES_URL');
     my $docroot = $cfg->val(PATHS => 'BATTIE_DOCUMENT_ROOT');
@@ -194,6 +195,7 @@ sub create {
             enable_https    => $enable_https,
             timezone        => $timezone,
             keywords        => $keywords,
+            template_expire => $texpire,
         },
         paths => {
             view => $view,
