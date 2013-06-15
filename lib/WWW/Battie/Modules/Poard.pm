@@ -3082,6 +3082,9 @@ sub poard__edit_message {
                 bbcode => $correct_bbcode,
             });
         my $error = $result->{error};
+        if (@$error and $ismod) {
+            @$error = grep { $_ ne "too_long" } @$error;
+        }
         if (@$error) {
             $text = $result->{text};
             for my $e (@$error) {
@@ -3186,7 +3189,7 @@ sub _check_message {
     $text =~ s/^\s*(.*?)\s*\z/$1/s;
     $result{text} = $text;
     my $l = length $text;
-    if ($l > 20_000) {
+    if ($l > 30_000) {
         push @{ $result{error} }, 'too_long';
     }
     else {
