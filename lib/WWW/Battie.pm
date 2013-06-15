@@ -700,18 +700,6 @@ sub create_htc {
 #    $self->init_timezone('default');
     my $plug = $self->translation;
     my $tz_plug = $self->timezone_plugin;
-#    unless ($plug) {
-#        my $trans = [];
-#        $plug = HTML::Template::Compiled::Plugin::Translate->new({
-#        });
-#        $self->set_translation($plug);
-#        eval {
-#            $trans = $self->module_call(system => 'fetch_translations', $self->language);
-#        };
-#        $plug->set_map(
-#            {map { ($_->id, $_->translation)  } @$trans}
-#        );
-#    }
     my %default = (
         cache => 1,
         debug => 0,
@@ -723,7 +711,7 @@ sub create_htc {
         search_path_on_include => 1,
         loop_context_vars => 1,
         default_escape => 'HTML',
-        expire_time => $EXPIRE_TIME,
+        expire_time => $self->get_conf->{template_expire},
         $self->get_conf->{debug}
             ? (debug_file => 'start,end,short')
             : (),
