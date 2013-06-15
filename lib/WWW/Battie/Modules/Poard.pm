@@ -2959,6 +2959,7 @@ sub poard__edit_message {
     if (($message->author_id || 0) != $battie->get_session->userid) {
         $modedit = 1;
     }
+    my $dont_update_mtime = $request->param('dont_update_mtime');
 
     $self->check_visibility($battie, $thread);
     my $from_form = $request->param('form');
@@ -3130,13 +3131,15 @@ sub poard__edit_message {
                             });
 
                         $self->update_subtrees($battie, $thread);
-                        $thread->mtime(DateTime->now);
-                        $thread->update;
+                        unless ($dont_update_mtime) {
+                            $thread->mtime(DateTime->now);
+                            $thread->update;
+                            $thread->discard_changes;
+                        }
 
                         $self->message_to_cache($battie, $message, 'set');
 
                         $battie->writelog($message);
-                        $thread->discard_changes;
                         $self->delete_thread_cache($battie, $thread);
                         $self->reset_thread_cache($battie, $thread);
                         if ($thread->is_tree) {

@@ -84,4 +84,8 @@ write_markup_help('help_result_bottom', 'markup_teaser_bottom');
 [%include poard/edit_attach.html %]
 [%/if %]
 
+[%if .can.poard.mod_edit_message %]
+<input type="checkbox" name="dont_update_mtime" value="1">
+Do not update change time of thread
+[%/if .can.poard.mod_edit_message %]
 </form>
