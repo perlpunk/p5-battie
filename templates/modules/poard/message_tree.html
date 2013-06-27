@@ -38,31 +38,27 @@ Subtree with [%= children_count_incl %] replies: [%= title %]</a>
 </div>
 
 
-<div id="div_msg_[%= id escape=0 %]">
-[%include poard/message_main.html %]
-</div>
+<div id="div_msg_[%= id escape=0 %]">[%include poard/message_main.html %]</div>
 </div>
 
 [%else %]
-<div >
-[%if is_deleted %]
-<span class="hint">[%translate id=poard_msg_deleted %]</span>
-[%else %]
-<span class="hint">[%translate id=poard_msg_not_approved_yet %]</span>   
+<div>
+<span class="hint">
+[%if is_deleted %][%translate id=poard_msg_deleted %]
+[%else %][%translate id=poard_msg_not_approved_yet %]
 [%/if %]
-test
+</span>
 <a name="ms_[%= id escape=0 %]">&nbsp;</a>[%= expr="ctime_epoch || ctime" escape=TIME_HTML %]
 </div>
 
 [%/if is_approved %]
 
 
-<!-- posting --></div>
+</div>
 [%unless leaf_posting %]
-[%if is_last %]<ul class="message_tree message_tree_last" id="ul_[%= id escape=0 %]"
-[%else %]<ul class="message_tree" id="ul_[%= id escape=0 %]"
+[%if is_last %]<ul class="message_tree message_tree_last" id="ul_[%= id escape=0 %]">
+[%else %]<ul class="message_tree" id="ul_[%= id escape=0 %]">
 [%/if is_last %]
->
 [%else leaf_posting %]
 </li>
 [%/unless leaf_posting %]
