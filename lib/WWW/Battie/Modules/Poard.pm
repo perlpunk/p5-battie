@@ -6140,7 +6140,7 @@ sub poard__thread {
     $data->{poard}->{thread} = $thread_ro;
     my ($title, @crumbs);
     if ($thread_ro->is_tree) {
-        $data->{poard}->{last_levels} = [(1) x ($thread_ro->messages->[-1]->level+1)];
+        $data->{poard}->{last_levels} = [(1) x ($thread_ro->messages->[-1]->level)];
         if ($leaf) {
             my $first = $thread_ro->messages->[0];
             if (not defined $first->title) {
