@@ -30,9 +30,9 @@ onclick="subscribe_thread([%= .data.poard.thread.id escape=0 %]);return false;">
 </div>
 [%/if .can.poard.subscribe_thread %]
 <div style="float: right; margin-top: 5px" class="share_buttons">
-<a title="[twitter]" href="http://twitter.com/share?text=[%= .data.subtitle escape=URL %]+-+[%= .title escape=URL %]&amp;url=[%= .server %][%= $SELF escape=0 %]/poard/thread/[%= .data.poard.thread.id escape=0 %]"><img style="vertical-align: bottom;" src="[%= .data.userprefs.theme %]/icons/twitter.gif"></a>
+<a title="[twitter]" href="http://twitter.com/share?text=[%= .data.subtitle escape=URL %]+-+[%= .title escape=URL %]&amp;url=[%= .server %][%= $SELF escape=0 %]/poard/thread/[%= .data.poard.thread.id escape=0 %]"><img style="vertical-align: bottom;" src="[%= .data.userprefs.theme %]/icons/twitter.gif" alt="[twitter]"></a>
 
-<a href="http://reddit.com/submit?url=[%= .server %][%= $SELF escape=0 %]/poard/thread/[%= .data.poard.thread.id escape=0 %]" title="submit to reddit"> <img src="[%= .data.userprefs.theme %]/icons/reddit.gif" style="vertical-align: bottom;" alt="submit to reddit" border="0" /> </a>
+<a href="http://reddit.com/submit?url=[%= .server %][%= $SELF escape=0 %]/poard/thread/[%= .data.poard.thread.id escape=0 %]" title="submit to reddit"> <img src="[%= .data.userprefs.theme %]/icons/reddit.gif" style="vertical-align: bottom;" alt="submit to reddit" border="0" > </a>
 </div>
 
 </div>
