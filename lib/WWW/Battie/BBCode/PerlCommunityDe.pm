@@ -40,9 +40,42 @@ sub html_tags {
         },
         pod => {
             class => 'url',
-            output => qq{<a href="http://perldoc.perl.org/%{uri}A.html" class="icon_link"><img src="$bbcode_images/perldoc.gif" alt="Perldoc:">%s</a>},
+            code => sub {
+                my ($parser, $attr, $content, $attribute_fallback) = @_;
+                my $title;
+                my $url = '';
+                if ($attribute_fallback =~ m/^(\w+(?:::\w+)*)(?:#(\S+))?\z/) {
+                    my $mod = $1;
+                    if (not defined $attr or not length $$content) {
+                        $title = $1;
+                    }
+                    my $anchor = $2;
+                    $mod =~ s#::#/#g;
+                    $url = "$mod.html";
+                    if ($anchor) {
+                        $url .= '#' . uri_escape_utf8($anchor);
+                        if (not defined $attr or not length $$content) {
+                            $title .= " $anchor";
+                        }
+                    }
+                }
+                elsif ($attribute_fallback =~ m/^perlfunc\.([^#]+)\z/) {
+                    my $func = $1;
+                    $url = "/functions/" . uri_escape_utf8($func) . ".html";
+                    if (not defined $attr or not length $$content) {
+                        $title = "perlfunc $func";
+                    }
+                }
+                if (defined $title) {
+                    $title = Parse::BBCode::escape_html($title);
+                }
+                else {
+                    $title = $$content;
+                }
+                return qq{<a href="http://perldoc.perl.org/$url" class="icon_link"><img src="$bbcode_images/perldoc.gif" alt="Perldoc:">$title</a>};
+            },
             example => {
-                source => '[pod]perlmodinstall[/pod] [pod://perlintro]',
+                source => '[pod]perlmodinstall[/pod] [pod://perlintro] [pod]File::Find#%options[/pod]',
             },
             short => 1,
         },
