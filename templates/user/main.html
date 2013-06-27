@@ -69,7 +69,6 @@ title="Switch to mini view without navigation">
 <ul class="navig navi_vertical">
 <li><small title="[%= .now escape=TIME%]" >[%= .now escape=TIME_YMD_HMS %]</small>
 <br><small><a href="[%= .self %]/userprefs/timezone" title="time zone">[%= .timezone %]</a></small>
-</small>
 </li>
 [%loop .elements.navi_left_top %]
 <li [%if active %]class="navigation_active"[%/if%]>[%= content escape=0 %]</li>
