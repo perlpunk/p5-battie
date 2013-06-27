@@ -19,12 +19,13 @@ Message is deleted
 [%/if .can.poard.mod_undelete_message %]
 
 [%else is_deleted %]
-<span id="status_[%= id escape=0 %]"><span class="error_cell"></span></span>
+<span id="status_[%= id escape=0 %]"><span class="error_cell"></span>
 <form action="[%= $SELF escape=0 %]/poard/approve_message/[%= id escape=0 %]" method="POST" style="display: inline;"
 onSubmit="javascript:approve_message([%= get_id escape=0 %],['status_[%= id escape=0 %]']);return false">
 [%= .user.token.hidden escape=0 %]
 <input type="submit" name="submit.approve" value="[%translate id="poard_approve" %]" class="button">
 </form>
+</span>
 
 [%/if is_deleted %]
 
