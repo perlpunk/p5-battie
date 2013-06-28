@@ -138,9 +138,18 @@ fill_saved_article([%= .data.poard.thread.id %], [%= .data.poard.msid %]);
 </form>
 
 [%loop .data.poard.previous %]
-[%include name="poard/single_message_minimal.html" %]
+[%if is_approved %]
+<div class="posting posting_user_[%= author_id escape=0 %] [%if get_is_new %]unread_msg[%else %]read_msg[%/if %]">
+<div class="posting_headline posting_headline_[%if is_deleted %]del[%else %]0[%/if %]">
+[%include poard/message_titlebar.html %]
+</div>
+</div>
+<div>
+[%include poard/message_author_info.html %]
+[%include poard/message_content.html %]
+</div>
+[%/if is_approved %]
 [%/loop .data.poard.previous %]
-</table>
 
 [%/if .data.poard.confirmation %]
 
