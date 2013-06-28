@@ -61,7 +61,7 @@ sub html_tags {
                 }
                 elsif ($attribute_fallback =~ m/^perlfunc\.([^#]+)\z/) {
                     my $func = $1;
-                    $url = "/functions/" . uri_escape_utf8($func) . ".html";
+                    $url = "functions/" . uri_escape_utf8($func) . ".html";
                     if (not defined $attr or not length $$content) {
                         $title = "perlfunc $func";
                     }
