@@ -1,5 +1,12 @@
 [%switch .action %]
 
+[%case start %]
+Current online users:<br>
+[%loop .data.activeusers.list %]
+<a href="[%= .self %]/member/profile/[%= id %]">[%= get_nick %]</a><br>
+[%/loop .data.activeusers.list %]
+
+
 [%case hide %]
 
 [%if .data.activeusers.error.token %]
