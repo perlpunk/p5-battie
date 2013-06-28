@@ -1,36 +1,23 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<head>
-[%include name="head.html" %]
-</head>
+<head>[%include name="head.html" %]</head>
 <body>
-<table class="outer_table" height="100%" width="100%" cellspacing="1" cellpadding="1" valign="top">
-    <tr>
-        <td class="navi_con" height="1">
-            <div class="navi_links_div" id="navi_links">
+<div style="float:left; width: 100%; border-radius: 5px;" class="navi_links_div" id="top_navi">
 [%= .active escape=0 %]
-</div>
-</td><td valign="top">
-&nbsp;
 <form action="[%= .self %]/[%= .ma %]" method="POST">
 <input type="hidden" name="battie_view" value="full">
 <input type="image" src="[%= .data.userprefs.theme %]/icons/layout-header-2.png" name="battie" value="Full View" class="image"
 title="Switch to full view with navigation">
 </form>
-        </td>
-    </tr>
-    <tr>
-        <td class="inner_table" valign="top" colspan="2">
-            [%include_var .templates.content %]
-        </td>
-    </tr>
-<tr>
-<td>
+</div>
+<div style="float:left; width: 100%;">
+[%include_var .templates.content %]
+</div>
+<div style="clear: left; width: 100%;">
+
 [%each .elements %]<div class="navi_links_div" ><ul>
 [%loop __value__ %][%= content escape=0 %][%/loop header %]
 </ul></div>[%/each .elements %]
-</td>
-</tr>
-</table>
+</div>
 
 </body></html>
