@@ -70,27 +70,40 @@ List of users:<br>
 Edit:<br>
 [%= .data.useradmin.user.nick %]
 <form action="[%= .self %]/useradmin/edit/[%= .data.useradmin.user.get_id %]" method="POST">
-<br />
+<br>
 <input type="radio" name="active" value="yes" [%if .data.useradmin.user.active %]checked="checked"[%/if %] />Active<br>
 <input type="radio" name="active" value="no" [%unless .data.useradmin.user.active %]checked="checked"[%/unless %] />Inactive<br>
-    <input type="submit" class="button" name="submit.save" value="Save">
+<input type="submit" class="button" name="submit.save_active" value="Save">
 [%= .user.token.hidden escape=0 %]
 </form>
 
 <br>
 <form action="[%= .self %]/useradmin/delete/[%= .data.useradmin.user.get_id %]" method="POST">
-    <input type="submit" class="button" name="submit.delete" value="Delete user"
-    onClick="javascript:return confirm('Really delete user &quot;[%= .data.useradmin.user.get_id %]&quot;?')">
+<input type="submit" class="button" name="submit.delete" value="Delete user"
+onClick="javascript:return confirm('Really delete user &quot;[%= .data.useradmin.user.get_id %]&quot;?')">
 [%= .user.token.hidden escape=0 %]
 </form>
 <br>
 Change Password:
 <form action="[%= .self %]/useradmin/edit/[%= .data.useradmin.user.get_id %]" method="POST">
-    <input type="password" name="user.pass">
-    <input type="submit" class="button" name="submit.change_pass" value="Change">
+<input type="password" name="user.pass">
+<input type="submit" class="button" name="submit.change_pass" value="Change">
+
+<br>
+Group:<br>
+<select size="4" name="group_id">
+[%each .data.useradmin.groups %]
+[%set_var mygroup value="__value__" %]
+<option value="[%= __key__ %]" [%if expr=".data.useradmin.user.group_id == __key__" %]selected="selected"[%/if %] >[%= $mygroup[0] %]</option>
+[%/each .data.useradmin.groups %]
+</select>
+<br>
+<input type="submit" class="button" name="submit.save_group" value="Save Group">
+
 [%= .user.token.hidden escape=0 %]
 </form>
 
+<br>
 Edit Roles:<br>
 <a href="[%= .self %]/useradmin/edit_user_roles/[%= .data.useradmin.user.get_id %]">Edit</a>
 

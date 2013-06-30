@@ -164,19 +164,16 @@ sub useradmin__edit {
     $self->exception("Argument", "User '$userid' does not exist") unless $user;
     my $submit = $request->get_submit;
     my $data = $battie->get_data;
+    my $groups = $battie->allow->get_groups;
     if ($submit->{change_pass}) {
         $battie->require_token;
-    }
-    if ($submit->{save}) {
-        $battie->require_token;
-    }
-    if ($submit->{change_pass}) {
         $user->password($schema->encrypt(scalar $request->param('user.pass')));
         $user->update;
         $battie->writelog($user, "change_pass");
         $battie->set_local_redirect('/useradmin/edit/' . $userid);
     }
-    elsif ($submit->{save}) {
+    elsif ($submit->{save_active}) {
+        $battie->require_token;
         my $active = $request->param('active') || 'no';
         my $bool = $active eq 'yes' ? 1 : 0;
         $user->active($bool);
@@ -185,6 +182,15 @@ sub useradmin__edit {
         $battie->delete_cache("login/user_token/$userid");
         $battie->set_local_redirect('/useradmin/edit/' . $userid);
     }
+    elsif ($submit->{save_group}) {
+        my $group_id = $request->param('group_id');
+        $self->exception(Argument => "Group id $group_id does not exist") unless $groups->{ $group_id };
+        $user->update({ group_id => $group_id });
+        $battie->writelog($user, "group_id: $group_id");
+        $battie->delete_cache("login/user_token/$userid");
+        $battie->set_local_redirect('/useradmin/edit/' . $userid);
+    }
+    $data->{useradmin}->{groups} = $groups;
     $data->{useradmin}->{user} = $user;
     my $profile = $schema->resultset('Profile')->find({ user_id => $user->id});
     $data->{useradmin}->{profile} = $profile ? $profile->readonly : undef;
