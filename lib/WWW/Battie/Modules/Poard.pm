@@ -3577,6 +3577,7 @@ sub poard__mod_split_thread {
                             rgt => { '<=', $rgt },
                         }, { for => 'update' });
 
+                    my @msg_ids = map { $_->id } $children->all;
                     my $minus = $lft - 1;
                     my $new_tid = $new_thread->id;
                     $children->update({
@@ -3642,6 +3643,10 @@ EOM
                         $update_msg{title} = undef;
                     }
                     $msg->update(\%update_msg);
+                    my @keys = map { "poard/msginthread/$_" } @msg_ids;
+                    for my $key (@keys) {
+                        $battie->delete_cache($key);
+                    }
                     if ($add_info) {
                         my $author_id = $msg->author_id;
                         my $author;
