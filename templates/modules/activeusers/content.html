@@ -2,9 +2,11 @@
 
 [%case start %]
 Current online users:<br>
+[%if .can.activeusers.show_active_nicks %]
 [%loop .data.activeusers.list %]
 <a href="[%= .self %]/member/profile/[%= id %]">[%= get_nick %]</a><br>
 [%/loop .data.activeusers.list %]
+[%/if .can.activeusers.show_active_nicks %]
 
 
 [%case hide %]
