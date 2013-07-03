@@ -29,7 +29,7 @@ __PACKAGE__->add_columns(
 );
 __PACKAGE__->set_primary_key('id');
 __PACKAGE__->has_many('grouproles' => 'WWW::Battie::Schema::User::GroupRole', 'group_id');
-__PACKAGE__->many_to_many('roles' => 'grouproles', 'group');
+__PACKAGE__->many_to_many('roles' => 'grouproles', 'role');
 __PACKAGE__->has_many('users' => 'WWW::Battie::Schema::User::User', 'group_id');
 
 my @acc = qw/ id name rtype /;

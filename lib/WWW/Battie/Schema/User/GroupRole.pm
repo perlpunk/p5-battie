@@ -17,13 +17,13 @@ __PACKAGE__->add_columns(
     },
 );
 __PACKAGE__->set_primary_key(qw/ group_id role_id /);
-__PACKAGE__->belongs_to('groups' => 'WWW::Battie::Schema::User::Group', 'group_id');
-__PACKAGE__->belongs_to('roles' => 'WWW::Battie::Schema::User::Role', 'role_id');
+__PACKAGE__->belongs_to('group' => 'WWW::Battie::Schema::User::Group', 'group_id');
+__PACKAGE__->belongs_to('role' => 'WWW::Battie::Schema::User::Role', 'role_id');
 
 my @acc = qw/ group_id role_id /;
 sub readonly {
     my ($self, $select) = @_;
-    my $ro = WWW::Battie::Schema::User::Profile::Readonly->new({});
+    my $ro = WWW::Battie::Schema::User::GroupRole::Readonly->new({});
     for my $field (@{ $select || [@acc] }) {
         my $set = "set_$field";
         my $value = $self->$field;
