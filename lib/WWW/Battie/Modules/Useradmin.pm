@@ -19,6 +19,8 @@ my %functions = (
             list_roles => 1,
             create_role => 1,
             clear_cache => 1,
+            list_groups => 1,
+            edit_group => 1,
         },
     },
 );
@@ -305,6 +307,38 @@ sub useradmin__edit_user_roles {
             [$_->id, $_->name . ' (' . $_->rtype . ')']
         } grep { not $selected{$_->name} } @all_roles];
     }
+}
+
+sub useradmin__list_groups {
+    my ($self, $battie) = @_;
+    $self->init_db($battie);
+    my $groups = $battie->allow->get_groups;
+    my $data = $battie->get_data;
+    $data->{useradmin}->{groups} = $groups;
+    $battie->crumbs->append("Groups", "useradmin/list_groups");
+}
+
+sub useradmin__edit_group {
+    my ($self, $battie) = @_;
+    $self->init_db($battie);
+    my $schema = $self->get_schema->{user};
+    my $request = $battie->get_request;
+    my ($args) = $request->get_args;
+    my ($id) = @$args;
+    $self->exception("Argument", "'$id' is not a valid group id")
+        unless $schema->valid_roleid($id);
+    my $group = $schema->resultset('Group')->find($id);
+    my $group_ro = $group->readonly;
+    my @roles = $group->roles;
+    $group_ro->set_roles(\@roles);
+    my $data = $battie->get_data;
+    my $option_roles = [undef, map {
+        [$_->id, $_->name]
+    } sort { $a->name cmp $b->name } @roles];
+    $data->{useradmin}->{options}->{group_roles} = $option_roles;
+    $data->{useradmin}->{group} = $group_ro;
+    $battie->crumbs->append("Groups", "useradmin/list_groups");
+    $battie->crumbs->append("Group " . $group->name, "useradmin/edit_group/" . $group->id);
 }
 
 sub useradmin__edit_role {

@@ -144,6 +144,20 @@ Edit roles of user [%= .data.useradmin.user.nick %]<p>
 [%= .user.token.hidden escape=0 %]
 </form>
 
+[%case list_groups %]
+<h3>Groups</h3>
+
+<ul>[%each .data.useradmin.groups %]
+[%set_var mygroupname value="__value__" %]
+<li><a href="[%= .self %]/useradmin/edit_group/[%= __key__ %]">[%= $mygroupname[0] %]</a></li>
+[%/each .data.useradmin.groups %]</ul>
+
+[%case edit_group %]
+<h3>Group [%= .data.useradmin.group.name %]</h3>
+<select name="roles" size="10" multiple class="colorselect">
+[%html_option .data.useradmin.options.group_roles %]
+</select>
+
 [%case list_roles %]
 <h3>Roles</h3>
 
