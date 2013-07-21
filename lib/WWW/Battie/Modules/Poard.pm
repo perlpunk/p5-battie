@@ -8608,8 +8608,8 @@ sub cron_notify {
 sub delete_latest_cache {
     # delete poard/latest/24h|7d from cache
     my ($self, $battie, $board_id) = @_;
-    $battie->delete_cache('poard/latest24');
-    $battie->delete_cache('poard/latest7d');
+    $battie->delete_cache('poard/latest/24');
+    $battie->delete_cache('poard/latest/7d');
 
     $self->delete_board_cache($battie, $board_id);
 }
