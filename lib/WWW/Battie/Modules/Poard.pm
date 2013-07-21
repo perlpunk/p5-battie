@@ -2288,35 +2288,74 @@ sub poard__latest {
     my $args = $request->get_args;
     $self->exception("Argument", "Not enough arguments") unless @$args;
     my ($time) = @$args;
-    my $interval = $time eq '24h' ? 1 : $time eq '7d' ? 7 : '';
-    my $cache_key = $time eq '24h' ? '24' : $time eq '7d' ? '7d' : '';
-    my ($threads, $mtime) = $battie->from_cache('poard/latest' . $cache_key);
+    my ($interval, $cache_key);
+    my $limit = 5;
+    my $page = $request->pagenum(1000);
+    if ($time eq '24h') {
+        $interval = 1;
+        $cache_key = 'poard/latest/24';
+    }
+    elsif ($time eq '7d') {
+        $interval = 7;
+        $cache_key = 'poard/latest/7d';
+    }
+    elsif ($time =~ m/^([234])w\z/) {
+        $interval = 7 * $1;
+    }
+    else {
+        $interval = 1;
+        $cache_key = "poard/latest/24";
+    }
+    if ($page > 1) {
+        undef $cache_key;
+    }
+    my $threads = $cache_key ? $battie->from_cache($cache_key) : undef;
     my $response = $battie->response;
 
+    my $minus = DateTime->now->subtract(days => $interval);
+    my $cond = {
+        'me.mtime' => { '>=', $minus },
+        'me.status' => { '!=' => 'deleted' },
+    };
     unless ($threads) {
         $self->init_db($battie);
         my $schema = $self->schema->{poard};
-        my $minus = DateTime->now->subtract(days => $interval);
         my $search = $schema->resultset('Thread')->search(
-            {
-                'me.mtime' => { '>=', $minus },
-                'me.status' => { '!=' => 'deleted' },
-            },
+            $cond,
             {
                 order_by => 'me.mtime desc',
+                rows => $limit,
+                page => $page,
             },
         );
         my $cthreads = $self->latest_threads($schema, $battie, $search);
         $threads = $cthreads;
-        $battie->to_cache('poard/latest' . $cache_key, $threads, 11 * 60);
+        $battie->to_cache($cache_key, $threads, 11 * 60) if $cache_key;
     }
     else {
         $self->load_db($battie);
     }
 
+    my $data = $battie->get_data;
+    if (@$threads == $limit or $page > 1) {
+        $self->init_db($battie);
+        my $schema = $self->schema->{poard};
+        my $count = $schema->resultset('Thread')->count($cond);
+        $data->{poard}->{latest_more} = @$threads;
+        my $pager = WWW::Battie::Pager->new({
+                items_pp => $limit,
+                before => 3,
+                after => 3,
+                total_count => $count,
+                current => $page,
+                link => $battie->self_url . "/poard/latest/$time?p=%p",
+                title => '%p',
+            })->init;
+        $data->{poard}->{latest_pager} = $pager;
+    }
+
     my $boards = $self->fetch_boards($battie);
 
-    my $data = $battie->get_data;
     $self->mark_read_threads($battie, $threads);
     my %boards = map { $_->board_id => $boards->{ $_->board_id } } @$threads;
     my @allowed = $self->check_board_group($battie, values %boards);

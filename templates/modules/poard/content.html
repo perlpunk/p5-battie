@@ -7,6 +7,7 @@
 [%case view_latest,latest %]
 <div id="result_list">
 [%include poard/show_unapproved_count.html %]
+[%with .data.poard.latest_pager %][%include name="pager.html" %][%/with %]
 <table class="overview">
 <tr>
 <th>
@@ -31,8 +32,9 @@ src="[%= .data.userprefs.theme %]/icons/arrow-circle-double.png" alt="[refresh]"
 </tr>
 [%/loop .data.poard.threads %]
 </table>
+[%with .data.poard.latest_pager %][%include name="pager.html" %][%/with %]
 [%if .can.poard.settings %]<small><a href="[%= .self %]/poard/settings/overview#latest">[%translate id=global_settings %]</a></small>[%/if %]
-[%if .data.poard.hidden_threads %]
+[%if .data.poard.hidden_threads# %]
 <br><br>
 Hidden:<br>
 [%loop .data.poard.hidden_threads %]
@@ -40,6 +42,9 @@ Hidden:<br>
 [%/loop .data.poard.hidden_threads %]
 [%/if .data.poard.hidden_threads %]
 </div>
+<a href="[%= $SELF %]/poard/latest/2w">2</a> /
+<a href="[%= $SELF %]/poard/latest/3w">3</a> /
+<a href="[%= $SELF %]/poard/latest/4w">4</a> weeks
 
 [%case start %]
 [%include poard/show_unapproved_count.html %]
