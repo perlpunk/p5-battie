@@ -41,10 +41,10 @@ Hidden:<br>
 [%= count %] [%translate id=poard_thread count=count %] in <a href="[%= .self %]/poard/board/[%= id %]">[%= name %]</a><br>
 [%/loop .data.poard.hidden_threads %]
 [%/if .data.poard.hidden_threads %]
-</div>
 <a href="[%= $SELF %]/poard/latest/2w">2</a> /
 <a href="[%= $SELF %]/poard/latest/3w">3</a> /
 <a href="[%= $SELF %]/poard/latest/4w">4</a> weeks
+</div>
 
 [%case start %]
 [%include poard/show_unapproved_count.html %]
