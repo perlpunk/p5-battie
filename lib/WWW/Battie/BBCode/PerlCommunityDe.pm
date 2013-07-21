@@ -75,7 +75,7 @@ sub html_tags {
                 return qq{<a href="http://perldoc.perl.org/$url" class="icon_link"><img src="$bbcode_images/perldoc.gif" alt="Perldoc:">$title</a>};
             },
             example => {
-                source => '[pod]perlmodinstall[/pod] [pod://perlintro] [pod]File::Find#%options[/pod]',
+                source => '[pod]perlmodinstall[/pod] [pod://perlintro] [pod]File::Find#%options[/pod] link to builtin: [pod]perlfunc.chomp[/pod]',
             },
             short => 1,
         },
