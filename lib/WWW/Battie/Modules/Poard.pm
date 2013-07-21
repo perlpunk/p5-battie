@@ -2289,7 +2289,7 @@ sub poard__latest {
     $self->exception("Argument", "Not enough arguments") unless @$args;
     my ($time) = @$args;
     my ($interval, $cache_key);
-    my $limit = 5;
+    my $limit = 30;
     my $page = $request->pagenum(1000);
     if ($time eq '24h') {
         $interval = 1;
