@@ -258,6 +258,7 @@ sub poard__init {
         $data->{userprefs}->{local_css}->{'poard'} = 'poard';
         $data->{userprefs}->{local_color_css}->{'poard'} = 'poard';
         $data->{userprefs}->{local_js}->{'bbcode_buttons'} = 1;
+        $data->{userprefs}->{local_js}->{'jquery-2.0.3'} = 1;
         $data->{userprefs}->{local_js}->{'poard'} = 1;
     }
     $data->{userprefs}->{local_rss}->{$battie->self_url . '/poard/xml_messages_rss'} = $self->get_rss_title . " (abstracts)";
