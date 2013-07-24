@@ -413,6 +413,17 @@ function really_close_suggestions() {
 
 }
 
+var poard_autosave_article = 'poard_autosave_articles5';
+function init_autosave_article() {
+    if (sessionStorage) {
+        var autosave_articles = sessionStorage.getItem(poard_autosave_article);
+        if (! autosave_articles) {
+            autosave_articles = new Object;
+            var string = JSON.stringify(autosave_articles);
+            sessionStorage.setItem(poard_autosave_article, string);
+        }
+    }
+}
 function autosave_article(thread_id, msg_id) {
     if (sessionStorage) {
         var key = thread_id+':'+msg_id;
@@ -423,6 +434,8 @@ function autosave_article(thread_id, msg_id) {
         var epoch = Math.floor(new Date().valueOf() / 1000);
         autosave_msg.message = form.elements["message.message"].value;
         autosave_msg.time = epoch;
+        var title = document.getElementById("thread_title_link").innerHTML;
+        autosave_msg.thread_title = title;
 
         autosave_articles[key] = autosave_msg;
         var string = JSON.stringify(autosave_articles);
@@ -446,5 +459,127 @@ function fill_saved_article(thread_id, msg_id) {
             }
         }
     }
+}
+function display_drafts() {
+    if (sessionStorage) {
+        var autosave_articles = sessionStorage.getItem(poard_autosave_article);
+        autosave_articles = JSON.parse(autosave_articles);
+        var box = document.getElementById('draftlist_box');
+        var list = document.getElementById('draftlist');
+        var first = list.getElementsByTagName("li");
+        for (var key in autosave_articles) {
+            var keys = key.split(":");
+            var thread_id = keys[0];
+            var msg_id = keys[1];
+            var draft = autosave_articles[key];
+            var string = JSON.stringify(draft);
+            var title = draft.thread_title;
+            var newlink = first[0].cloneNode(true);
+            var text = newlink.innerHTML + '';
+            text = text.replace(/TITLE/g, title);
+            text = text.replace(/THREAD_ID/g, thread_id);
+            var date = new Date(draft.time * 1000);
+            text = text.replace(/TIME/g, date);
+            newlink.innerHTML = text;
+            newlink.setAttribute('style', 'display: block');
+            list.appendChild(newlink);
+        }
+        var style = box.getAttribute('style');
+        style = style.replace(/none/, 'block');
+        style = style.replace(/-99/, '99');
+        box.setAttribute('style', style);
+    }
+}
+
+function create_nested_list(id, html) {
+    var ul = $('<ul id="overview_ul_'+id+'" />');
+    var li = $('<li id="overview_li_'+id+'"/>');
+    var posting = $('<div id="overview_' + id + '" />');
+    var f = createClosure(id);
+    $(ul).append(li);
+    $(li).append(posting);
+    $(posting).click(f);
+    var posting_orig = $('#li_' + id).find('div.posting');
+    var author = $('#li_' + id).find('.author:first');
+    var headline = $('#li_' + id).find('.posting_headline');
+    $(posting).append(author.text());
+    $(posting).attr('class', $(headline).attr('class'));
+    if ($(posting_orig).hasClass('unread_msg')) {
+        $(posting).addClass('unread_msg');
+    }
+    $(html).append(ul);
+    var ul_original = $('#ul_' + id);
+    var links = $(ul_original).find('> li.message_tree');
+    for (var i = 0; i < links.length; i++) {
+        var link = links[i];
+        var link_id = $(link).attr('id');
+        if (link_id.match(/li_(\d+)/)) {
+            var new_id = RegExp.$1;
+            create_nested_list(new_id, ul);
+        }
+    }
+}
+
+function createClosure(i) {
+    var f = function() {
+        $('html, body').animate({
+            scrollTop: $("#li_"+i).offset().top
+        }, 500, null, function() { draw_outline() });
+//        alert($('#ul_346').scrollTop());
+//        alert($("html, body").scrollTop());
+//        window.setTimeout(draw_outline(), 800);
+    };
+    return f;
+}
+function draw_outline() {
+    var links = $('.message_tree_root').find('li.message_tree');
+    $('#outline').text('');
+    for (var i = 0; i < links.length; i++) {
+        var li = links[i];
+        id = $(li).attr('id');
+        if (id.match(/li_(\d+)/)) {
+            id = RegExp.$1;
+        }
+        var top_offset = $(li).offset().top;
+        var scrolltop = $("html, body").scrollTop();
+        if (scrolltop > top_offset) {
+        }
+        else {
+            var overview_li = $('#overview_li_' + id);
+            var f = overview_li.offset().top - $('#thread_overview').offset().top + 1;
+            $('#outline').css({ top: f + 'px'});
+            break;
+        }
+    }
+}
+function toggle_overview() {
+	var toggle_button = $('#toggle_overview');
+    var open = $(toggle_button).attr('data-open');
+    var ul = $('#thread_overview').find('ul:first');
+    if (open == 1) {
+        $(toggle_button).attr('data-open', 0);
+        $(ul).attr('style', 'display: none;');
+        $(toggle_button).text('open');
+    }
+    else {
+        $(toggle_button).attr('data-open', 1);
+        $(ul).attr('style', 'display: block;');
+        $(toggle_button).text('close');
+    }
+}
+
+function create_thread_overview() {
+var overview = $('<div id="thread_overview" />');
+var outline = $('<div id="outline" style="position: absolute; right: 0px; width: 80px; margin: 0px; border: 1px solid red;">test</div>');
+var toggle_button = $('<button data-open="1" id="toggle_overview" onclick="toggle_overview();">close</button>');
+$(overview).append(outline);
+$('body').append(overview);
+$(overview).append("Thread-Navi: ");
+$(overview).append(toggle_button);
+create_nested_list(first_id, overview);
+draw_outline();
+$(window).scroll(function() {
+draw_outline();
+});
 }
 
