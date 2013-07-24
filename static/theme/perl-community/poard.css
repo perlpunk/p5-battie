@@ -215,3 +215,34 @@ li.board_tree th, li.board_tree_last th {
     text-align: left;
 }
 
+#thread_overview {
+    padding: 2px;
+    padding-left: 0px;
+    position: fixed;
+    border: 1px solid #888888;
+    background-color: #f8f8f8;
+    box-shadow: 5px 5px 5px #999;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    max-width: 13em;
+    max-height: 80%;
+    left: 7px;
+    top: 5px;
+
+}
+#thread_overview:hover {
+    max-width: none;
+    width: auto;
+    overflow-y: auto;
+}
+#thread_overview > ul {
+    margin-left: -8px;
+}
+#thread_overview ul {
+    list-style: none;
+    padding-left: 0.7em;
+}
+#thread_overview .posting_headline {
+    overflow-x: visible;
+    overflow-y: visible;
+}

@@ -139,12 +139,13 @@ Articles: <a href="javascript:void(hide_all(true));">hide</a>
 <script type="text/javascript">
 var messages = new Array();
 var old_branches = new Array();
-[%loop .data.poard.thread.messages %]
-[%unless __first__ %]
+[%loop .data.poard.thread.messages %][%if __first__ %]
+var first_id = [%= id %];
+[%else %]
 [%unless get_is_new %]hide_message_static([%= id escape=0 %]);[%/unless %]
 [%if get_old_branch %]old_branches.push([%= id escape=0 %]);[%/if %]
 messages.push([%= id %]);
-[%/unless %][%/loop %]
+[%/if %][%/loop %]
 var anchor = window.location.hash;
 if (anchor.match(/#ms_(\d+)/)) {
     var id = RegExp.$1;
@@ -156,6 +157,8 @@ if (anchor.match(/#ms_(\d+)/)) {
 [%if .data.settings.poard.articles.hide_old_branches %]
 hide_old_branches(true);
 [%/if %]
+
+create_thread_overview();
 </script>
 
 [%else %]
