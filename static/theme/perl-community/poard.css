@@ -228,6 +228,7 @@ li.board_tree th, li.board_tree_last th {
     max-height: 90%;
     left: 7px;
     top: 5px;
+    font-size: 85%;
 
 }
 #thread_overview:hover {
