@@ -225,7 +225,7 @@ li.board_tree th, li.board_tree_last th {
     overflow-x: hidden;
     overflow-y: hidden;
     max-width: 13em;
-    max-height: 80%;
+    max-height: 90%;
     left: 7px;
     top: 5px;
 
@@ -245,4 +245,5 @@ li.board_tree th, li.board_tree_last th {
 #thread_overview .posting_headline {
     overflow-x: visible;
     overflow-y: visible;
+    cursor: pointer;
 }

@@ -525,15 +525,17 @@ function createClosure(i) {
         $('html, body').animate({
             scrollTop: $("#li_"+i).offset().top
         }, 500, null, function() { draw_outline() });
-//        alert($('#ul_346').scrollTop());
-//        alert($("html, body").scrollTop());
-//        window.setTimeout(draw_outline(), 800);
     };
     return f;
 }
 function draw_outline() {
     var links = $('.message_tree_root').find('li.message_tree');
     $('#outline').text('');
+    var outline_top = 0;
+    var outline_height = 0;
+    var scrolltop = $("html, body").scrollTop();
+    var scrollbottom = scrolltop + window.innerHeight;
+    var overview_scrolltop = $('#thread_overview').scrollTop();
     for (var i = 0; i < links.length; i++) {
         var li = links[i];
         id = $(li).attr('id');
@@ -541,44 +543,62 @@ function draw_outline() {
             id = RegExp.$1;
         }
         var top_offset = $(li).offset().top;
-        var scrolltop = $("html, body").scrollTop();
         if (scrolltop > top_offset) {
         }
-        else {
+        else if (outline_top == 0) {
             var overview_li = $('#overview_li_' + id);
-            var f = overview_li.offset().top - $('#thread_overview').offset().top + 1;
-            $('#outline').css({ top: f + 'px'});
-            break;
+            var f = overview_li.offset().top - $('#thread_overview').offset().top;
+            outline_top = f;
+            outline_top = f + overview_scrolltop;
+        }
+        else {
+            if (scrollbottom < top_offset) {
+                var overview_li = $('#overview_li_' + id);
+                var f = overview_li.offset().top - $('#thread_overview').offset().top;
+                var height = f - outline_top;
+                outline_height = height + overview_scrolltop;
+                break;
+            }
         }
     }
+    $('#outline').css({ top: outline_top + 'px'});
+    if (outline_height == 0) {
+        outline_height = $('#thread_overview').height() - outline_top + overview_scrolltop;
+    }
+    $('#outline').css({ height: outline_height-2 + 'px'});
 }
 function toggle_overview() {
-	var toggle_button = $('#toggle_overview');
+    var toggle_button = $('#toggle_overview');
     var open = $(toggle_button).attr('data-open');
     var ul = $('#thread_overview').find('ul:first');
     if (open == 1) {
         $(toggle_button).attr('data-open', 0);
-        $(ul).attr('style', 'display: none;');
-        $(toggle_button).text('open');
+        $(ul).hide(500);
+//        $(toggle_button).text('open');
+        $(toggle_button).attr('src', theme+'/icons/arrow-315.png');
     }
     else {
         $(toggle_button).attr('data-open', 1);
-        $(ul).attr('style', 'display: block;');
-        $(toggle_button).text('close');
+        $(ul).show(500);
+//        $(toggle_button).text('close');
+        $(toggle_button).attr('src', theme+'/icons/arrow-135.png');
     }
 }
 
 function create_thread_overview() {
 var overview = $('<div id="thread_overview" />');
-var outline = $('<div id="outline" style="position: absolute; right: 0px; width: 80px; margin: 0px; border: 1px solid red;">test</div>');
-var toggle_button = $('<button data-open="1" id="toggle_overview" onclick="toggle_overview();">close</button>');
+var outline = $('<div id="outline" style="position: absolute; right: 0px; width: 3px; margin: 0px; background-color: red; ">test</div>');
+var toggle_button = $('<input type="image" data-open="1" id="toggle_overview" onclick="toggle_overview();" style="padding: 5px;">');
+$(toggle_button).attr('src', theme+'/icons/arrow-135.png');
 $(overview).append(outline);
 $('body').append(overview);
-$(overview).append("Thread-Navi: ");
 $(overview).append(toggle_button);
 create_nested_list(first_id, overview);
 draw_outline();
 $(window).scroll(function() {
+draw_outline();
+});
+overview.scroll(function() {
 draw_outline();
 });
 }
