@@ -533,7 +533,7 @@ function draw_outline() {
     $('#outline').text('');
     var outline_top = 0;
     var outline_height = 0;
-    var scrolltop = $("html, body").scrollTop();
+    var scrolltop = $(document).scrollTop();
     var scrollbottom = scrolltop + window.innerHeight;
     var overview_scrolltop = $('#thread_overview').scrollTop();
     for (var i = 0; i < links.length; i++) {
