@@ -568,24 +568,41 @@ function draw_outline() {
     $('#outline').css({ height: outline_height-2 + 'px'});
 }
 function toggle_overview() {
+    activate_overview();
     var toggle_button = $('#toggle_overview');
     var open = $(toggle_button).attr('data-open');
     var ul = $('#thread_overview').find('ul:first');
+    var thread_navi_status = 0;
     if (open == 1) {
+        thread_navi_status = 0;
         $(toggle_button).attr('data-open', 0);
         $(ul).hide(500);
 //        $(toggle_button).text('open');
         $(toggle_button).attr('src', theme+'/icons/arrow-315.png');
     }
     else {
+        thread_navi_status = 1;
         $(toggle_button).attr('data-open', 1);
         $(ul).show(500);
 //        $(toggle_button).text('close');
         $(toggle_button).attr('src', theme+'/icons/arrow-135.png');
     }
+    if (! localStorage)
+        return;
+    localStorage.setItem('poard_thread_navi_status', thread_navi_status);
 }
 
 function create_thread_overview() {
+    if (! localStorage)
+        return;
+    var thread_navi_status = localStorage.getItem('poard_thread_navi_status');
+    if (thread_navi_status == null)
+        thread_navi_status = 1;
+
+    var links = $(document).find('li.message_tree');
+    if (links.length < 3) {
+        return;
+    }
 var overview = $('<div id="thread_overview" />');
 var outline = $('<div id="outline" style="position: absolute; right: 0px; width: 3px; margin: 0px; background-color: red; ">test</div>');
 var toggle_button = $('<input type="image" data-open="1" id="toggle_overview" onclick="toggle_overview();" style="padding: 5px;">');
@@ -593,13 +610,26 @@ $(toggle_button).attr('src', theme+'/icons/arrow-135.png');
 $(overview).append(outline);
 $('body').append(overview);
 $(overview).append(toggle_button);
-create_nested_list(first_id, overview);
-draw_outline();
-$(window).scroll(function() {
-draw_outline();
-});
-overview.scroll(function() {
-draw_outline();
-});
+    if (thread_navi_status == 1) {
+        activate_overview();
+    }
+    else {
+        $(toggle_button).attr('data-open', 0);
+        $(toggle_button).attr('src', theme+'/icons/arrow-315.png');
+    }
+}
+var thread_overview_active = 0;
+function activate_overview() {
+    if (thread_overview_active)
+        return;
+    create_nested_list(first_id, $('#thread_overview'));
+    draw_outline();
+    $('#thread_overview').scroll(function() {
+        draw_outline();
+    });
+    $(window).scroll(function() {
+        draw_outline();
+    });
+    thread_overview_active = 1;
 }
 
