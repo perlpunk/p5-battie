@@ -12,7 +12,7 @@
 +[%= children_count_incl %] replies</div></li>
 [%/unless leaf_posting %]
 <li class="message_tree [%if is_last %]message_tree_last[%/if is_last %] tree_user_[%= author_id escape=0 %]" id="li_[%= id escape=0 %]">
-<div class="posting posting_user_[%= author_id escape=0 %] [%if get_is_new %]unread_msg[%else %]read_msg[%/if %]">
+<div class="posting posting_user_[%= author_id escape=0 %] [%if expr="is_new and .user.logged_in" %]unread_msg[%else %]read_msg[%/if %]">
 <div class="posting_headline posting_headline_[%if is_deleted %]del[%else %][%= age_level escape=0 %][%/if %]">
     <div class="collapse">
     <a href="#" onclick="hide_message_static([%= id escape=0 %]); return false">

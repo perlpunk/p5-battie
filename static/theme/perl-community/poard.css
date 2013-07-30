@@ -217,14 +217,14 @@ li.board_tree th, li.board_tree_last th {
 
 #thread_overview {
     padding: 2px;
-    padding-left: 0px;
     position: fixed;
-    border: 1px solid #888888;
+    border: 3px solid #ccc;
+    border-radius: 7px;
     background-color: #f8f8f8;
     box-shadow: 5px 5px 5px #999;
     overflow-x: hidden;
     overflow-y: hidden;
-    max-width: 13em;
+    max-width: 12em;
     max-height: 90%;
     left: 7px;
     top: 5px;
