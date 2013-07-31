@@ -1,3 +1,5 @@
+var thread_overview_active = 0;
+
 var name_unsub = 'submit.unsubscribe';
 var name_sub = 'submit.subscribe';
 function subscribe_thread2 () {
@@ -66,6 +68,8 @@ function hide_message_static(id) {
         table.style.display = 'none';
         table.battie_hidden = true;
     }
+    if (thread_overview_active)
+        draw_outline();
 }
 function hide_all(hide) {
     for (var i in messages) {
@@ -499,7 +503,7 @@ function create_nested_list(id, html) {
     $(ul).append(li);
     $(li).append(posting);
     $(posting).click(f);
-    var posting_orig = $('#li_' + id).find('div.posting');
+    var posting_orig = $('#li_' + id).find('div.posting:first');
     var author = $('#li_' + id).find('.author:first');
     var headline = $('#li_' + id).find('.posting_headline');
     $(posting).append(author.text());
@@ -601,7 +605,7 @@ function create_thread_overview() {
         thread_navi_status = 1;
 
     var links = $(document).find('li.message_tree');
-    if (links.length < 3) {
+    if (links.length < 4) {
         return;
     }
     var overview = $('<div id="thread_overview" />');
@@ -625,7 +629,6 @@ function create_thread_overview() {
     }
 }
 
-var thread_overview_active = 0;
 function activate_overview() {
     if (thread_overview_active)
         return;
