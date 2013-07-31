@@ -234,7 +234,7 @@ li.board_tree th, li.board_tree_last th {
     max-width: 9em;
 }
 #thread_overview > ul {
-    margin-left: -8px;
+    margin-left: -6px;
 }
 #thread_overview ul {
     list-style: none;
