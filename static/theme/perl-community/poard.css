@@ -217,14 +217,18 @@ li.board_tree th, li.board_tree_last th {
 
 #thread_overview {
     padding: 2px;
+    padding-right: 7px;
     position: fixed;
     border: 3px solid #ccc;
     border-radius: 7px;
+    /*
+    background-color: rgba(255,255,255,0.6);
+    */
     background-color: #f8f8f8;
     box-shadow: 5px 5px 5px #999;
     overflow-x: hidden;
     overflow-y: hidden;
-    max-width: 12em;
+    max-width: 10em;
     max-height: 90%;
     left: 7px;
     top: 5px;
@@ -241,10 +245,10 @@ li.board_tree th, li.board_tree_last th {
 }
 #thread_overview ul {
     list-style: none;
-    padding-left: 0.7em;
+    padding-left: 0.5em;
 }
 #thread_overview .posting_headline {
-    overflow-x: visible;
-    overflow-y: visible;
+    overflow-x: hidden;
     cursor: pointer;
+    padding: 0px;
 }
