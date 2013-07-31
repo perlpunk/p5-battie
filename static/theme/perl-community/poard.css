@@ -244,6 +244,8 @@ li.board_tree th, li.board_tree_last th {
     overflow-x: hidden;
     cursor: pointer;
     padding: 0px;
+    padding-left: 2px;
+    white-space: nowrap;
 }
 #thread_overview:hover {
     max-width: none;
@@ -255,4 +257,13 @@ li.board_tree th, li.board_tree_last th {
     left: 0px;
     background-color: #444;
     border-radius: 0px 10px 10px 0px;
+}
+#thread_overview_outline {
+    position: absolute;
+    right: 0px;
+    width: 4px;
+    margin: 0px;
+    background-color: #aaa;
+    border-radius: 2px;
+    border: 1px solid #333;
 }

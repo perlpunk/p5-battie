@@ -534,7 +534,7 @@ function createClosure(i) {
 }
 function draw_outline() {
     var links = $('.message_tree_root').find('li.message_tree');
-    $('#outline').text('');
+    $('#thread_overview_outline').text('');
     var outline_top = 0;
     var outline_height = 0;
     var scrolltop = $(document).scrollTop();
@@ -565,11 +565,11 @@ function draw_outline() {
             }
         }
     }
-    $('#outline').css({ top: outline_top + 'px'});
+    $('#thread_overview_outline').css({ top: outline_top + 'px'});
     if (outline_height == 0) {
         outline_height = $('#thread_overview').height() - outline_top + overview_scrolltop;
     }
-    $('#outline').css({ height: outline_height-2 + 'px'});
+    $('#thread_overview_outline').css({ height: outline_height-2 + 'px'});
 }
 function toggle_overview() {
     activate_overview();
@@ -609,7 +609,7 @@ function create_thread_overview() {
         return;
     }
     var overview = $('<div id="thread_overview" />');
-    var outline = $('<div id="outline" style="position: absolute; right: 0px; width: 5px; margin: 0px; background-color: #aaa; border-radius: 3px; border: 1px solid #333;"></div>');
+    var outline = $('<div id="thread_overview_outline" />');
     var toggle_div = $('<div id="thread_overview_toggle_div" ></div>');
     var toggle_button = $('<img rc="'+theme+'/icons/arrow-skip-180.png" data-open="1" id="toggle_overview" nclick="toggle_overview();" style="padding: 5px;">');
 
