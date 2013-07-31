@@ -584,6 +584,7 @@ function toggle_overview() {
         $(toggle_button).attr('data-open', 1);
         $('#thread_overview').show(300, null, function() {
             draw_outline();
+            $(toggle_button).attr('src', theme+'/icons/arrow-skip-180.png');
         });
     }
     if (! localStorage)
