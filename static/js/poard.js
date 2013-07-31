@@ -576,22 +576,22 @@ function toggle_overview() {
     if (open == 1) {
         thread_navi_status = 0;
         $(toggle_button).attr('data-open', 0);
-        $(ul).hide(500);
-//        $(toggle_button).text('open');
-        $(toggle_button).attr('src', theme+'/icons/arrow-315.png');
+        $('#thread_overview').hide(300);
+        $(toggle_button).attr('src', theme+'/icons/arrow-skip.png');
     }
     else {
         thread_navi_status = 1;
         $(toggle_button).attr('data-open', 1);
-        $(ul).show(500);
-//        $(toggle_button).text('close');
-        $(toggle_button).attr('src', theme+'/icons/arrow-135.png');
+        $('#thread_overview').show(300, null, function() {
+            draw_outline();
+        });
     }
     if (! localStorage)
         return;
     localStorage.setItem('poard_thread_navi_status', thread_navi_status);
 }
 
+var d_height = window.innerHeight;
 function create_thread_overview() {
     if (! localStorage)
         return;
@@ -603,21 +603,27 @@ function create_thread_overview() {
     if (links.length < 3) {
         return;
     }
-var overview = $('<div id="thread_overview" />');
-var outline = $('<div id="outline" style="position: absolute; right: 0px; width: 3px; margin: 0px; background-color: red; ">test</div>');
-var toggle_button = $('<input type="image" data-open="1" id="toggle_overview" onclick="toggle_overview();" style="padding: 5px;">');
-$(toggle_button).attr('src', theme+'/icons/arrow-135.png');
-$(overview).append(outline);
-$('body').append(overview);
-$(overview).append(toggle_button);
+    var overview = $('<div id="thread_overview" />');
+    var outline = $('<div id="outline" style="position: absolute; right: 0px; width: 5px; margin: 0px; background-color: #aaa; border-radius: 3px; border: 1px solid #333;"></div>');
+    var toggle_div = $('<div id="thread_overview_toggle_div" ></div>');
+    var toggle_button = $('<img rc="'+theme+'/icons/arrow-skip-180.png" data-open="1" id="toggle_overview" nclick="toggle_overview();" style="padding: 5px;">');
+
+    $('body').append(overview);
+    $(overview).append(outline);
+    $(toggle_div).append(toggle_button);
+    $(toggle_button).click(function() { toggle_overview() });
+    $('body').append(toggle_div);
+    $(toggle_div).css({ top: d_height/2 + 'px' });
     if (thread_navi_status == 1) {
+        $(toggle_button).attr('src', theme+'/icons/arrow-skip-180.png');
         activate_overview();
     }
     else {
         $(toggle_button).attr('data-open', 0);
-        $(toggle_button).attr('src', theme+'/icons/arrow-315.png');
+        $(toggle_button).attr('src', theme+'/icons/arrow-skip.png');
     }
 }
+
 var thread_overview_active = 0;
 function activate_overview() {
     if (thread_overview_active)
@@ -631,5 +637,8 @@ function activate_overview() {
         draw_outline();
     });
     thread_overview_active = 1;
+    var o_height = $('#thread_overview').height();
+    var offset_top = d_height/2 - o_height/2;
+    $('#thread_overview').css({ top: offset_top + 'px' });
 }
 

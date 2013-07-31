@@ -217,7 +217,6 @@ li.board_tree th, li.board_tree_last th {
 
 #thread_overview {
     padding: 2px;
-    padding-right: 7px;
     position: fixed;
     border: 3px solid #ccc;
     border-radius: 7px;
@@ -226,19 +225,13 @@ li.board_tree th, li.board_tree_last th {
     */
     background-color: #f8f8f8;
     box-shadow: 5px 5px 5px #999;
-    overflow-x: hidden;
-    overflow-y: hidden;
-    max-width: 10em;
     max-height: 90%;
     left: 7px;
     top: 5px;
     font-size: 85%;
-
-}
-#thread_overview:hover {
-    max-width: none;
-    width: auto;
-    overflow-y: auto;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    max-width: 9em;
 }
 #thread_overview > ul {
     margin-left: -8px;
@@ -251,4 +244,14 @@ li.board_tree th, li.board_tree_last th {
     overflow-x: hidden;
     cursor: pointer;
     padding: 0px;
+}
+#thread_overview:hover {
+    max-width: none;
+    overflow-y: auto;
+}
+#thread_overview_toggle_div {
+    position: fixed;
+    top: 7px;
+    left: 0px;
+    background-color: #333;
 }
