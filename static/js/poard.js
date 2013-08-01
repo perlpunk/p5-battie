@@ -681,8 +681,8 @@ function save_overview_shortcuts() {
     }
     else {
         localStorage.setItem('poard_thread_navi_shortcut_toggle', '');
-
     }
+    toggle_overview_settings(0);
 }
 
 function activate_overview() {
