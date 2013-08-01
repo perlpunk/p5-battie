@@ -623,6 +623,8 @@ function create_thread_overview() {
     $(overview).append(settings_button);
     $(settings_button).find('img').click(function() { toggle_overview_settings() });
     var shortcut_toggle = localStorage.getItem('poard_thread_navi_shortcut_toggle');
+    if (shortcut_toggle == null)
+        shortcut_toggle = '';
     var settings = $('<div id="overview_settings" style="display: none; position: absolute; background-color: white; border: 1px solid black;">Shortcut for Navi:<br>'
     +'toggle: CTRL-<input type="text" size="2" maxlength="1" value="'+shortcut_toggle+'" id="overview_shortcut_toggle"><br>'
     +'<button onclick="save_overview_shortcuts()">Save</button></div>');
@@ -675,7 +677,7 @@ function save_overview_shortcuts() {
     var shortcut_toggle = $('#overview_shortcut_toggle').val();
     if (shortcut_toggle.length) {
         localStorage.setItem('poard_thread_navi_shortcut_toggle', shortcut_toggle.toUpperCase());
-        create_overview_shortcut_event(shortcut_toggle);
+        create_overview_shortcut_event(shortcut_toggle.toUpperCase());
     }
     else {
         localStorage.setItem('poard_thread_navi_shortcut_toggle', '');
