@@ -580,13 +580,18 @@ function toggle_overview() {
     if (open == 1) {
         thread_navi_status = 0;
         $(toggle_button).attr('data-open', 0);
-        $('#thread_overview').hide(300);
+        $('#thread_overview').animate({
+            width: 'hide'
+        }, 200);
         $(toggle_button).attr('src', theme+'/icons/arrow-skip.png');
     }
     else {
         thread_navi_status = 1;
         $(toggle_button).attr('data-open', 1);
-        $('#thread_overview').show(300, null, function() {
+        $('#thread_overview').animate({
+            width: 'show'
+        },
+        200, null, function() {
             draw_outline();
             $(toggle_button).attr('src', theme+'/icons/arrow-skip-180.png');
         });
