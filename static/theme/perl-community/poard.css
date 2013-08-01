@@ -227,7 +227,7 @@ li.board_tree th, li.board_tree_last th {
     background-color: #f8f8f8;
     box-shadow: 5px 5px 5px #999;
     max-height: 90%;
-    left: 12px;
+    left: 14px;
     top: 5px;
     font-size: 85%;
     overflow-y: hidden;
@@ -247,6 +247,10 @@ li.board_tree th, li.board_tree_last th {
     padding: 0px;
     padding-left: 2px;
     white-space: nowrap;
+}
+#thread_overview .unread_msg {
+    background-color: #ffff66;
+    border-left: none;
 }
 #thread_overview:hover {
     max-width: none;
