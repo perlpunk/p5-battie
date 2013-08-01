@@ -613,12 +613,20 @@ function create_thread_overview() {
     if (links.length < 4) {
         return;
     }
-    var overview = $('<div id="thread_overview" />');
+    var overview = $('<div id="thread_overview" >Navi</div>');
+    var settings_button = $('<div style="float: left;"><img src="'+theme+'/settings.png" border="0" alt="" style="cursor: pointer;"></div>');
     var outline = $('<div id="thread_overview_outline" />');
     var toggle_div = $('<div id="thread_overview_toggle_div" ></div>');
     var toggle_button = $('<img rc="'+theme+'/icons/arrow-skip-180.png" data-open="1" id="toggle_overview" nclick="toggle_overview();" style="padding: 5px;">');
 
     $('body').append(overview);
+    $(overview).append(settings_button);
+    $(settings_button).find('img').click(function() { toggle_overview_settings() });
+    var shortcut_toggle = localStorage.getItem('poard_thread_navi_shortcut_toggle');
+    var settings = $('<div id="overview_settings" style="display: none; position: absolute; background-color: white; border: 1px solid black;">Shortcut for Navi:<br>'
+    +'toggle: CTRL-<input type="text" size="2" maxlength="1" value="'+shortcut_toggle+'" id="overview_shortcut_toggle"><br>'
+    +'<button onclick="save_overview_shortcuts()">Save</button></div>');
+    $(settings_button).append(settings);
     $(overview).append(outline);
     $(toggle_div).append(toggle_button);
     $(toggle_button).click(function() { toggle_overview() });
@@ -631,6 +639,47 @@ function create_thread_overview() {
     else {
         $(toggle_button).attr('data-open', 0);
         $(toggle_button).attr('src', theme+'/icons/arrow-skip.png');
+    }
+    create_overview_shortcut_event(shortcut_toggle);
+}
+function create_overview_shortcut_event(shortcut_toggle) {
+    if (shortcut_toggle != null && shortcut_toggle.length) {
+        var code_open = shortcut_toggle.charCodeAt(0);
+        $(window).keydown(function(event) {
+            if(event.ctrlKey && event.keyCode == code_open) {
+                event.preventDefault();
+                toggle_overview();
+            }
+        });
+    }
+}
+
+function toggle_overview_settings(set) {
+    if (set == null) {
+        if ($('#overview_settings').css('display') == 'none') {
+            set = 1;
+        }
+        else {
+            set = 0;
+        }
+    }
+    if (set == 1) {
+        $('#overview_settings').show(100);
+    }
+    else {
+        $('#overview_settings').hide(100);
+    }
+}
+
+function save_overview_shortcuts() {
+    var shortcut_toggle = $('#overview_shortcut_toggle').val();
+    if (shortcut_toggle.length) {
+        localStorage.setItem('poard_thread_navi_shortcut_toggle', shortcut_toggle.toUpperCase());
+        create_overview_shortcut_event(shortcut_toggle);
+    }
+    else {
+        localStorage.setItem('poard_thread_navi_shortcut_toggle', '');
+
     }
 }
 
