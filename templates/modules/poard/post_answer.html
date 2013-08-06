@@ -5,7 +5,7 @@ This happens if you are a guest poster or if this is one of your first posts.<br
 <a href="[%= .self %]/poard/thread/[%= .data.poard.thread_id %][%if .data.poard.subtree %]/[%= .data.poard.subtree %][%/if %]#ms_[%= .data.poard.msg_id %]">Your message</a>
 
 [%else %]
-Post answer in thread <a href="[%= .self %]/poard/thread/[%= .data.poard.thread.get_id %]">[%= .data.poard.thread.get_title %]</a>
+Post answer in thread <a id="thread_title_link" href="[%= .self %]/poard/thread/[%= .data.poard.thread.get_id %]">[%= .data.poard.thread.get_title %]</a>
 [%if .data.poard.post_hint %]
 <br><span class="hint"><b>[%translate id=poard_post_hint %]</b></span>
 [%/if %]
