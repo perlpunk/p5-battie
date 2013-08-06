@@ -685,7 +685,7 @@ function activate_overview() {
     var shortcut_toggle = localStorage.getItem('poard_thread_navi_shortcut_toggle');
     if (shortcut_toggle == null)
         shortcut_toggle = '';
-    var settings = $('<div id="overview_settings" style="display: none; position: absolute; z-index: 15; width: 25em; background-color: white; border: 1px solid black;">Shortcut for Navi:<br>'
+    var settings = $('<div id="overview_settings" style="display: none; position: fixed; z-index: 15; padding: 5px; background-color: white; border: 1px solid black; ">Shortcut for Navi:<br>'
     +'toggle: CTRL-<input type="text" size="2" maxlength="1" value="'+shortcut_toggle+'" id="overview_shortcut_toggle"><br>'
     +'<button onclick="save_overview_shortcuts()">Save</button></div>');
     $(settings_button).append(settings);
