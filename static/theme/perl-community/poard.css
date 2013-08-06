@@ -229,12 +229,12 @@ li.board_tree th, li.board_tree_last th {
     max-height: 90%;
     left: 14px;
     top: 5px;
-    font-size: 85%;
     overflow-y: hidden;
     overflow-x: hidden;
     max-width: 9em;
 }
 #thread_overview > ul {
+    font-size: 85%;
     margin-left: -6px;
 }
 #thread_overview ul {
@@ -258,6 +258,7 @@ li.board_tree th, li.board_tree_last th {
 }
 #thread_overview_toggle_div {
     position: fixed;
+    z-index: 10;
     top: 7px;
     left: 0px;
     background-color: #444;

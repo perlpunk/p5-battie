@@ -613,23 +613,9 @@ function create_thread_overview() {
     if (links.length < 4) {
         return;
     }
-    var overview = $('<div id="thread_overview" >Navi</div>');
-    var settings_button = $('<div style="float: left;"><img src="'+theme+'/settings.png" border="0" alt="" style="cursor: pointer;"></div>');
-    var outline = $('<div id="thread_overview_outline" />');
     var toggle_div = $('<div id="thread_overview_toggle_div" ></div>');
-    var toggle_button = $('<img rc="'+theme+'/icons/arrow-skip-180.png" data-open="1" id="toggle_overview" nclick="toggle_overview();" style="padding: 5px;">');
+    var toggle_button = $('<img rc="'+theme+'/icons/arrow-skip-180.png" data-open="1" id="toggle_overview" style="padding: 5px;">');
 
-    $('body').append(overview);
-    $(overview).append(settings_button);
-    $(settings_button).find('img').click(function() { toggle_overview_settings() });
-    var shortcut_toggle = localStorage.getItem('poard_thread_navi_shortcut_toggle');
-    if (shortcut_toggle == null)
-        shortcut_toggle = '';
-    var settings = $('<div id="overview_settings" style="display: none; position: absolute; background-color: white; border: 1px solid black;">Shortcut for Navi:<br>'
-    +'toggle: CTRL-<input type="text" size="2" maxlength="1" value="'+shortcut_toggle+'" id="overview_shortcut_toggle"><br>'
-    +'<button onclick="save_overview_shortcuts()">Save</button></div>');
-    $(settings_button).append(settings);
-    $(overview).append(outline);
     $(toggle_div).append(toggle_button);
     $(toggle_button).click(function() { toggle_overview() });
     $('body').append(toggle_div);
@@ -642,6 +628,7 @@ function create_thread_overview() {
         $(toggle_button).attr('data-open', 0);
         $(toggle_button).attr('src', theme+'/icons/arrow-skip.png');
     }
+    var shortcut_toggle = localStorage.getItem('poard_thread_navi_shortcut_toggle');
     create_overview_shortcut_event(shortcut_toggle);
 }
 function create_overview_shortcut_event(shortcut_toggle) {
@@ -688,6 +675,20 @@ function save_overview_shortcuts() {
 function activate_overview() {
     if (thread_overview_active)
         return;
+    var overview = $('<div id="thread_overview" >Navi</div>');
+    $('body').append(overview);
+    var outline = $('<div id="thread_overview_outline" />');
+    $('#thread_overview').append(outline);
+    var settings_button = $('<div style="float: left;"><img src="'+theme+'/settings.png" border="0" alt="" style="cursor: pointer;"></div>');
+    $('#thread_overview').append(settings_button);
+    $(settings_button).find('img').click(function() { toggle_overview_settings() });
+    var shortcut_toggle = localStorage.getItem('poard_thread_navi_shortcut_toggle');
+    if (shortcut_toggle == null)
+        shortcut_toggle = '';
+    var settings = $('<div id="overview_settings" style="display: none; position: absolute; z-index: 15; width: 25em; background-color: white; border: 1px solid black;">Shortcut for Navi:<br>'
+    +'toggle: CTRL-<input type="text" size="2" maxlength="1" value="'+shortcut_toggle+'" id="overview_shortcut_toggle"><br>'
+    +'<button onclick="save_overview_shortcuts()">Save</button></div>');
+    $(settings_button).append(settings);
     create_nested_list(first_id, $('#thread_overview'));
     draw_outline();
     $('#thread_overview').scroll(function() {
