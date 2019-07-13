@@ -22,7 +22,7 @@ function hide_login() {
 //]]>
 --></script>
 <a href="[%= .self %]/login/show?login.from=[%= .data.login.from %]"
-name="ajaxlink" onClick="show_login('[%= .data.login.from escape=HTML|JS %]');return false">[%translate id="global_action_login" %]</a>
+name="ajaxlink" onClick="show_login('[%= .data.login.from escape=JS|HTML %]');return false">[%translate id="global_action_login" %]</a>
 <small>(<a href="[%= .self %]/login/register">[%translate id="global_action_register" %]</a>)</small>
 <div id="loginresult" style="z-index: 99; position: absolute;"></div>
 [%/if %]
